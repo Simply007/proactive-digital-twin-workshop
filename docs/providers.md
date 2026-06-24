@@ -1,18 +1,10 @@
-# Provider Comparison
+# Host Comparison
 
-What's wired in today, what's planned, and the VPS providers we already tried (so you don't repeat our mistakes).
+Why the workshop runs on local Docker, and the VPS providers we tried (so you don't repeat our mistakes).
 
-## Agent frameworks
+## Agent framework
 
-| Framework | Status in this kit | License | Install model | Living-files shape | Why we picked / why not |
-|---|---|---|---|---|---|
-| **NanoClaw** | ✅ Implemented (default) | MIT | `bash nanoclaw.sh` builds a per-agent Docker container | One `CLAUDE.local.md` per agent + composed fragments + skills | Small (~35k tokens, fits in one Claude context), self-contained, native Anthropic Agents SDK. Right size for a 2.5h workshop. |
-| OpenClaw | ⏸ Stub in `scripts/install-agent.sh` | Source-available | Hostinger one-click ($5.99/mo+) or manual install per `docs.openclaw.ai` | 9 files: `AGENTS.md`, `SOUL.md`, `USER.md`, `HEARTBEAT.md`, `MEMORY.md`, `TOOLS.md`, `IDENTITY.md`, `BOOT.md`, `BOOTSTRAP.md` | Reference architecture for the space. Heavier — better suited for attendees who want a paid managed bundle than a free hands-on demo. |
-| Hermes Agent | ⏸ Stub | Open weights | Hosted via OpenRouter (no install) | Built-in persistent memory | No infra to teach. Skips the part of the workshop where attendees see the deployment shape. |
-| Agent-One | ⏸ Stub | MIT | Python framework, build-your-own | Roll your own | Too low-level for a 2.5h session — you'd spend the workshop building the agent loop instead of using it. |
-| Claude Code (in Docker) | ⏸ Stub | Anthropic CLI | No framework, just `claude` running in a container with your subscription | Just `CLAUDE.md` + memory | The minimal-floor alternative. No multi-agent, no scheduled jobs out of the box — you'd add those yourself. |
-
-To swap: set `AGENT_FRAMEWORK=<name>` in `.env` and run `scripts/install-agent.sh`. The non-implemented options exit with a "not yet wired" message — adding them is a single case branch in that script.
+This kit runs **NanoClaw** (MIT, container-per-agent, native Anthropic Agents SDK) — small (~35k tokens, fits one Claude context), self-contained, and the right size for a 2.5h workshop. One `CLAUDE.local.md` per agent + composed fragments + skills. Installed by cloning NanoClaw into the sandbox and running `bash nanoclaw.sh`.
 
 ## VPS providers we tried (and what happened)
 

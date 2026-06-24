@@ -10,9 +10,8 @@
 #     so any process started later inherits it
 #   - nanoclaw user with passwordless sudo + docker group
 #
-# What's NOT baked in: the agent framework itself (NanoClaw / OpenClaw / etc.).
-# That's installed at first run via scripts/install-agent.sh, mounted at /work.
-# Keeps the image provider-agnostic.
+# What's NOT baked in: NanoClaw itself. It's installed at first run by cloning
+# NanoClaw into /work and running `bash nanoclaw.sh`.
 
 FROM buildpack-deps:jammy-curl
 
@@ -49,14 +48,14 @@ RUN useradd -m -s /bin/bash nanoclaw \
  && echo 'nanoclaw ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/nanoclaw \
  && chmod 0440 /etc/sudoers.d/nanoclaw
 
+# Bake USER=nanoclaw so `docker compose exec -u nanoclaw sandbox bash` lands with
+# $USER set (NanoClaw's installer dies on an unset $USER). The container itself
+# still starts as root for dockerd; this only affects exec shells.
+ENV USER=nanoclaw
+
 # /work is the bind mount target for the host's agent workspace.
 RUN mkdir -p /work && chown -R nanoclaw:nanoclaw /work
 WORKDIR /work
-
-# In-container helper scripts: install-agent.sh + start-agent.sh.
-# Available as /opt/scripts/install-agent.sh once the container is running.
-COPY scripts/install-agent.sh scripts/start-agent.sh /opt/scripts/
-RUN chmod +x /opt/scripts/*.sh
 
 # Entrypoint starts inner dockerd + the socat bridges, then sleeps so the
 # container stays up for `docker exec` shells.

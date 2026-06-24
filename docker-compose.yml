@@ -13,5 +13,4 @@ services:
       - "${AGENT_WORKSPACE:-${HOME}/nanoclaw-workspace}:/work"
     environment:
       ONECLI_BIND_HOST: ${ONECLI_BIND_HOST:-127.0.0.1}
-      AGENT_FRAMEWORK: ${AGENT_FRAMEWORK:-nanoclaw}
     working_dir: /work

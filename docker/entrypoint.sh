@@ -34,9 +34,17 @@ fi
 # Docker. OneCLI itself binds to the sandbox's 127.0.0.1, unreachable from
 # the bridge. socat bridges the gap.
 #
-# We bind on 172.18.0.1 — the default inner bridge gateway. If the inner
-# Docker has assigned a different bridge subnet, adjust DOCKER_BRIDGE_IP.
-BRIDGE_IP="${DOCKER_BRIDGE_IP:-172.18.0.1}"
+# host.docker.internal in spawned agent containers resolves to `host-gateway`,
+# which Docker sets to the *default bridge* gateway. Docker auto-selects that
+# subnet from its address pool — 172.17.0.0/16 if free on the host, otherwise
+# 172.18.0.0/16, 172.19, … — so the gateway IP varies by machine (e.g. it is
+# 172.18.0.1 when the outer Docker already occupies 172.17). Hardcoding it is
+# the #1 silent DinD trap: a mismatch leaves agents hanging on "API retry"
+# forever. So we READ it at runtime from the live default bridge instead.
+# DOCKER_BRIDGE_IP overrides if you ever need to pin it by hand.
+BRIDGE_IP="${DOCKER_BRIDGE_IP:-$(docker network inspect bridge \
+    --format '{{(index .IPAM.Config 0).Gateway}}' 2>/dev/null)}"
+BRIDGE_IP="${BRIDGE_IP:-172.17.0.1}"
 
 log "starting socat bridges on ${BRIDGE_IP} for OneCLI ports"
 nohup socat "TCP-LISTEN:10254,fork,reuseaddr,bind=${BRIDGE_IP}" TCP:127.0.0.1:10254 \
