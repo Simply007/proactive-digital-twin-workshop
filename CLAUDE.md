@@ -13,7 +13,7 @@ The kit bundles:
 - a Docker Compose sandbox that runs NanoClaw with every dry-run fix baked in
 - the workshop walkthrough (`workshop/outline.md`)
 - a "what we tried and rejected" record (`workshop/findings.md` + `workshop/recordings/`)
-- the Claude prompt + presenter profile that generated the outline (`outline-writer/` — git submodule)
+- the Claude prompt + presenter profile that generated the outline (`outline-writer/talk-outline-writer/` — git submodule → ai-library)
 - comparison docs for agent frameworks and VPS providers (`docs/`)
 
 ## Repo structure
@@ -36,7 +36,7 @@ The kit bundles:
 │   ├── outline.md                  # the walkthrough (intro, exercises, schedule, wrap-up)
 │   ├── findings.md                 # Railway + Oracle failures, 9 DinD gotchas, end-to-end validation log
 │   └── recordings/                 # 8 screenshots from validation runs
-├── outline-writer/                 # git submodule → talk-outline-writer repo
+├── outline-writer/                 # git submodule → ai-library repo (talk-outline-writer/ subdir is the relevant tool)
 └── docs/
     ├── architecture.md             # what runs where + framework-agnostic swap points
     └── providers.md                # framework comparison (NanoClaw/OpenClaw/Hermes/Agent-One/Claude Code) + VPS comparison
@@ -71,8 +71,8 @@ End-to-end validation done in DinD sandbox on 2026-06-09/10:
 
 ## Conventions
 
-- **No em-dashes** anywhere (workshop voice rule, see `outline-writer/presenter.md`).
-- **Workshop voice** is cue-based, hook-first, no agenda slides — see `outline-writer/presenter.md`.
+- **No em-dashes** anywhere (workshop voice rule, see `outline-writer/talk-outline-writer/presenter.md`).
+- **Workshop voice** is cue-based, hook-first, no agenda slides — see `outline-writer/talk-outline-writer/presenter.md`.
 - **Bot tokens / API keys are passwords** — never paste them in shared chats, screen shares, or commits. The `.gitignore` covers `.env`.
 
 ## DinD gotchas (presenter-side only — attendees on laptop Docker don't hit these)
@@ -95,27 +95,15 @@ See `workshop/findings.md` for full reproduction details.
 
 - **CKEditor cameo** (workshop Exercise / wrap-up demo): needs concrete CKEditor API endpoint, auth token, and target document ID to wire into the agent's `CLAUDE.local.md`.
 - **Pre-workshop email** to attendees (1 week before): not yet drafted. Should cover Docker install + Claude access path (Pro sub or API key) + Telegram phone-app reminder.
-- **Slide deck**: not yet started. The `outline-writer/prompt.md` `talk` mode can generate slide-by-slide from the workshop outline if needed.
+- **Slide deck**: not yet started. The `outline-writer/talk-outline-writer/prompt.md` `talk` mode can generate slide-by-slide from the workshop outline if needed.
 - **Run sheet for July 2**: cut-candidate ladder is in `workshop/outline.md`; a presenter-friendly minute-by-minute card is still TODO.
-- **Push both repos to GitHub** + flip submodule URL from `file://` to `https://github.com/Simply007/talk-outline-writer.git`. See README "outline-writer submodule" section for the exact commands.
+- **Push this repo to GitHub.** The `outline-writer` submodule already points at `https://github.com/Simply007/ai-library` (pinned to `main`); bump the pin to the merge commit once the workshop branch is merged + pushed: `git -C outline-writer pull origin main && git add outline-writer && git commit -m "bump outline-writer submodule"`.
 - **Wire OpenClaw / Hermes / Agent-One / Claude Code branches** in `scripts/install-agent.sh` when there's a reason to swap. Stubs already in place.
 
 ## How to push to GitHub when ready
 
 ```bash
-# This repo
+# This repo (the outline-writer submodule already points at the public ai-library repo)
 cd ~/projects/proactive-digital-twin-workshop
 gh repo create proactive-digital-twin-workshop --public --source=. --remote=origin --push
-
-# Submodule repo
-cd ~/projects/talk-outline-writer
-gh repo create talk-outline-writer --public --source=. --remote=origin --push
-
-# Flip submodule URL
-cd ~/projects/proactive-digital-twin-workshop
-git submodule set-url outline-writer https://github.com/Simply007/talk-outline-writer.git
-git submodule sync
-git add .gitmodules
-git commit -m "point outline-writer submodule at GitHub"
-git push
 ```

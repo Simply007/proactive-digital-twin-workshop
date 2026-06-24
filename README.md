@@ -15,7 +15,7 @@ Built and validated for **Web Summer Camp 2026, Opatija** (July 2-4). Pre-tested
 │   ├── outline.md              # the workshop walkthrough (intro, exercises, schedule, wrap-up)
 │   ├── findings.md             # everything we tried and rejected (Railway, Oracle, DinD gotchas)
 │   └── recordings/             # screenshots from the validation runs
-├── outline-writer/             # git submodule — talk-outline-writer repo (prompt.md + presenter.md)
+├── outline-writer/             # git submodule — ai-library repo (talk-outline-writer/ = prompt.md + presenter.md)
 └── docs/
     ├── architecture.md         # what the sandbox runs and why each piece exists
     └── providers.md            # agent-framework + VPS comparison + verdicts
@@ -91,15 +91,14 @@ All four follow the same shape: provision Linux, SSH in, run the same `bash nano
 
 ## The outline-writer submodule
 
-The `outline-writer/` directory is a [git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) pointing at the standalone [`talk-outline-writer`](https://github.com/Simply007/talk-outline-writer) repo (currently pinned to a local `file://` path during development). It contains the Claude prompt and presenter profile used to generate [`workshop/outline.md`](workshop/outline.md). Forking it for a different talk or presenter is independent of this kit's lifecycle.
+The `outline-writer/` directory is a [git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) pointing at the [`ai-library`](https://github.com/Simply007/ai-library) repo (pinned to `main`). The relevant tool lives in the [`outline-writer/talk-outline-writer/`](outline-writer/talk-outline-writer/) subdirectory — the Claude prompt (`prompt.md`) and presenter profile (`presenter.md`) used to generate [`workshop/outline.md`](workshop/outline.md). Forking it for a different talk or presenter is independent of this kit's lifecycle.
 
-To update the submodule URL once both repos are pushed to GitHub:
+To pull the latest submodule content:
 
 ```bash
-git submodule set-url outline-writer https://github.com/Simply007/talk-outline-writer.git
-git submodule sync
-git add .gitmodules
-git commit -m "point outline-writer submodule at GitHub"
+git -C outline-writer pull origin main
+git add outline-writer
+git commit -m "bump outline-writer submodule"
 ```
 
 ## License
