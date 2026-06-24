@@ -10,7 +10,17 @@ services:
       - "127.0.0.1:10254:10254"
       - "127.0.0.1:10255:10255"
     volumes:
-      - "${AGENT_WORKSPACE:-${HOME}/nanoclaw-workspace}:/work"
+      # Named volume (NOT a host bind mount) on purpose: the agent's unix sockets
+      # (data/cli.sock, data/ncl.sock) must live on a filesystem that supports
+      # unlink. Docker Desktop's macOS bind mount returns ENOTSUP on socket files,
+      # which blocks the service from rebinding on restart. A named volume lives on
+      # the Docker VM's ext4, so sockets unlink cleanly and the service auto-starts
+      # after stop/start and down/up. State persists across both; removed by
+      # `docker compose down -v` (teardown.sh). Inspect via `docker compose exec`.
+      - "nanoclaw-work:/work"
     environment:
       ONECLI_BIND_HOST: ${ONECLI_BIND_HOST:-127.0.0.1}
     working_dir: /work
+
+volumes:
+  nanoclaw-work:

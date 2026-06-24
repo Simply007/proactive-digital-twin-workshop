@@ -10,6 +10,15 @@ set -euo pipefail
 log() { printf '[entrypoint] %s\n' "$*"; }
 
 # ─── start inner dockerd ───────────────────────────────────────────────────
+# Clear stale runtime state from a previous run. /var/run isn't a tmpfs here, so
+# after `docker compose stop/start` the old dockerd pidfile persists and the new
+# dockerd refuses to start ("delete /var/run/docker.pid: process ... still
+# running") — an infinite restart loop. Remove the stale pidfile (and socket)
+# before launching. Safe: a fresh container has none, and nothing else is using
+# them at entrypoint time.
+log "clearing stale dockerd runtime state"
+rm -f /var/run/docker.pid /run/docker.pid /var/run/docker.sock
+
 log "starting inner dockerd"
 nohup dockerd > /var/log/dockerd.log 2>&1 &
 
@@ -51,6 +60,29 @@ nohup socat "TCP-LISTEN:10254,fork,reuseaddr,bind=${BRIDGE_IP}" TCP:127.0.0.1:10
     > /var/log/socat-10254.log 2>&1 &
 nohup socat "TCP-LISTEN:10255,fork,reuseaddr,bind=${BRIDGE_IP}" TCP:127.0.0.1:10255 \
     > /var/log/socat-10255.log 2>&1 &
+
+# ─── auto-start the NanoClaw service if it's already installed ──────────────
+# On the FIRST `up`, NanoClaw isn't installed yet (the user clones + runs
+# nanoclaw.sh afterward), so this is skipped. On every later `stop/start` (or
+# `down/up`) it brings the agent back automatically — no manual restart needed.
+#
+# IMPORTANT: run the service as the `nanoclaw` user (uid 1000), NOT root. The
+# spawned agent containers run their agent-runner as `node` (uid 1000) and write
+# their session DBs (inbound.db/outbound.db) in DATA_DIR. If the service ran as
+# root it would create those files (and groups/, /tmp/onecli-*.pem) root-owned,
+# and the uid-1000 agent containers couldn't write them ("attempt to write a
+# readonly database"). The named volume's /work is uid-1000-owned, so nanoclaw
+# can create sockets/DBs there; nanoclaw is in the docker group, so it can spawn
+# agent containers. Keeping everything uid 1000 mirrors a real laptop install.
+# (`;` not `&&` after cd so the cd runs in the foreground and `echo $!` writes
+# nanoclaw.pid in the right dir with node's real pid.)
+if [ -f /work/nanoclaw/dist/index.js ]; then
+  log "found NanoClaw install — starting the agent service as nanoclaw"
+  runuser -u nanoclaw -- bash -c \
+    'cd /work/nanoclaw; nohup node dist/index.js >> logs/agent.log 2>&1 & echo $! > nanoclaw.pid'
+else
+  log "no NanoClaw install yet — skipping service start (run nanoclaw.sh, then hand-start once)"
+fi
 
 log "sandbox ready — sleeping. To enter: docker exec -it -u nanoclaw -w /work agent-sandbox bash"
 exec sleep infinity

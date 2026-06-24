@@ -27,6 +27,17 @@ RUN apt-get update \
 # Docker engine inside (DinD-style; runs with --privileged via compose).
 RUN curl -fsSL https://get.docker.com | sh
 
+# Node 22 baked in (matches NanoClaw's .nvmrc). NanoClaw's setup/install-node.sh
+# would install this via NodeSource into the container's writable layer — which
+# is wiped on every container recreate (down/up/--build), taking the node
+# runtime with it and leaving the /work install unrunnable. Baking it into the
+# image makes node survive any restart, lets entrypoint.sh auto-start the agent
+# service afterward, and speeds first install (the installer detects node 22 and
+# skips). Same "bake the fix in" rationale as sudo/socat above.
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+ && apt-get install -y --no-install-recommends nodejs \
+ && rm -rf /var/lib/apt/lists/*
+
 # Force VFS storage driver. Real hosts use overlay2, but Docker Desktop's
 # storage is already overlay2 and nesting it inside our container fails on
 # BuildKit cache mounts. VFS is slower but always works.

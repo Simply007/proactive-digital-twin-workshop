@@ -31,11 +31,101 @@ The kit bundles:
 │   ├── outline.md                  # the walkthrough (intro, exercises, schedule, wrap-up)
 │   ├── findings.md                 # Railway + Oracle failures, 9 DinD gotchas, end-to-end validation log
 │   └── recordings/                 # 8 screenshots from validation runs
+├── scripts/
+│   └── teardown.sh                 # wipe sandbox back to fully fresh (container + image + host workspace)
 ├── ai-library/                     # private git submodule (author tooling; not fetched by a normal clone)
 └── docs/
     ├── architecture.md             # what the sandbox runs and why each piece exists
     └── providers.md                # host/VPS comparison + verdicts
 ```
+
+### Resetting the sandbox
+
+`scripts/teardown.sh` returns the DinD sandbox to a completely fresh state. It
+prompts for `yes` on **each** step independently (container+image / image
+force-remove / host workspace / repo `.env`), so you can drop only what you
+want. `-y` runs all steps unattended. It reads `AGENT_WORKSPACE`/
+`SANDBOX_CONTAINER` from `.env` before removing anything, and refuses to `rm` an
+unsafe path (`/`, `$HOME`, empty).
+
+```bash
+./scripts/teardown.sh        # confirm each step
+./scripts/teardown.sh -y     # nuke everything, no prompts
+docker compose up -d         # rebuild fresh from the Dockerfile
+```
+
+### Starting the agent service (DinD only)
+
+The container has no init system (no systemd/launchd), so NanoClaw's service
+never auto-starts: the installer reports "Couldn't reach the NanoClaw service",
+skips its ping test, and Telegram pairing can't complete (nothing consumes the
+code). Start it from the host with `docker exec -d -u nanoclaw` (a new terminal;
+`-d` because a plain `docker exec … 'node … &'` hangs on the inherited pipe;
+`-u nanoclaw` — NOT root — so files it creates are uid 1000, matching the agent
+containers; see below):
+
+```bash
+docker exec -d -u nanoclaw agent-sandbox bash -c 'cd /work/nanoclaw && node dist/index.js >> logs/agent.log 2>&1'
+docker exec agent-sandbox tail -n 15 /work/nanoclaw/logs/agent.log   # "NanoClaw running" + "Telegram polling started"
+```
+
+Run as `nanoclaw` (uid 1000), never root: the spawned agent containers run their
+agent-runner as `node` (uid 1000) and write session DBs (`inbound.db`/
+`outbound.db`), `groups/…/container.json`, and `/tmp/onecli-*.pem`. A root-run
+service creates those root-owned, so the uid-1000 agent can't write them →
+`attempt to write a readonly database` / `EACCES`, agent crashes, no reply. (The
+old bind mount masked this via permissive FUSE ownership; the ext4 named volume
+enforces it.) If you ever ran it as root and switched: `docker exec agent-sandbox
+chown -R nanoclaw:nanoclaw /work && docker exec agent-sandbox rm -f /tmp/onecli-*.pem`.
+
+Timing: start it **after** the Telegram bot token is entered (when the wizard
+waits at the pairing-code step), NOT before. The service loads channel adapters
+at startup, so starting it early (e.g. to make the ping pass) brings it up with
+no Telegram adapter — pairing then silently fails (no "Telegram polling
+started", queue piles up). If you started it too early, restart it
+(`docker exec -u nanoclaw agent-sandbox pkill -f dist/index.js`, then the `-d`
+start) so it picks up Telegram. Then send the code and approve the "Connected to
+<agent>" card. **Do not re-run the wizard with the service up** (multi-poller race).
+
+After the initial hand-start, **`stop`/`start` is fully automatic.** `entrypoint.sh`
+(a) clears the stale `docker.pid` before launching inner dockerd — `/var/run`
+isn't tmpfs, so the old pidfile otherwise makes dockerd refuse to start and the
+container crash-loops (`restart: unless-stopped`); (b) auto-starts the service as
+nanoclaw if an install exists. Combined with node baked in and `/work` on a named
+volume (sockets on ext4 → unlink works), `stop`/`start` brings back inner dockerd,
+the OneCLI gateway containers (`onecli` + `onecli-postgres-1`, which persist in the
+kept inner Docker), the agent images, and the service — agent replies, no manual
+steps.
+
+**`down`/`up`/`--build` does NOT fully survive:** recreating the container wipes
+the inner Docker's storage (`/var/lib/docker` is in the container layer, not
+`/work`) — the OneCLI gateway + vault secrets, the `onecli` binary, and agent
+images are gone → `OneCLIError: fetch failed` → **reinstall required**. `/work`
+(clone, DB, pairing) persists in the named volume. So restart with `stop`/`start`,
+not `down`/`up`. Iterating on entrypoint.sh without a rebuild/reinstall:
+`docker cp docker/entrypoint.sh agent-sandbox:/usr/local/bin/entrypoint.sh`
+(writes into the container layer, survives stop/start).
+
+The wizard's final verify may report `SERVICE: not_found` / `STATUS: failed` —
+a false negative: it looks for a launchd/systemd service or a `nanoclaw.pid`
+file, and a hand-started service has neither. If credentials/channel/groups are
+configured and Telegram chat works, it's fine. To make verify green, write the
+pid file: `docker exec agent-sandbox sh -c 'for p in $(pgrep -f dist/index.js);
+do [ "$(cat /proc/$p/comm)" = node ] && echo $p > /work/nanoclaw/nanoclaw.pid;
+done'` (per-run; rewrite if the service restarts).
+
+Also expect a separate `Claude CLI isn't signed in` prompt even though the vault
+shows configured: the OneCLI vault token (agent's API calls) is not the local
+`claude` CLI sign-in (~/.claude). Answer Yes / complete OAuth — two credential
+stores. And note `teardown.sh` does not clear Telegram's server-side message
+queue; reusing an old bot may need `deleteWebhook?drop_pending_updates=true`.
+
+Why root, given the nanoclaw user? The nanoclaw user makes the *install* faithful
+to attendees (NanoClaw's installer refuses root; real users are non-root + sudo),
+but install steps that touch data/ and logs/ run elevated (inner Docker, OneCLI),
+leaving those dirs root-owned — so the service must run as root here. Pure DinD
+artifact: on a real laptop the install, the init-started service, and data/logs
+are all owned by the same normal user, so none of this is needed.
 
 ## Key decisions (with rationale)
 
@@ -48,6 +138,9 @@ The kit bundles:
 | **`ONECLI_BIND_HOST=127.0.0.1` in `/etc/environment` AND `/etc/bash.bashrc`** | PAM-based `/etc/environment` is bypassed by `docker exec` non-login shells. Belt-and-suspenders. |
 | **`socat` bridges the default-bridge gateway `:10254-10255` → `127.0.0.1:10254-10255`** | Spawned agent containers reach OneCLI via `host.docker.internal`, which resolves to the inner **default-bridge gateway** — auto-assigned by Docker (`172.17.0.1` if free, else `172.18.0.1`, …), so it varies by machine. `entrypoint.sh` reads it at runtime (`DOCKER_BRIDGE_IP` overrides) and binds socat there; OneCLI binds to sandbox loopback `127.0.0.1`. Bridge connects them. |
 | **Sandbox publishes `127.0.0.1:10254-10255` to host** | Agent prints `http://127.0.0.1:10254/...` URLs when connecting external services (e.g., OpenAI for voice). Same address resolves to host loopback for the user's Mac browser. |
+| **`/work` is a Docker named volume, not a host bind mount** | The agent's unix sockets (`data/cli.sock`, `data/ncl.sock`) live under `DATA_DIR` (project root, not env-configurable). Docker Desktop's macOS bind mount returns `ENOTSUP` on `unlink` of socket files (even root `rm`/`ls` fail), so the service could never rebind on restart. A named volume lives on the Docker VM's ext4 → socket unlink works → service restarts cleanly. Trade-off: state isn't browsable as host files (inspect via `docker compose exec`); still persists across stop/start + down/up; wiped by `down -v`. |
+| **Node 22 baked into the image** (NodeSource) | NanoClaw's installer puts node in the container's writable layer, which is wiped on every container recreate (`down/up`/`--build`), leaving the `/work` install unrunnable. Baking node 22 (matches `.nvmrc`) into the image makes it survive restarts, lets `entrypoint.sh` auto-start the service, and speeds first install (installer detects node, skips). |
+| **`entrypoint.sh` auto-starts the agent service as `nanoclaw`** | No init system in the container, so the service won't come up on its own. The entrypoint runs `node dist/index.js` via `runuser -u nanoclaw` (uid 1000, NOT root; writes `nanoclaw.pid`) if an install exists — automatic after every restart. Running as nanoclaw keeps all files uid 1000, so the agent containers (`node`, uid 1000) can write their session DBs; a root service would create root-owned files → `readonly database`/`EACCES` in agents. The very first install still needs one hand-start (`-u nanoclaw`), since the container isn't restarted mid-setup. |
 
 ## Validation status
 
