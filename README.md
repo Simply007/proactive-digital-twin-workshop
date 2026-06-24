@@ -15,10 +15,7 @@ Built and validated for **Web Summer Camp 2026, Opatija** (July 2-4). Pre-tested
 │   ├── outline.md              # the workshop walkthrough (intro, exercises, schedule, wrap-up)
 │   ├── findings.md             # everything we tried and rejected (Railway, Oracle, DinD gotchas)
 │   └── recordings/             # screenshots from the validation runs
-├── outline-writer/
-│   ├── prompt.md               # the Claude prompt used to generate the outline
-│   ├── presenter.md            # voice/pace conventions
-│   └── README.md
+├── outline-writer/             # git submodule — talk-outline-writer repo (prompt.md + presenter.md)
 └── docs/
     ├── architecture.md         # what the sandbox runs and why each piece exists
     └── providers.md            # agent-framework + VPS comparison + verdicts
@@ -33,6 +30,12 @@ Built and validated for **Web Summer Camp 2026, Opatija** (July 2-4). Pre-tested
 ## Quick start
 
 ```bash
+# 0. Clone with the outline-writer submodule (or `git submodule update --init`
+#    after a bare clone). On a local-file submodule URL you may also need:
+#       git -c protocol.file.allow=always submodule update --init
+git clone --recurse-submodules <repo-url>
+cd proactive-digital-twin-workshop
+
 # 1. Copy and (optionally) tweak environment
 cp .env.example .env
 
@@ -85,6 +88,19 @@ The wrap-up section of [`workshop/outline.md`](workshop/outline.md) covers four 
 - ~~Oracle Cloud Always Free~~ (capacity roulette, see [`workshop/findings.md`](workshop/findings.md))
 
 All four follow the same shape: provision Linux, SSH in, run the same `bash nanoclaw.sh`. The CLAUDE.local.md, scheduled jobs, and OpenRouter rule you built locally all transfer.
+
+## The outline-writer submodule
+
+The `outline-writer/` directory is a [git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) pointing at the standalone [`talk-outline-writer`](https://github.com/Simply007/talk-outline-writer) repo (currently pinned to a local `file://` path during development). It contains the Claude prompt and presenter profile used to generate [`workshop/outline.md`](workshop/outline.md). Forking it for a different talk or presenter is independent of this kit's lifecycle.
+
+To update the submodule URL once both repos are pushed to GitHub:
+
+```bash
+git submodule set-url outline-writer https://github.com/Simply007/talk-outline-writer.git
+git submodule sync
+git add .gitmodules
+git commit -m "point outline-writer submodule at GitHub"
+```
 
 ## License
 
