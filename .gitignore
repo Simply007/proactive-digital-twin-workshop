@@ -1,6 +1,9 @@
 # Local env (may contain tokens)
 .env
 
+# Personal Claude Code memory (per-developer, not shared)
+CLAUDE.local.md
+
 # Agent workspace (default location is OUTSIDE this repo at ~/nanoclaw-workspace
 # but ignore in case someone overrides AGENT_WORKSPACE to point inside the repo)
 workspace/

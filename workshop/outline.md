@@ -21,6 +21,8 @@ session_url: https://websummercamp.com/2026/session/beyond-the-chatbot-engineeri
 
 Web Summer Camp 2026, Opatija, Croatia. AI Engineering track. 2h 30min hands-on workshop.
 
+> **This is the public version of the outline.** The author's working copy with drafts, alternative phrasings, and pre-decision notes lives in the [ai-library DevRel monorepo](https://github.com/Simply007/ai-library/blob/main/_outputs/workshop-websummercamp-2026-proactive-digital-twin.md) (private repo). The version you're reading is the canonical published outline that ships with this workshop kit.
+
 ---
 
 ## Stack & Rationale
