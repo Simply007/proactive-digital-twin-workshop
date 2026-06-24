@@ -1,0 +1,17 @@
+services:
+  sandbox:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: ${SANDBOX_CONTAINER:-agent-sandbox}
+    privileged: true
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:10254:10254"
+      - "127.0.0.1:10255:10255"
+    volumes:
+      - "${AGENT_WORKSPACE:-${HOME}/nanoclaw-workspace}:/work"
+    environment:
+      ONECLI_BIND_HOST: ${ONECLI_BIND_HOST:-127.0.0.1}
+      AGENT_FRAMEWORK: ${AGENT_FRAMEWORK:-nanoclaw}
+    working_dir: /work

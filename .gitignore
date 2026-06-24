@@ -1,0 +1,24 @@
+# Local env (may contain tokens)
+.env
+
+# Agent workspace (default location is OUTSIDE this repo at ~/nanoclaw-workspace
+# but ignore in case someone overrides AGENT_WORKSPACE to point inside the repo)
+workspace/
+nanoclaw-workspace/
+
+# Docker volumes
+.docker-data/
+
+# Node / build artifacts (not used directly, but in case of nested clones)
+node_modules/
+dist/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
