@@ -152,15 +152,15 @@ Updated 2026-06-10 after end-to-end walkthrough validation. Times reflect what a
 |---|---|---|
 | **Block A – Foundations** (1h 15min) | 0:00 – 1:15 | Intro + ping/pong + first taste of Living Files |
 | Break (off-clock, 30 min) | between blocks | Water, restrooms, hallway track, 1:1 troubleshooting with stragglers |
-| **Block B – Memory Architecture + GitHub Sync + Where It Scales** (1h 15min) | 1:15 – 2:30 | Living Files debrief, GitHub memory sync hands-on, memory backend options, wrap-up |
+| **Block B – Memory Architecture + GitHub Sync + Use Cases** (1h 15min) | 1:15 – 2:30 | Living Files debrief, GitHub memory sync hands-on, run your use case, wrap-up |
 
 ### Block A breakdown (75 min)
 
 | Time | Length | What |
 |---|---|---|
 | 0:00 – 0:20 | 20 min | **Intro** — hook, framing, stack overview, Telegram bot setup (Claude access already done pre-workshop). 20 min buffers late arrivals + tech check. |
-| 0:20 – 1:00 | 40 min | **Preparation 1** — install NanoClaw + Telegram pairing + first ping/pong reply |
-| 1:00 – 1:15 | 15 min | **Preparation 2 (first taste)** — agent self-edits `CLAUDE.local.md` with 5-question profile; verify personalization. Sets up Block B's deep dive. |
+| 0:20 – 1:00 | 40 min | **Exercise 1** — install NanoClaw + Telegram pairing + first ping/pong reply |
+| 1:00 – 1:15 | 15 min | **Exercise 2 (first taste)** — agent self-edits `CLAUDE.local.md` with 5-question profile; verify personalization. Sets up Block B's deep dive. |
 
 ### Block B breakdown (75 min)
 
@@ -169,27 +169,27 @@ The shift: from install to understanding. What did you just build, how does memo
 | Time | Length | What |
 |---|---|---|
 | 1:15 – 1:35 | 20 min | **Living Files debrief** — what you gave the agent (5 answers), what you got (`CLAUDE.local.md` profile). Walk the memory architecture: `CLAUDE.md` (always loaded) → memory files (recalled when relevant) → conversation history. Live: open the files, show the diff, ask the agent to re-read and prove it remembers. |
-| 1:35 – 2:00 | 25 min | **Preparation 3: GitHub memory sync** — back up your agent's memory to a GitHub repo. Attendees use `gh auth login` in the Linux terminal (no external credential vault). TODO steps: create repo, write sync script, schedule hourly job. Agent memory becomes version-controlled and survives container rebuilds. |
-| 2:00 – 2:20 | 20 min | **Memory backends — where this scales** — flat markdown files are the floor. Three paths: **Obsidian** (human-readable vault, same markdown, browseable on phone), **PostgreSQL + pgvector** (semantic search, "what did I work on last quarter similar to this?"), **MCP memory server** (structured recall via Model Context Protocol). Frame: "you pick the right store for the trust level you need." |
-| 2:20 – 2:30 | 10 min | **Wrap-up** — what they have, 3 always-on migration recipes, where to go next, QR + follow-up |
+| 1:35 – 2:00 | 25 min | **Exercise 3: GitHub memory sync** — back up your agent's memory to a GitHub repo. Attendees use `gh auth login` in the Linux terminal. TODO steps: create repo, write sync script, schedule hourly job. Post the use case voting poll here. |
+| 2:00 – 2:20 | 20 min | **Exercise 4: Run your use case** — attendees pick the poll winner (or their own choice) and set it up via one DM. Presenter circulates. Goal: at least one notification fires before the session ends. |
+| 2:20 – 2:30 | 10 min | **Wrap-up** — what they have, where to take it next, QR + follow-up |
 
 ### Time estimates per exercise (from the 2026-06-10 walkthrough)
 
-| Preparation | Smooth-path | With buffer | What the walkthrough actually showed |
+| Exercise | Smooth-path | With buffer | Notes |
 |---|---|---|---|
 | **Ex 1 — Install + ping/pong** | 25 min | 40 min | Container build 3-5 min on laptop overlay2 (was 12 min in DinD VFS). Telegram pairing 2-3 min. First-message cold start 60-90s. Pad for Docker-not-started, wrong-token attendees. |
 | **Ex 2 — Living Files first taste** | 10 min | 15 min | Agent does most of the work. Five questions + answers + diff + verification took ~7 min including reads. |
-| **Living Files debrief** | 15 min | 20 min | Show the diff from Preparation 2, open `CLAUDE.local.md` and memory files live, ask agent to re-read and prove it remembers a detail. |
+| **Living Files debrief** | 15 min | 20 min | Show the diff from Exercise 2, open `CLAUDE.local.md` and memory files live, ask agent to re-read and prove it remembers a detail. |
 | **Ex 3 — GitHub memory sync** | 20 min | 25 min | `gh auth login` → create repo → write sync script → `schedule hourly`. Covers scheduled jobs naturally. Pad for attendees without a GitHub account. |
-| **Memory backends talk** | 15 min | 20 min | Obsidian / pgvector / MCP memory server. No hands-on — concept + screenshots. |
-| **Wrap-up** | 5 min | 10 min | Always-on migration table (Hetzner / AWS / Pi), the "where to next" list, QR. |
+| **Ex 4 — Run your use case** | 15 min | 20 min | One DM to set up. Presenter circulates. Goal: at least one notification fires before wrap-up. |
+| **Wrap-up** | 5 min | 10 min | Where to go next, always-on recipes, QR. |
 
 ### Cut candidates (in order, if running slow)
 
-1. **Preparation 3 attendee task** — keep as presenter demo only; skip the hands-on schedule create from attendees.
-2. **Memory backends talk shortened** — drop pgvector + MCP, cover only Obsidian as the immediate take-home option.
+1. **Exercise 3 attendee task** — keep as presenter demo only; skip the hands-on schedule create from attendees.
+2. **Exercise 4** — cut to presenter demo only; pick the top-voted use case and set it up live while attendees watch.
 
-If the room is **still stuck on Preparation 1 at 1:00**, push Preparation 2 entirely into Block B and start Block B with "we'll do the personalization that catches everyone up" — 15 min slack for stragglers, no one feels left behind.
+If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely into Block B and start Block B with "we'll do the personalization that catches everyone up" — 15 min slack for stragglers, no one feels left behind.
 
 ---
 
@@ -342,7 +342,9 @@ NanoClaw + Telegram bots accept voice notes out of the box, but transcription re
 
 ### Block A checkpoint (10 min buffer)
 
-Presenter walks the room. Anyone stuck on Preparation 1 gets a 1:1; anyone past Preparation 2 starts on a stretch goal. Last bullet before the break: **"Don't close your laptop or let it sleep during the break - the container dies with the host. Plug into power. If your laptop must sleep, the bot will go silent and you'll need to restart the container after."**
+Presenter walks the room. Anyone stuck on Exercise 1 gets a 1:1; anyone past Exercise 2 starts on a stretch goal. Last bullet before the break: **"Don't close your laptop or let it sleep during the break - the container dies with the host. Plug into power. If your laptop must sleep, the bot will go silent and you'll need to restart the container after."**
+
+**Before breaking:** post the use case voting poll in the workshop Telegram group. Attendees vote during the break and the first half of Block B. Results drive Exercise 4.
 
 ---
 
@@ -352,7 +354,7 @@ Water, restrooms, hallway track. Presenter stays in the room for 1:1 troubleshoo
 
 ---
 
-## Block B - Memory Architecture + GitHub Sync + Where It Scales (75 min)
+## Block B - Memory Architecture + GitHub Sync + Use Cases (75 min)
 
 ### Living Files debrief (20 min)
 
@@ -368,7 +370,7 @@ Water, restrooms, hallway track. Presenter stays in the room for 1:1 troubleshoo
 
 ---
 
-### Preparation 3: GitHub Memory Sync (25 min)
+### Exercise 3: GitHub Memory Sync (25 min)
 
 **Time budget:** ~20 min (minimum viable) / +5 min (stretch)
 **Goal (minimum viable):** agent memory backed up to a private GitHub repo, syncing on a schedule. Memory survives container rebuilds and is version-controlled.
@@ -441,19 +443,22 @@ bash ~/sync-memory.sh
 
 ---
 
-### Memory backends — where this scales (20 min)
+### Exercise 4: Run your use case (20 min)
 
-Presenter talk, no attendee hands-on. Goal: show that what they built today is the floor, not the ceiling.
+**Goal:** each attendee picks one use case from the voting results and sets it up with their agent in a single DM.
 
-**Three paths forward:**
+**Setup (presenter, during Exercise 3):**
+Post the voting poll in the workshop Telegram group. Announce the winner at 2:00.
 
-**1. Obsidian** — same markdown files, human-readable vault, sync to phone via iCloud/Obsidian Sync. The agent writes files it reads; you browse the same files in Obsidian on your phone. Zero migration — the files you just pushed to GitHub are already valid Obsidian notes. Good for: personal knowledge management, you want to read/edit memory yourself.
+**What attendees do:**
+- Pick the winning use case (or their own favourite — no pressure)
+- Send the DM from the use case card in `use-cases-relatable.md`
+- Verify the job is scheduled: DM `list my scheduled jobs`
+- If it can fire during the workshop, time it so it fires during wrap-up
 
-**2. PostgreSQL + pgvector** — store memory as vector embeddings. Instead of "load all memory files into context," the agent runs a semantic search: "what did I work on last quarter similar to this?" Returns the 3 most relevant notes, not all 50. Good for: large memory sets, "find similar" queries, sharing a memory store across multiple agents.
+**Presenter circulates.** Anyone who finishes early tries a second use case.
 
-**3. MCP memory server** — a Model Context Protocol server that exposes structured memory tools: `remember(key, value)`, `recall(query)`, `forget(key)`. The agent calls these tools instead of reading files directly. Swappable backend (SQLite, Postgres, cloud), no file management. Good for: production setups, multi-agent memory sharing, audit trails.
-
-**Framing line:** "Today you learned the mental model. Markdown files make it transparent — you can read exactly what the agent knows. When you outgrow that, swap the store. The agent's behavior doesn't change. Only the backend does."
+**The one moment that must happen:** at least one attendee's notification arrives before the session ends. Prime the room at the start: "we're going to try to make something fire before we wrap up."
 
 ---
 
@@ -483,7 +488,7 @@ All four migrations follow the same shape: `git clone nanoclaw && bash nanoclaw.
 
 - **Swap LLM provider.** Don't want to pay Anthropic forever? Inside the agent run `/add-codex` for OpenAI (ChatGPT subscription or API key), `/add-opencode` for OpenRouter / Google / DeepSeek, or `/add-ollama-provider` for local open-weight models. The `CLAUDE.md` you built today works as-is - it's a Claude Code convention, not a hard provider lock.
 - **Add a second channel.** Slack for work, Discord for community, WhatsApp for friends. `/add-slack`, `/add-discord`, etc.
-- **Connect Google Calendar.** Pick up the calendar-webhook stretch from Preparation 3.
+- **Connect Google Calendar.** Pick up the calendar-webhook stretch from Exercise 3.
 - **Write a `personal/playbooks/` folder** with one SOP per recurring task you do.
 - **Want the "easy button" instead?** Hostinger ships a one-click **Managed OpenClaw** ($5.99/mo intro, AI credits pre-loaded) or **OpenClaw on VPS** ($8.99/mo intro, 2 vCPU / 8 GB / 100 GB NVMe). Different framework, different file model (9 files vs `CLAUDE.md`), but zero setup and a 30-day money-back to try it.
 
@@ -496,6 +501,42 @@ All four migrations follow the same shape: `git clone nanoclaw && bash nanoclaw.
 
 ---
 
+## Backup content (use if ahead of schedule)
+
+### Where to host real agents
+
+Your laptop sleeps. To make the agent always-on, migrate it to any Linux box. Same install command everywhere.
+
+| Option | Cost | Notes |
+|---|---|---|
+| **Hetzner CAX11** | €4.51/mo | ARM VM, instant CC signup, EU datacenters. Recommended. |
+| **AWS t4g.small** | Free 12 months | ARM Graviton, then ~$15/mo. Best for the "free workshop year" path. |
+| **Mac Mini / Pi at home** | Free (if owned) | SSH from anywhere, run `bash nanoclaw.sh`. |
+| ~~Oracle Cloud Always Free~~ | Forever-free | Capacity roulette — A1 ARM frequently "Out of capacity" in EU. Not reliable. |
+
+### What services can store agent memory
+
+Markdown files in a GitHub repo are the floor. Three paths up:
+
+**Obsidian** — same markdown, human-readable vault, syncs to your phone via iCloud or Obsidian Sync. Zero migration — the files you just pushed to GitHub are already valid Obsidian notes. Good for: personal knowledge management, you want to read and edit memory yourself.
+
+**PostgreSQL + pgvector** — memory as vector embeddings. Instead of loading all 50 notes into context, the agent runs a semantic search: "what did I work on last quarter similar to this?" Returns the 3 most relevant. Good for: large memory sets, "find similar" queries, sharing memory across agents.
+
+**MCP memory server** — structured memory tools via Model Context Protocol: `remember(key, value)`, `recall(query)`, `forget(key)`. Swappable backend (SQLite, Postgres, cloud). Good for: production setups, audit trails, multi-agent memory sharing.
+
+**Framing line:** "Markdown files make it transparent — you can read exactly what the agent knows. When you outgrow that, swap the store. The agent's behavior doesn't change. Only the backend does."
+
+### What other services you can connect to
+
+The same pattern that wired Telegram and GitHub works for anything with an API:
+
+- **Swap LLM provider** — `/add-codex` (OpenAI), `/add-opencode` (OpenRouter / Gemini / DeepSeek), `/add-ollama-provider` (local open-weight models).
+- **Add a second channel** — `/add-slack`, `/add-discord`, `/add-whatsapp`.
+- **Connect Google Calendar** — agent reads your schedule, sends pre-meeting briefs, reacts to event changes.
+- **Any HTTP API** — Resend for email, GitHub for code, Notion for notes, Todoist for tasks. If it has an endpoint, the agent can call it.
+
+---
+
 ## Backup plans
 
 | Dependency | Failure mode | Backup |
@@ -505,7 +546,7 @@ All four migrations follow the same shape: `git clone nanoclaw && bash nanoclaw.
 | Attendee laptop too low-spec | Can't allocate enough RAM to Docker, exercises feel unusable | Pair with a neighbor; presenter offers their spare laptop or a screen-share session as fallback |
 | Anthropic API | Outage or 529 | Presenter runs `/add-codex` (OpenAI) or `/add-opencode` (OpenRouter) on the demo agent to keep the live walkthrough moving; attendees pair with someone whose region is unaffected |
 | Telegram | Banned country / phone issues | Discord via `/add-discord` - same flow, different token; attendee pairs with someone who has Telegram for the demo and switches at home |
-| Venue WiFi | Down or unusable | Presenter hotspots from phone; attendees pair to share. Critical because Anthropic API + Telegram + OpenRouter all need outbound HTTPS. Worst case, present from a pre-recorded screencast of Preparation 1-4 and let attendees follow along offline-then-deploy |
+| Venue WiFi | Down or unusable | Presenter hotspots from phone; attendees pair to share. Critical because Anthropic API + Telegram + OpenRouter all need outbound HTTPS. Worst case, present from a pre-recorded screencast of Exercise 1-4 and let attendees follow along offline-then-deploy |
 | NanoClaw repo down | Rare but happens | Pre-mirrored tarball on a USB stick + on the workshop repo |
 
 ---

@@ -6,7 +6,7 @@ Version 3 — 2026-06-26
 
 Block B starts with attendees who already have:
 - NanoClaw running in Docker
-- Agent personalized via CLAUDE.local.md (Preparation 2)
+- Agent personalized via CLAUDE.local.md (Exercise 2)
 - 75 minutes left
 
 Block B's narrative arc: **you built an agent that knows you → make that memory persist → watch it act without you asking**
@@ -20,13 +20,13 @@ The use cases below map directly onto Block B's time slots. They are demonstrati
 | Time slot | Activity | Use case woven in |
 |-----------|----------|-------------------|
 | 1:15 – 1:35 | Living Files debrief | #5 Growing personal context (narrative, no hands-on) |
-| 1:35 – 2:00 | Preparation 3: GitHub memory sync | #1 Scheduled message (bonus task after sync job is set up) |
-| 2:00 – 2:20 | Memory backends talk | #4 Async research delivery (live demo during the talk) |
+| 1:35 – 2:00 | Exercise 3: GitHub memory sync | #1 Scheduled message (bonus task after sync job is set up) |
+| 2:00 – 2:20 | Exercise 4: Run your use case | Attendees pick the poll winner from #1–#10 and set it up |
 | 2:20 – 2:30 | Wrap-up | #2 Deadline follow-up / #3 Weekly recap (show, don't build) |
 
 ---
 
-## The 5 use cases for Block B
+## The 10 use cases for Exercise 4
 
 ### 1. Scheduled Message *(Preparation 3 bonus — 5 min add-on)*
 
@@ -106,7 +106,7 @@ Then fast-forward: "Come back next week. Tell it you just had a difficult client
 
 **Why here:** This is a narrative beat, not a demo. The concept of persistent growing context is what separates a digital twin from a chat assistant. Block B's debrief is the right moment to state this clearly.
 
-**No hands-on needed.** The attendees already built it in Preparation 2.
+**No hands-on needed.** The attendees already built it in Exercise 2.
 
 **Wow:** Medium — but it's the moment the concept clicks at a deeper level. The "month from now" framing is the takeaway they'll remember.
 
@@ -120,7 +120,7 @@ Then fast-forward: "Come back next week. Tell it you just had a difficult client
 | #4 Async research (live demo) | Low — mention it as a capability without the live kick-off |
 | #1 Scheduled message bonus task | Medium — keep as a presenter-only demo if time is short; attendees see the notification but don't build it |
 | #2 Deadline follow-up (wrap-up demo) | Low — 2 min show, easy to cut |
-| **Never cut** | Living Files debrief + Preparation 3 (GitHub sync) — these are the workshop's core |
+| **Never cut** | Living Files debrief + Exercise 3 (GitHub sync) — these are the workshop's core |
 
 ---
 
@@ -132,4 +132,81 @@ Whether it's #1 (scheduled message), or just "watch me schedule a reminder for 2
 
 ---
 
-*v3 — Block B focused — iterate from here*
+---
+
+### 6. Price / Change Watcher *(Exercise 4 option)*
+
+Tell the agent to watch any URL for changes and alert you when something shifts.
+
+**What to DM:**
+> `every morning at 9am, check https://nanoclaw.sh and tell me if anything on the page has changed since yesterday. If yes, summarize what's new.`
+
+**Why NanoClaw wins here:** ChatGPT can't check a URL tomorrow morning — it closes when you close the tab.
+
+**Difficulty:** Easy
+
+**Wow:** High — visual payoff when the alert arrives.
+
+---
+
+### 7. Pre-Meeting Brief *(Exercise 4 option)*
+
+Agent sends a short brief before any meeting based on what it knows about the people you're meeting.
+
+**What to DM:**
+> `every weekday at 8am, check if I have any meetings today and send me a brief: who I'm meeting, what I know about them from memory, and one suggested talking point.`
+
+**Why NanoClaw wins here:** it knows what you've told it about that person — context a generic assistant can't have.
+
+**Difficulty:** Easy (works as a narrative brief even without calendar integration)
+
+**Wow:** Medium — lands harder once you've talked to the agent a few times and it recalls real context.
+
+---
+
+### 8. Proactive Learning Nudge *(Exercise 4 option)*
+
+Agent nudges you to practice a skill based on what you're working on.
+
+**What to DM:**
+> `every Monday at 9am, remind me to practice TypeScript for 20 minutes and suggest one specific thing to try based on what I've told you about my current project.`
+
+**Why NanoClaw wins here:** the suggestion is personalised to your stack and current project — not a generic "learn TypeScript" link.
+
+**Difficulty:** Easy
+
+**Wow:** Medium — works better the more context the agent has about you.
+
+---
+
+### 9. Multi-Step Event Chain *(Exercise 4 option)*
+
+One trigger, a chain of actions spread across time.
+
+**What to DM:**
+> `when I say "shipped": send me a Telegram message saying the feature is live, then in 2 hours remind me to check the error logs, then tomorrow morning ask me for a one-sentence retro on what went well.`
+
+**Why NanoClaw wins here:** a ChatGPT session can't follow up 2 hours later or tomorrow.
+
+**Difficulty:** Easy
+
+**Wow:** High — the delayed follow-up is the moment the "it remembers" concept clicks.
+
+---
+
+### 10. Escalating Reminder *(Exercise 4 option)*
+
+Agent starts gentle and gets louder if you don't act.
+
+**What to DM:**
+> `I need to write a blog post about last week's talk. Remind me today at 5pm. If I haven't mentioned it by tomorrow 9am, remind me again with more urgency. If still nothing by Thursday, send me a draft outline so I have something to react to.`
+
+**Why NanoClaw wins here:** ChatGPT forgets the moment you close the tab. This one keeps coming back until the task is done — or does the first draft for you.
+
+**Difficulty:** Easy
+
+**Wow:** High — the escalation story is instantly relatable. Everyone has the task they keep avoiding.
+
+---
+
+*v4 — 10 use cases for Exercise 4 voting — iterate from here*
