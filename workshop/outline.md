@@ -182,14 +182,12 @@ The shift: from install to understanding. What did you just build, how does memo
 | **Living Files debrief** | 15 min | 20 min | Show the diff from Exercise 2, open `CLAUDE.local.md` and memory files live, ask agent to re-read and prove it remembers a detail. |
 | **Ex 3 — GitHub memory sync** | 20 min | 25 min | `gh auth login` → create repo → write sync script → `schedule hourly`. Covers scheduled jobs naturally. Pad for attendees without a GitHub account. |
 | **Memory backends talk** | 15 min | 20 min | Obsidian / pgvector / MCP memory server. No hands-on — concept + screenshots. |
-| **CKEditor cameo** *(optional)* | 5 min | 5 min | Pure presenter demo. Cut if running behind — works as a one-liner in wrap-up instead. |
 | **Wrap-up** | 5 min | 10 min | Always-on migration table (Hetzner / AWS / Pi), the "where to next" list, QR. |
 
 ### Cut candidates (in order, if running slow)
 
-1. **CKEditor cameo** — optional by design. Skip the live demo, mention as a "same pattern" closing line in wrap-up.
-2. **Exercise 3 attendee task** — keep as presenter demo only; skip the hands-on schedule create from attendees.
-3. **Memory backends talk shortened** — drop pgvector + MCP, cover only Obsidian as the immediate take-home option.
+1. **Exercise 3 attendee task** — keep as presenter demo only; skip the hands-on schedule create from attendees.
+2. **Memory backends talk shortened** — drop pgvector + MCP, cover only Obsidian as the immediate take-home option.
 
 If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely into Block B and start Block B with "we'll do the personalization that catches everyone up" — 15 min slack for stragglers, no one feels left behind.
 
@@ -456,18 +454,6 @@ Presenter talk, no attendee hands-on. Goal: show that what they built today is t
 **3. MCP memory server** — a Model Context Protocol server that exposes structured memory tools: `remember(key, value)`, `recall(query)`, `forget(key)`. The agent calls these tools instead of reading files directly. Swappable backend (SQLite, Postgres, cloud), no file management. Good for: production setups, multi-agent memory sharing, audit trails.
 
 **Framing line:** "Today you learned the mental model. Markdown files make it transparent — you can read exactly what the agent knows. When you outgrow that, swap the store. The agent's behavior doesn't change. Only the backend does."
-
----
-
-### CKEditor cameo *(optional — cut if running behind)*
-
-Pure presenter demo, no attendee task. Skip to wrap-up if the room is at 2:15 or later.
-
-**Goal:** show one realistic API integration as a closing demo.
-
-- DM the demo agent: `take the bullets from this morning's brief and post them into the WSC weekly notes CKEditor doc (https://...) as a new section dated today.`
-- The agent calls CKEditor's REST API (token pre-loaded in `CLAUDE.md` under an "Available APIs" section), creates a new section, replies with the document URL.
-- One-line takeaway: "Same shape as the Telegram channel. Same shape as the GitHub sync. Any API your day-job touches plugs in the same way."
 
 ---
 
