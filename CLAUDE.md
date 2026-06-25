@@ -146,11 +146,11 @@ are all owned by the same normal user, so none of this is needed.
 
 End-to-end validation done in DinD sandbox on 2026-06-09/10:
 
-- ✅ Exercise 1: install → Telegram pairing → ping/pong
-- ✅ Exercise 2: Living Files (CLAUDE.local.md self-edit, personalization confirmed)
-- ✅ Exercise 3 Part A: default web search baseline
-- ✅ Exercise 3 Part B: research tool swap (tried OpenRouter Perplexity, then DDG Instant Answers as free fallback — DDG comes up dry on event-specific queries, which is itself a useful demo moment)
-- ✅ Exercise 4: scheduled morning brief (create + list + run-once)
+- ✅ Preparation 1: install → Telegram pairing → ping/pong
+- ✅ Preparation 2: Living Files (CLAUDE.local.md self-edit, personalization confirmed)
+- ✅ Preparation 3 Part A: default web search baseline
+- ✅ Preparation 3 Part B: research tool swap (tried OpenRouter Perplexity, then DDG Instant Answers as free fallback — DDG comes up dry on event-specific queries, which is itself a useful demo moment)
+- ✅ Preparation 4: scheduled morning brief (create + list + run-once)
 - ✅ Bonus voice messages: graceful fallback when no OpenAI key, OneCLI URL flow
 - ⏸ Full clean-slate DinD validation with the current Dockerfile (this kit)
 - ⏸ `docker compose stop && start` recovery test

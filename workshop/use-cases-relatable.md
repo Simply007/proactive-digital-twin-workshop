@@ -6,7 +6,7 @@ Version 3 — 2026-06-26
 
 Block B starts with attendees who already have:
 - NanoClaw running in Docker
-- Agent personalized via CLAUDE.local.md (Exercise 2)
+- Agent personalized via CLAUDE.local.md (Preparation 2)
 - 75 minutes left
 
 Block B's narrative arc: **you built an agent that knows you → make that memory persist → watch it act without you asking**
@@ -20,7 +20,7 @@ The use cases below map directly onto Block B's time slots. They are demonstrati
 | Time slot | Activity | Use case woven in |
 |-----------|----------|-------------------|
 | 1:15 – 1:35 | Living Files debrief | #5 Growing personal context (narrative, no hands-on) |
-| 1:35 – 2:00 | Exercise 3: GitHub memory sync | #1 Scheduled message (bonus task after sync job is set up) |
+| 1:35 – 2:00 | Preparation 3: GitHub memory sync | #1 Scheduled message (bonus task after sync job is set up) |
 | 2:00 – 2:20 | Memory backends talk | #4 Async research delivery (live demo during the talk) |
 | 2:20 – 2:30 | Wrap-up | #2 Deadline follow-up / #3 Weekly recap (show, don't build) |
 
@@ -28,16 +28,16 @@ The use cases below map directly onto Block B's time slots. They are demonstrati
 
 ## The 5 use cases for Block B
 
-### 1. Scheduled Message *(Exercise 3 bonus — 5 min add-on)*
+### 1. Scheduled Message *(Preparation 3 bonus — 5 min add-on)*
 
 After attendees set up the hourly sync job, have them immediately schedule one more job — a message to themselves, delivered during the wrap-up section of the workshop.
 
-**Why here:** Exercise 3 teaches `schedule_task`. The sync job is functional but dry. The scheduled message makes the concept click emotionally — the notification arrives on their phone while they're still in the room.
+**Why here:** Preparation 3 teaches `schedule_task`. The sync job is functional but dry. The scheduled message makes the concept click emotionally — the notification arrives on their phone while they're still in the room.
 
 **What to DM:**
 > `schedule a message to me in 45 minutes: "You built a proactive agent today. Here's what to try this week: [paste 3 ideas from the wrap-up]"`
 
-**Presenter timing:** schedule it during Exercise 3. It fires during the wrap-up. No coordination needed — it just arrives.
+**Presenter timing:** schedule it during Preparation 3. It fires during the wrap-up. No coordination needed — it just arrives.
 
 **Difficulty:** Easy — literally the same `schedule_task` call they just learned.
 
@@ -106,7 +106,7 @@ Then fast-forward: "Come back next week. Tell it you just had a difficult client
 
 **Why here:** This is a narrative beat, not a demo. The concept of persistent growing context is what separates a digital twin from a chat assistant. Block B's debrief is the right moment to state this clearly.
 
-**No hands-on needed.** The attendees already built it in Exercise 2.
+**No hands-on needed.** The attendees already built it in Preparation 2.
 
 **Wow:** Medium — but it's the moment the concept clicks at a deeper level. The "month from now" framing is the takeaway they'll remember.
 
@@ -120,7 +120,7 @@ Then fast-forward: "Come back next week. Tell it you just had a difficult client
 | #4 Async research (live demo) | Low — mention it as a capability without the live kick-off |
 | #1 Scheduled message bonus task | Medium — keep as a presenter-only demo if time is short; attendees see the notification but don't build it |
 | #2 Deadline follow-up (wrap-up demo) | Low — 2 min show, easy to cut |
-| **Never cut** | Living Files debrief + Exercise 3 (GitHub sync) — these are the workshop's core |
+| **Never cut** | Living Files debrief + Preparation 3 (GitHub sync) — these are the workshop's core |
 
 ---
 

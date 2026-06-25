@@ -111,7 +111,7 @@ NanoClaw uses Claude (Anthropic) as the agent's brain. Before the workshop, set 
 
 ### 3. Telegram bot — quick, can be done in the workshop intro
 
-Install Telegram on your phone. DM [@BotFather](https://t.me/botfather): send `/newbot`, pick a name, save the token. You'll need this token in Exercise 1. Takes ~2 min, no pre-workshop urgency.
+Install Telegram on your phone. DM [@BotFather](https://t.me/botfather): send `/newbot`, pick a name, save the token. You'll need this token in Preparation 1. Takes ~2 min, no pre-workshop urgency.
 
 ### Minimum laptop requirements
 
@@ -159,8 +159,8 @@ Updated 2026-06-10 after end-to-end walkthrough validation. Times reflect what a
 | Time | Length | What |
 |---|---|---|
 | 0:00 – 0:20 | 20 min | **Intro** — hook, framing, stack overview, Telegram bot setup (Claude access already done pre-workshop). 20 min buffers late arrivals + tech check. |
-| 0:20 – 1:00 | 40 min | **Exercise 1** — install NanoClaw + Telegram pairing + first ping/pong reply |
-| 1:00 – 1:15 | 15 min | **Exercise 2 (first taste)** — agent self-edits `CLAUDE.local.md` with 5-question profile; verify personalization. Sets up Block B's deep dive. |
+| 0:20 – 1:00 | 40 min | **Preparation 1** — install NanoClaw + Telegram pairing + first ping/pong reply |
+| 1:00 – 1:15 | 15 min | **Preparation 2 (first taste)** — agent self-edits `CLAUDE.local.md` with 5-question profile; verify personalization. Sets up Block B's deep dive. |
 
 ### Block B breakdown (75 min)
 
@@ -169,27 +169,27 @@ The shift: from install to understanding. What did you just build, how does memo
 | Time | Length | What |
 |---|---|---|
 | 1:15 – 1:35 | 20 min | **Living Files debrief** — what you gave the agent (5 answers), what you got (`CLAUDE.local.md` profile). Walk the memory architecture: `CLAUDE.md` (always loaded) → memory files (recalled when relevant) → conversation history. Live: open the files, show the diff, ask the agent to re-read and prove it remembers. |
-| 1:35 – 2:00 | 25 min | **Exercise 3: GitHub memory sync** — back up your agent's memory to a GitHub repo. Attendees use `gh auth login` in the Linux terminal (no external credential vault). TODO steps: create repo, write sync script, schedule hourly job. Agent memory becomes version-controlled and survives container rebuilds. |
+| 1:35 – 2:00 | 25 min | **Preparation 3: GitHub memory sync** — back up your agent's memory to a GitHub repo. Attendees use `gh auth login` in the Linux terminal (no external credential vault). TODO steps: create repo, write sync script, schedule hourly job. Agent memory becomes version-controlled and survives container rebuilds. |
 | 2:00 – 2:20 | 20 min | **Memory backends — where this scales** — flat markdown files are the floor. Three paths: **Obsidian** (human-readable vault, same markdown, browseable on phone), **PostgreSQL + pgvector** (semantic search, "what did I work on last quarter similar to this?"), **MCP memory server** (structured recall via Model Context Protocol). Frame: "you pick the right store for the trust level you need." |
 | 2:20 – 2:30 | 10 min | **Wrap-up** — what they have, 3 always-on migration recipes, where to go next, QR + follow-up |
 
 ### Time estimates per exercise (from the 2026-06-10 walkthrough)
 
-| Exercise | Smooth-path | With buffer | What the walkthrough actually showed |
+| Preparation | Smooth-path | With buffer | What the walkthrough actually showed |
 |---|---|---|---|
 | **Ex 1 — Install + ping/pong** | 25 min | 40 min | Container build 3-5 min on laptop overlay2 (was 12 min in DinD VFS). Telegram pairing 2-3 min. First-message cold start 60-90s. Pad for Docker-not-started, wrong-token attendees. |
 | **Ex 2 — Living Files first taste** | 10 min | 15 min | Agent does most of the work. Five questions + answers + diff + verification took ~7 min including reads. |
-| **Living Files debrief** | 15 min | 20 min | Show the diff from Exercise 2, open `CLAUDE.local.md` and memory files live, ask agent to re-read and prove it remembers a detail. |
+| **Living Files debrief** | 15 min | 20 min | Show the diff from Preparation 2, open `CLAUDE.local.md` and memory files live, ask agent to re-read and prove it remembers a detail. |
 | **Ex 3 — GitHub memory sync** | 20 min | 25 min | `gh auth login` → create repo → write sync script → `schedule hourly`. Covers scheduled jobs naturally. Pad for attendees without a GitHub account. |
 | **Memory backends talk** | 15 min | 20 min | Obsidian / pgvector / MCP memory server. No hands-on — concept + screenshots. |
 | **Wrap-up** | 5 min | 10 min | Always-on migration table (Hetzner / AWS / Pi), the "where to next" list, QR. |
 
 ### Cut candidates (in order, if running slow)
 
-1. **Exercise 3 attendee task** — keep as presenter demo only; skip the hands-on schedule create from attendees.
+1. **Preparation 3 attendee task** — keep as presenter demo only; skip the hands-on schedule create from attendees.
 2. **Memory backends talk shortened** — drop pgvector + MCP, cover only Obsidian as the immediate take-home option.
 
-If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely into Block B and start Block B with "we'll do the personalization that catches everyone up" — 15 min slack for stragglers, no one feels left behind.
+If the room is **still stuck on Preparation 1 at 1:00**, push Preparation 2 entirely into Block B and start Block B with "we'll do the personalization that catches everyone up" — 15 min slack for stragglers, no one feels left behind.
 
 ---
 
@@ -204,7 +204,7 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 **Credentials setup, in parallel (3 min):** Claude access should already be sorted from pre-workshop (Pro subscription, Anthropic API key, or OpenRouter free key). Confirm with attendees that they have it; help anyone who didn't get it set up. Then everyone does the one quick credential left:
 
-- On phone, open Telegram → DM @BotFather → `/newbot` → pick a name → save the token. You'll paste it during Exercise 1.
+- On phone, open Telegram → DM @BotFather → `/newbot` → pick a name → save the token. You'll paste it during Preparation 1.
 
 **Stack overview (narrated while attendees do credentials):** Local Docker on your laptop. NanoClaw as the agent framework. Anthropic Sonnet 4.5 as the model. Telegram as the channel. Why local Docker? Because we tested the VPS options and they don't work for everyone on day-of (see the findings doc). Local is the only path where every attendee walks out with something running.
 
@@ -214,7 +214,7 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 ## Block A - Foundations (1h 5min)
 
-### Exercise 1: Deploying the Brain
+### Preparation 1: Deploying the Brain
 
 **Time budget:** ~30 min (minimum viable) / +5 min (stretch)
 **Goal (minimum viable):** NanoClaw running in a Docker container on your laptop, paired to your Telegram bot, answering "ping" with "pong".
@@ -284,7 +284,7 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 ---
 
-### Exercise 2: Living Files
+### Preparation 2: Living Files
 
 > **Heads-up on the file shape.** Where OpenClaw splits context across 9 files (`soul.md`, `user.md`, `heartbeat.md`, `tools.md`, `identity.md`, ...), NanoClaw uses **one `CLAUDE.md` per agent**, plus the agent's memory, plus installable skills. Same mental model, one file to learn first. Tone, identity, rules, and API references all live as sections inside `CLAUDE.md`; long-term recall lives in the agent's memory; new capabilities arrive as skills (`/add-*`). The file name is a Claude Code convention - if you swap the provider via `/add-codex` or `/add-opencode`, the file stays `CLAUDE.md` (NanoClaw reads it regardless of provider).
 
@@ -342,7 +342,7 @@ NanoClaw + Telegram bots accept voice notes out of the box, but transcription re
 
 ### Block A checkpoint (10 min buffer)
 
-Presenter walks the room. Anyone stuck on Exercise 1 gets a 1:1; anyone past Exercise 2 starts on a stretch goal. Last bullet before the break: **"Don't close your laptop or let it sleep during the break - the container dies with the host. Plug into power. If your laptop must sleep, the bot will go silent and you'll need to restart the container after."**
+Presenter walks the room. Anyone stuck on Preparation 1 gets a 1:1; anyone past Preparation 2 starts on a stretch goal. Last bullet before the break: **"Don't close your laptop or let it sleep during the break - the container dies with the host. Plug into power. If your laptop must sleep, the bot will go silent and you'll need to restart the container after."**
 
 ---
 
@@ -360,7 +360,7 @@ Water, restrooms, hallway track. Presenter stays in the room for 1:1 troubleshoo
 
 **Demo cue (presenter):**
 - Open the agent's workspace in the terminal: `ls` the files, `cat CLAUDE.local.md`, open the memory folder.
-- Show the diff from Exercise 2 — these are the actual words the agent will carry into every future conversation.
+- Show the diff from Preparation 2 — these are the actual words the agent will carry into every future conversation.
 - DM the agent: `re-read your CLAUDE.local.md and tell me one specific thing you remember about me that you didn't know before this workshop.`
 - Point at the structure: `CLAUDE.md` (always loaded — identity, rules, skills) vs `CLAUDE.local.md` (per-agent memory — who you are, what you care about) vs memory files (longer-term recall, recalled when relevant) vs conversation history (searchable transcripts).
 
@@ -368,7 +368,7 @@ Water, restrooms, hallway track. Presenter stays in the room for 1:1 troubleshoo
 
 ---
 
-### Exercise 3: GitHub Memory Sync (25 min)
+### Preparation 3: GitHub Memory Sync (25 min)
 
 **Time budget:** ~20 min (minimum viable) / +5 min (stretch)
 **Goal (minimum viable):** agent memory backed up to a private GitHub repo, syncing on a schedule. Memory survives container rebuilds and is version-controlled.
@@ -483,7 +483,7 @@ All four migrations follow the same shape: `git clone nanoclaw && bash nanoclaw.
 
 - **Swap LLM provider.** Don't want to pay Anthropic forever? Inside the agent run `/add-codex` for OpenAI (ChatGPT subscription or API key), `/add-opencode` for OpenRouter / Google / DeepSeek, or `/add-ollama-provider` for local open-weight models. The `CLAUDE.md` you built today works as-is - it's a Claude Code convention, not a hard provider lock.
 - **Add a second channel.** Slack for work, Discord for community, WhatsApp for friends. `/add-slack`, `/add-discord`, etc.
-- **Connect Google Calendar.** Pick up the calendar-webhook stretch from Exercise 3.
+- **Connect Google Calendar.** Pick up the calendar-webhook stretch from Preparation 3.
 - **Write a `personal/playbooks/` folder** with one SOP per recurring task you do.
 - **Want the "easy button" instead?** Hostinger ships a one-click **Managed OpenClaw** ($5.99/mo intro, AI credits pre-loaded) or **OpenClaw on VPS** ($8.99/mo intro, 2 vCPU / 8 GB / 100 GB NVMe). Different framework, different file model (9 files vs `CLAUDE.md`), but zero setup and a 30-day money-back to try it.
 
@@ -505,7 +505,7 @@ All four migrations follow the same shape: `git clone nanoclaw && bash nanoclaw.
 | Attendee laptop too low-spec | Can't allocate enough RAM to Docker, exercises feel unusable | Pair with a neighbor; presenter offers their spare laptop or a screen-share session as fallback |
 | Anthropic API | Outage or 529 | Presenter runs `/add-codex` (OpenAI) or `/add-opencode` (OpenRouter) on the demo agent to keep the live walkthrough moving; attendees pair with someone whose region is unaffected |
 | Telegram | Banned country / phone issues | Discord via `/add-discord` - same flow, different token; attendee pairs with someone who has Telegram for the demo and switches at home |
-| Venue WiFi | Down or unusable | Presenter hotspots from phone; attendees pair to share. Critical because Anthropic API + Telegram + OpenRouter all need outbound HTTPS. Worst case, present from a pre-recorded screencast of Exercise 1-4 and let attendees follow along offline-then-deploy |
+| Venue WiFi | Down or unusable | Presenter hotspots from phone; attendees pair to share. Critical because Anthropic API + Telegram + OpenRouter all need outbound HTTPS. Worst case, present from a pre-recorded screencast of Preparation 1-4 and let attendees follow along offline-then-deploy |
 | NanoClaw repo down | Rare but happens | Pre-mirrored tarball on a USB stick + on the workshop repo |
 
 ---
