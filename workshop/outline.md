@@ -266,30 +266,32 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 ### Preparation 2: Living Files
 
-> **Heads-up on the file shape.** Where OpenClaw splits context across 9 files (`soul.md`, `user.md`, `heartbeat.md`, `tools.md`, `identity.md`, ...), NanoClaw uses **one `CLAUDE.md` per agent**, plus the agent's memory, plus installable skills. Same mental model, one file to learn first. Tone, identity, rules, and API references all live as sections inside `CLAUDE.md`; long-term recall lives in the agent's memory; new capabilities arrive as skills (`/add-*`). The file name is a Claude Code convention - if you swap the provider via `/add-codex` or `/add-opencode`, the file stays `CLAUDE.md` (NanoClaw reads it regardless of provider).
+> **Heads-up on the file shape.** Where OpenClaw splits context across 9 files (`soul.md`, `user.md`, `heartbeat.md`, `tools.md`, `identity.md`, ...), NanoClaw uses **one `CLAUDE.md` per agent** for config (tone, identity, rules, API references), plus the agent's **memory** for recall, plus installable skills for new capabilities (`/add-*`). Same mental model, far fewer files. **What you teach the agent about yourself in this exercise lands in its memory, not in `CLAUDE.md`** - and the memory store's shape depends on the provider: the **Claude** provider keeps a flat `CLAUDE.local.md`; **Codex** (and other scaffold providers) keep a `memory/` tree (`memory/index.md`, `memory/memories/`, `memory/data/`). The agent reads its memory every time it wakes up.
+
+> **Where memory lives.** The agent sees its memory at the in-container path `/workspace/agent/memory`; on the host the same files are at `~/nanoclaw/groups/<folder>/memory` (the `~/nanoclaw-workspace/...` path is not where memory lives). A baked-in scaffold seeds only `system/`, `memories/`, `data/` plus `index.md` and `system/definition.md`; the taxonomy (`people` / `projects` / `organizations` / `decisions`) is editable doctrine in `system/definition.md` - "a starting point, not a contract" - and the concrete files are written by the agent as you talk to it. The [`living-files`](../.claude/skills/living-files/SKILL.md) skill walks this in detail.
 
 **Time budget:** ~25 min (minimum viable) / +5 min (stretch)
-**Goal (minimum viable):** your agent's `CLAUDE.md` (and a per-agent `personal/` folder) contains enough about you that when you message "what should I focus on this afternoon?", the reply references your actual stack, role, and current project - not generic advice.
-**Stretch goal:** add a `business/goals.md` and `personal/goals.md`, then have the agent self-edit `CLAUDE.md` to link to them.
+**Goal (minimum viable):** your agent's **memory** contains enough about you that when you message "what should I focus on this afternoon?", the reply references your actual stack, role, and current project - not generic advice.
+**Stretch goal:** have the agent spread what it learned across its memory categories (`people`, `projects`, `organizations`, `decisions`, `data`) and update the indexes - then confirm it reads only the relevant file when asked.
 
 **Demo cue (presenter):**
 
-- Open the agent's workspace folder, show the freshly-created `CLAUDE.md`.
-- DM the bot: `ask me 5 questions to get to know me, then write a draft user profile into CLAUDE.md`.
-- Read the questions out loud, answer 2 of them on stage, show the diff in `CLAUDE.md`.
+- Ask the agent how its memory is structured, then `read your memory definition at system/definition.md and explain the rules`. Land the point: the folder taxonomy is **editable doctrine, not code** - "a starting point, not a contract."
+- DM the bot: `ask me 5 questions to get to know me, then write what you learn into your memory`.
+- Read the questions out loud, answer 2 of them on stage, show the new file in the agent's memory tree.
 - "Notice what just happened. We didn't write code. We verbalized."
 
 **Attendee task:**
 
-1. From Telegram, send: `show me the current contents of CLAUDE.md`.
-2. Send: `ask me 5 short questions to learn the basics about me - role, stack, time zone, what I'm working on this week, communication style.`
-3. Answer them in chat.
-4. Send: `update CLAUDE.md with what you learned. Then show me the new file.`
+1. From Telegram, send: `tell me how structured is your memory` - see the tree (or, on the Claude provider, the single `CLAUDE.local.md`).
+2. Send: `how can I explore it within the environment you run in` - note the three ways (ask in chat, shell into `/workspace/agent/memory`, packaged export).
+3. Send: `read your memory definition at system/definition.md and explain the rules you follow`.
+4. Send: `ask me 5 short questions to learn the basics about me - role, stack, time zone, what I'm working on this week, communication style.` Answer them in chat, then: `save what you learned into your memory and show me the files you wrote.`
 5. Test: send `given what you now know about me, what should I focus on this afternoon?` - check that the reply is specific to you.
 
 **Expected output / checkpoint:**
 
-- `CLAUDE.md` shows your name, role, stack, and current focus, written in the agent's voice.
+- The agent's memory holds your profile in its voice - on Codex a file like `memory/memories/people/<you>.md`; on the Claude provider, your details in `CLAUDE.local.md`.
 - The "what should I focus on" reply mentions at least one detail from your answers (not generic).
 
 **Troubleshooting:**
@@ -297,11 +299,9 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 | Symptom                                             | Likely cause                              | Fix                                                                                                                                                              |
 | --------------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Agent says it can't edit files                      | Workspace mount missing or read-only      | Check `docker inspect <container>` for the workspace mount, re-run `bash nanoclaw.sh` if missing                                                                 |
-| `CLAUDE.md` change doesn't persist between messages | Per-session container, no volume          | NanoClaw mounts a per-agent volume by default; if persistence fails, the install picked a transient container - re-bootstrap and pick "keep state" when prompted |
-| Reply is generic despite saved context              | Context not loaded into the system prompt | DM `re-read your CLAUDE.md from disk before answering` once, then retry                                                                                          |
-
-**Sources / refs:** NanoClaw per-agent workspace docs, the OpenClaw "living files" framing (<https://www.youtube.com/watch?v=cod50CWlZeU>)
-
+| Memory change doesn't persist between messages      | Per-session container, no volume          | NanoClaw mounts a per-agent volume by default; if persistence fails, the install picked a transient container - re-bootstrap and pick "keep state" when prompted |
+| Reply is generic despite saved context              | Context not loaded into the system prompt | DM `re-read your memory from disk before answering` once, then retry                                                                                            |
+| No `memory/` tree, only a `CLAUDE.local.md`         | Agent is on the Claude provider           | Expected - the Claude provider keeps a flat `CLAUDE.local.md`; the `memory/` tree is a Codex/scaffold-provider shape                                             |
 ---
 
 ### Bonus: voice messages (~5 min, optional, can run during checkpoint)
