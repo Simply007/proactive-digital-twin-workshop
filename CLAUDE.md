@@ -34,6 +34,8 @@ The attendee-facing host/VPS comparison (Railway, Oracle, and the rest) lives in
 ├── .claude/skills/
 │   └── nanoclaw-install/           # install walkthrough skill (Claude-native; more being split out)
 ├── ai-library/                     # private git submodule (author tooling; not fetched by a normal clone)
+├── reference/
+│   └── nanoclaw/                   # git submodule: upstream NanoClaw source, vendored as a reference/data source for authoring the skill + outline (run `git submodule update --init reference/nanoclaw`)
 └── dind-sandbox/                   # ISOLATED, presenter-only - not core
     ├── README.md                   # how the DinD sandbox works + all the operational notes
     ├── docker-compose.yml          # `docker compose up` → working sandbox
@@ -51,6 +53,22 @@ The attendee-facing host/VPS comparison (Railway, Oracle, and the rest) lives in
 The presenter-only Docker-in-Docker sandbox and all its operational guidance (starting the agent service as `nanoclaw`, stop/start vs down/up behavior, Telegram pairing in DinD, verify false-negatives, the 9 gotchas, reset) now live in **[`dind-sandbox/README.md`](dind-sandbox/README.md)** and **[`dind-sandbox/findings.md`](dind-sandbox/findings.md)**. Do not duplicate that detail here - update it there.
 
 Attendees never need the sandbox; they run the workshop in an Ubuntu VM on their own laptop.
+
+## NanoClaw reference (submodule)
+
+Upstream NanoClaw source is vendored at `reference/nanoclaw/` (git submodule) as a grounding
+data source for authoring the install skill and outline. Fetch it with
+`git submodule update --init reference/nanoclaw`. Key facts confirmed from it:
+
+- **Agents are "agent groups"** (`groups/<name>/`), each with its own workspace, memory,
+  `CLAUDE.md`, container, and personality - container-per-agent, fully isolated. They are
+  **siblings; there is no "boss"/main agent over the others.** `groups/main` is the default
+  agent.
+- **`groups/global/CLAUDE.md`** is shared base config inherited by every agent (each agent's
+  `CLAUDE.md` begins with `@./.claude-global.md`); `global` is config, not an agent.
+- **Channels (messaging groups) are decoupled from agents**, wired many-to-many with three
+  isolation levels (shared session / same-agent-separate-sessions / separate agents). See
+  `reference/nanoclaw/docs/isolation-model.md`.
 
 ## Key decisions (with rationale)
 

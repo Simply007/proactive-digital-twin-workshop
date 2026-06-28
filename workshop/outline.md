@@ -102,7 +102,7 @@ Install Telegram on your phone. DM [@BotFather](https://t.me/botfather): send `/
 | Resource            | Minimum (will work, will be tight)                                                        | Recommended (comfortable)                            |
 | ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | **RAM**             | 8 GB                                                                                      | 16 GB or more                                        |
-| **Free disk space** | 10 GB                                                                                     | 20 GB+                                               |
+| **Free disk space** | 30 GB (a full install + Docker images fills ~20 GB)                                        | 40 GB+                                               |
 | **CPU**             | Any 64-bit CPU from ~2018 onward (Intel Core i5+, AMD Ryzen 5+, Apple Silicon M1+, ARM64) | Same                                                 |
 | **OS**              | macOS 11+ / Windows 10 build 2004+ with WSL2 / Linux kernel 4.x+                          | macOS 13+ / Windows 11 / recent Ubuntu LTS           |
 | **Admin rights**    | Required (to install the virtualization tool)                                             | Required                                             |

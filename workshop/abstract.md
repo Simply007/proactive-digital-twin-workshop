@@ -17,11 +17,6 @@ We'll dive into:
 
 By the end of this session, you won't just have a chatbot. You'll have a functioning Digital Twin playground ready to offload the parts of your agenda or just ready to help with your experiments.
 
-## Prerequisites
-
-- OS: Linux Ubuntu LTS installed in a virtualization platform (UTM for Mac, VirtualBox for Windows, or KVM for Linux).
-- AI Access: Claude (API key or Pro+ subscription) or OpenAI (API key or Plus+ subscription).
-
 ## Takeaways
 
 Have a playground agent to try the experiments!
