@@ -31,8 +31,9 @@ When it finishes, DM your bot `ping` from your phone — the agent replies withi
 
 ### 3. What you need before the workshop
 
-- **VM software** — UTM, VirtualBox, or KVM (see above, all free).
-- **Ubuntu 24.04 or 22.04 LTS** ISO — download from [ubuntu.com](https://ubuntu.com/download/desktop).
+- **A booted Linux VM (Ubuntu 24.04 or 22.04 LTS)** — this is the hard prerequisite. Set it up at home, not on conference WiFi. You need:
+  - **VM software** — UTM (macOS), VirtualBox (Windows), or KVM / `virt-manager` (Linux). All free (see above).
+  - **Ubuntu 24.04 or 22.04 LTS** ISO — download from [ubuntu.com](https://ubuntu.com/download/desktop), then create the VM (≥4 GB RAM, 20 GB disk) and boot it to the desktop at least once.
 - **AI access** — one of:
   - Claude: [Pro or higher subscription](https://claude.ai) **or** [Anthropic API key](https://console.anthropic.com)
   - OpenAI: [ChatGPT Plus or higher](https://openai.com) **or** [API key](https://platform.openai.com) — install the `/add-codex` skill after setup to switch providers
