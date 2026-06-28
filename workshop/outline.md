@@ -78,6 +78,8 @@ You will run the whole workshop inside an Ubuntu Linux VM on your laptop. Set up
 
 Then download an **Ubuntu 24.04 or 22.04 LTS** ISO from <https://ubuntu.com/download>, create a new VM in your tool, and boot it through the installer until you reach an Ubuntu desktop or login. You do NOT install Docker yet - that happens inside the VM when you run `bash nanoclaw.sh` in Preparation 1.
 
+**Recommended: run the VM natively, not emulated.** For the smoothest experience, the Ubuntu image that matches your computer's CPU architecture is the better pick, so the VM runs on the native CPU rather than emulating a different one (emulation works, but it's several times slower). On Apple Silicon (M-series) Macs that's the **ARM64** image; on Intel/AMD machines, the **x86_64 / amd64** image (with VT-x / AMD-V enabled in BIOS).
+
 Boot the VM successfully at least once before you walk in - we can't troubleshoot virtualization setups over Opatija's hotel WiFi in a 2.5h session.
 
 ### 2. Decide how you'll connect to Claude (pick ONE of two paths)

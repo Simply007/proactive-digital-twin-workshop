@@ -20,6 +20,8 @@ Install a free virtualization tool, then download and boot an Ubuntu LTS ISO ins
 
 Download **Ubuntu 24.04 LTS** (or 22.04) from [ubuntu.com](https://ubuntu.com/download/desktop). Create the VM (allocate at least 4 GB RAM and 20 GB disk), complete the Ubuntu setup wizard, and boot it to the desktop at least once.
 
+> **Recommended: run the VM natively, not emulated.** For the smoothest experience, the Ubuntu image that matches your computer's CPU architecture is the better pick, so the VM runs on the native CPU rather than emulating a different one (emulation works, but it's several times slower). On **Apple Silicon (M-series) Macs** that's the **ARM64** image; on **Intel/AMD** machines, the **x86_64 / amd64** image (with VT-x / AMD-V enabled in BIOS).
+
 ### 2. AI access — one of
 
 - Claude: [Pro or higher subscription](https://claude.ai) **or** [Anthropic API key](https://console.anthropic.com)
