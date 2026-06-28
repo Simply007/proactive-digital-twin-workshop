@@ -1,3 +1,6 @@
 [submodule "ai-library"]
 	path = ai-library
 	url = https://github.com/Simply007/ai-library
+[submodule "reference/nanoclaw"]
+	path = reference/nanoclaw
+	url = https://github.com/nanocoai/nanoclaw.git

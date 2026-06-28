@@ -15,7 +15,7 @@ your laptop (macOS / Linux / Windows + WSL2)
         ├── socat bridges  (bridge-gateway IP read at runtime by entrypoint.sh)
         │   ├── <bridge-gw>:10254 → 127.0.0.1:10254  (so inner containers can reach OneCLI)
         │   └── <bridge-gw>:10255 → 127.0.0.1:10255
-        └── /work  (bind-mounted from ${AGENT_WORKSPACE} on your host)
+        └── /work  (the `nanoclaw-work` Docker named volume, persists across restarts)
             └── nanoclaw/  (cloned during setup: git clone + bash nanoclaw.sh)
                 ├── dist/index.js  (the agent process)
                 ├── data/v2.db
@@ -32,7 +32,7 @@ Why each piece exists:
 | Inner `dockerd` with VFS | NanoClaw's container-per-agent model needs Docker. VFS instead of overlay2 because overlay-on-overlay fails on Docker Desktop. |
 | socat bridges | OneCLI binds to the sandbox's `127.0.0.1`. Inner agent containers reach it via `host.docker.internal` → the default bridge gateway (auto-assigned by Docker — `172.17.0.1` if free, else `172.18.0.1`, …; `entrypoint.sh` reads it at runtime). socat forwards that gateway to the loopback so the connection completes. |
 | Port publish `127.0.0.1:10254-10255` | When the agent prints a OneCLI URL ("connect OpenAI here: http://127.0.0.1:10254/..."), your Mac browser opens that exact URL because the published port maps to the same address inside the sandbox. |
-| Bind mount `/work` | Agent state survives container restart. You can also read/edit `CLAUDE.local.md` from your host with any editor while the agent is running. |
+| Named volume `/work` | Agent state survives container restart. It is a Docker named volume (not a host bind mount) so the agent's unix sockets can unlink cleanly on the VM's ext4; inspect it via `docker compose exec`. |
 
 ## What's NOT in scope
 

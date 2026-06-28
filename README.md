@@ -2,24 +2,42 @@
 
 A hands-on workshop kit for **"Beyond the Chatbot: Engineering Your Proactive Digital Twin"**. You spin up a Linux Ubuntu VM, install NanoClaw (an autonomous agent framework), pair it to Telegram, and build an agent that wakes up on its own schedule — while you grab a coffee.
 
-Built and validated for **Web Summer Camp 2026, Opatija** (July 2). Every failure mode is captured and the working setup is pinned so you don't debug from scratch.
+> **This is an Anthropic / Claude-first repository.** It's built around Claude (Claude Code, the `claude` CLI, and skills in `.claude/skills/`). Codex / OpenAI works as an alternative throughout — wherever you see a Claude command, there's a Codex equivalent.
 
-## Quick start (primary path — Linux VM)
+## Prerequisites
 
-### 1. Spin up a Linux Ubuntu LTS VM
+Set these up at home before the workshop, not on conference WiFi.
 
-| Host OS | Virtualization tool |
-|---------|---------------------|
-| macOS | [UTM](https://mac.getutm.app/) (free) |
+### 1. A booted Linux VM (Ubuntu 24.04 or 22.04 LTS) — the hard prerequisite
+
+Install a free virtualization tool, then download and boot an Ubuntu LTS ISO inside it.
+
+| Host OS | Virtualization tool                              |
+| ------- | ------------------------------------------------ |
+| macOS   | [UTM](https://mac.getutm.app/) (free)            |
 | Windows | [VirtualBox](https://www.virtualbox.org/) (free) |
-| Linux | KVM / `virt-manager` (free) |
+| Linux   | KVM / `virt-manager` (free)                      |
 
-Download **Ubuntu 24.04 LTS** (or 22.04). Allocate at least 4 GB RAM and 20 GB disk. Start the VM, complete the Ubuntu setup wizard, and open a terminal.
+Download **Ubuntu 24.04 LTS** (or 22.04) from [ubuntu.com](https://ubuntu.com/download/desktop). Create the VM (allocate at least **4 GB RAM** and **30 GB disk**, 40 GB comfortable - a full install plus the Docker images fills ~20 GB), complete the Ubuntu setup wizard, and boot it to the desktop at least once.
 
-### 2. Install NanoClaw inside the VM
+> **Recommended: run the VM natively, not emulated.** For the smoothest experience, the Ubuntu image that matches your computer's CPU architecture is the better pick, so the VM runs on the native CPU rather than emulating a different one (emulation works, but it's several times slower). On **Apple Silicon (M-series) Macs** that's the **ARM64** image; on **Intel/AMD** machines, the **x86_64 / amd64** image (with VT-x / AMD-V enabled in BIOS).
+
+### 2. AI access — one of
+
+- Claude: [Pro or higher subscription](https://claude.ai) **or** [Anthropic API key](https://console.anthropic.com)
+- OpenAI: [ChatGPT Plus or higher](https://openai.com) **or** [API key](https://platform.openai.com) — install the `/add-codex` skill after setup to switch providers
+
+## Quick start — install NanoClaw
+
+In one pass, you'll:
+
+1. **Install NanoClaw** — clone the repo and run the installer (it sets up Docker, Node, and pnpm).
+2. **Add your AI key** — paste your Claude subscription login or Anthropic API key when prompted.
+3. **Hook up Telegram** — create a bot with [@BotFather](https://t.me/botfather), paste its token, and pair the bot so you can DM your agent. (Have Telegram on your phone.)
+
+Open a terminal inside your Ubuntu VM and run:
 
 ```bash
-# Inside the Ubuntu VM terminal
 git clone https://github.com/nanocoai/nanoclaw.git
 cd nanoclaw
 bash nanoclaw.sh
@@ -29,59 +47,49 @@ bash nanoclaw.sh
 
 When it finishes, DM your bot `ping` from your phone — the agent replies within ~60-90 seconds on first start, sub-10s after that.
 
-### 3. What you need before the workshop
+For a guided, prompt-by-prompt install, use the [`nanoclaw-install`](.claude/skills/nanoclaw-install/SKILL.md) skill from the cloned repo:
 
-- **VM software** — UTM, VirtualBox, or KVM (see above, all free).
-- **Ubuntu 24.04 or 22.04 LTS** ISO — download from [ubuntu.com](https://ubuntu.com/download/desktop).
-- **AI access** — one of:
-  - Claude: [Pro or higher subscription](https://claude.ai) **or** [Anthropic API key](https://console.anthropic.com)
-  - OpenAI: [ChatGPT Plus or higher](https://openai.com) **or** [API key](https://platform.openai.com) — install the `/add-codex` skill after setup to switch providers
-- **Telegram** on your phone (any account). You'll create a bot via `@BotFather`.
+```bash
+# Claude Code (auto-discovers skills in .claude/skills/)
+claude "/nanoclaw-install"
+
+# Codex (alternative) - point it at the skill file
+codex   # then type:  Follow .claude/skills/nanoclaw-install/SKILL.md and walk me through installing NanoClaw step by step.
+```
 
 ## What's in this repo
 
-```
+```plain
 .
-├── docker-compose.yml          # presenter sandbox (Docker-in-Docker) — not the primary attendee path
-├── docker/                     # sandbox image (Ubuntu + DinD + VFS + OneCLI bind)
 ├── workshop/
 │   ├── outline.md              # the workshop walkthrough (intro, exercises, schedule, wrap-up)
-│   ├── findings.md             # everything we tried and rejected (Railway, Oracle, DinD gotchas)
-│   ├── use-cases.md            # 10 free-tier integration ideas for the "Connecting the Dots" exercise
-│   └── recordings/             # screenshots from validation runs
-└── docs/
-    ├── architecture.md         # what NanoClaw runs and why each piece exists
-    └── providers.md            # host comparison + verdicts
+│   ├── abstract.md             # session title, abstract, prerequisites, takeaways
+│   ├── providers.md            # host/VPS comparison - which providers were tested and how they fared
+│   ├── use-cases-relatable.md  # use cases for the "Connecting the Dots" / use-case exercise
+│   └── use-cases-untested.md   # extra ideas not yet validated in the flow
+├── .claude/skills/
+│   └── nanoclaw-install/       # a Skill that walks you through installing NanoClaw
+└── dind-sandbox/               # presenter-only Docker-in-Docker sandbox + what we tried and rejected
+    ├── README.md               # how the sandbox works and how to run it
+    ├── findings.md             # Railway, Oracle, and DinD gotchas (why DinD is problematic)
+    └── ...                     # docker-compose.yml, docker/, scripts/, the dind skill, recordings/
 ```
 
-## After the workshop — moving to a real always-on host
+## The Skill that walks you through it
 
-The wrap-up section of [`workshop/outline.md`](workshop/outline.md) covers four options for making your agent permanent:
+This kit ships Claude Code skills under [`.claude/skills/`](.claude/skills/) that guide a person through the workshop one step at a time. The first is [`nanoclaw-install`](.claude/skills/nanoclaw-install/SKILL.md), which walks you through installing NanoClaw and reaching your first ping/pong (more skills for the later exercises are being split out). Claude Code auto-discovers them; Codex can use the same `SKILL.md` files by path. You drive the commands; the skill highlights the exact next step and runs only read-only checks.
 
-- **Hetzner CAX11** (€4.51/mo, recommended)
-- **AWS `t4g.small`** (free 12 months, then ~$15/mo)
-- **Mac Mini / Raspberry Pi at home** (free if you own one)
-- ~~Oracle Cloud Always Free~~ (capacity roulette, see [`workshop/findings.md`](workshop/findings.md))
+## After the workshop - moving to an always-on host
 
-All four: provision Linux, SSH in, run the same `bash nanoclaw.sh`. The `CLAUDE.local.md`, scheduled jobs, and integrations you built in the workshop all transfer — just copy your agent workspace.
+Your VM pauses when the laptop sleeps, so the agent goes quiet with it. **Once you're confident in the local VM playground**, you can move the agent to something always-on: a VPS (Hetzner, AWS, Oracle, GCP, Azure, Hostinger, Railway) or a home box (Mac Mini, Raspberry Pi). The wrap-up in [`workshop/providers.md`](workshop/providers.md) covers this.
+
+Every migration is the same shape: provision Linux, SSH in, run the same `bash nanoclaw.sh`. The `CLAUDE.md`, scheduled jobs, and integrations you built in the workshop all transfer.
 
 ## Presenter sandbox (Docker-in-Docker)
 
-The `docker-compose.yml` here is for **presenter-side validation** — it runs NanoClaw inside a privileged container so the presenter can test the full flow without touching their host. Attendees on a fresh Ubuntu VM don't need this.
+> warning TL;DR; - Do not try to run the Docker-in-docker setup of the NanoClaw. I wen through the pain, so that you don't need you.
 
-See [`workshop/findings.md`](workshop/findings.md) for the 9 DinD-specific gotchas baked into the Dockerfile, and [`docs/architecture.md`](docs/architecture.md) for the full setup explanation.
-
-## Workshop abstract
-
-> I bet most of you have spent some time chatting with AI, maybe even oneshotting a few websites or proof of concepts. It's cool, right? But constantly babysitting a chat window and approving every single terminal command is starting to feel like more work than it's saving.
->
-> The real magic happens when you stop chatting and start delegating.
->
-> In this hands-on workshop, we're going to cross the line from reactive AI to proactive autonomy. We'll be using NanoClaw, an autonomous agentic framework that lives on its own. This isn't just another GPT wrapper; it's a system with a "Heartbeat" that can wake up, scan your agenda, and execute tasks while you're grabbing a coffee.
->
-> We'll dive into: Deploying the Brain, the "Living Files" paradigm, Connecting the Dots with real-world APIs, and setting up Heartbeats so your agent does its thing even when you're not looking.
-
-Session page: https://websummercamp.com/2026/session/beyond-the-chatbot-engineering-your-proactive-digital-twin
+See [`dind-sandbox/README.md`](dind-sandbox/README.md) to run it, [`dind-sandbox/findings.md`](dind-sandbox/findings.md) for the 9 DinD-specific issues, and [`dind-sandbox/architecture.md`](dind-sandbox/architecture.md) for the full setup explanation.
 
 ## License
 

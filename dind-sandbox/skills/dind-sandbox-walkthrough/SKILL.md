@@ -7,9 +7,9 @@ description: Use when running or validating the Proactive Digital Twin workshop 
 
 ## Overview
 
-Guide a person through the **README's 4-step flow** inside this repo's Docker-in-Docker sandbox (the presenter-validation path). The kit bakes in the fixes from `workshop/findings.md`; your job is to verify each layer came up clean, flag the DinD-only gotchas as **expected vs. real**, and stop at ping/pong to ask how they want to continue.
+Guide a person through the **4-step flow** in [`../README.md`](../README.md) inside this repo's Docker-in-Docker sandbox (the presenter-validation path). The kit bakes in the fixes from [`../../findings.md`](../../findings.md); your job is to verify each layer came up clean, flag the DinD-only gotchas as **expected vs. real**, and stop at ping/pong to ask how they want to continue.
 
-**This is the DinD path, NOT attendee laptop Docker.** On clean laptop Docker the gotchas below don't exist — point laptop users at `README.md` directly.
+**This is the DinD path, NOT the attendee VM/laptop.** On a clean VM or laptop Docker the gotchas below don't exist - point those users at the root [`../../README.md`](../../README.md) and the `nanoclaw-install` skill directly.
 
 ## When to Use
 
@@ -17,7 +17,7 @@ Guide a person through the **README's 4-step flow** inside this repo's Docker-in
 - An agent container hangs on `Error: API retry (retryable: true)`
 - Telegram won't pair (`Pairing NNNN disappeared`, codes rotating, code never lands)
 
-## The flow (matches README.md)
+## The flow (matches [`../README.md`](../README.md))
 
 ```bash
 docker compose up -d                              # 1. build + start the sandbox
@@ -134,11 +134,11 @@ Saving the subscription token to the **OneCLI vault** (`claude setup-token` → 
 
 Do not auto-continue into the exercises. Ask:
 
-> ✅ Ping/pong works. Want me to keep guiding you through the exercises (Living Files → research swap → scheduled brief, in `workshop/outline.md`), or take it from here?
+> ✅ Ping/pong works. Want me to keep guiding you through the exercises (Living Files → research swap → scheduled brief, in [`../../../workshop/outline.md`](../../../workshop/outline.md)), or take it from here?
 
 ## References
 
-- `README.md` — the canonical 4-step flow.
-- `workshop/findings.md` — full reproduction of the 9 DinD gotchas.
-- `workshop/outline.md` — the exercise walkthrough (Ex 1-4).
-- `docker/entrypoint.sh` — dockerd + the runtime-read socat bridges.
+- [`../README.md`](../README.md) — the canonical 4-step flow + sandbox operations.
+- [`../../findings.md`](../../findings.md) — full reproduction of the 9 DinD gotchas.
+- [`../../../workshop/outline.md`](../../../workshop/outline.md) — the exercise walkthrough (Ex 1-4).
+- [`../../docker/entrypoint.sh`](../../docker/entrypoint.sh) — dockerd + the runtime-read socat bridges.
