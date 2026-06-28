@@ -200,6 +200,10 @@ order, with the answer to pick:
 
 ## Step 3 - First contact
 
+**The agent is already verified.** The installer ran its own ping/pong test during setup
+(Step 2, item 9 - "Your assistant is ready."), so by the time you're here the agent is
+confirmed working. Telegram is just your hands-on confirmation.
+
 When the installer finishes ("You're set.") it prints a few commands:
 
 ```
@@ -210,12 +214,15 @@ Try these
 ```
 
 and your **assistant sends a welcome message on Telegram automatically** ("Go say hi ->
-Check your Telegram"). Open Telegram (desktop or phone) and reply, e.g. `ping`.
+Check your Telegram"). Open Telegram (desktop or phone) and reply, e.g. `ping` - this is the
+channel that's wired, so it's the reliable way to chat.
 
 - The **first reply can take ~60-90s** (the agent container cold-starts on the first
   message); under 10s after that. Send once and wait - repeated messages queue up.
-- You can also chat from the terminal (`pnpm run chat hi`) or watch activity
-  (`tail -f logs/nanoclaw.log`).
+- Watch activity with `tail -f logs/nanoclaw.log`.
+- **Terminal chat (`pnpm run chat hi`) only works if an agent is wired to the Local CLI
+  channel** - by default only the channel you set up (Telegram) is wired, so this may time
+  out until you wire one. See Gotchas.
 
 **Always-on note (shown by the installer):** NanoClaw only runs while this machine is on and
 connected to the internet. For always-on availability, move it to a cloud VM or keep the
