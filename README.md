@@ -2,8 +2,6 @@
 
 A hands-on workshop kit for **"Beyond the Chatbot: Engineering Your Proactive Digital Twin"**. You spin up a Linux Ubuntu VM, install NanoClaw (an autonomous agent framework), pair it to Telegram, and build an agent that wakes up on its own schedule — while you grab a coffee.
 
-Built and validated for **Web Summer Camp 2026, Opatija** (July 2). Every failure mode is captured and the working setup is pinned so you don't debug from scratch.
-
 ## Quick start (primary path — Linux VM)
 
 ### 1. Spin up a Linux Ubuntu LTS VM
@@ -75,13 +73,7 @@ See [`dind-sandbox/README.md`](dind-sandbox/README.md) to run it, [`dind-sandbox
 
 ## Workshop abstract
 
-> I bet most of you have spent some time chatting with AI, maybe even oneshotting a few websites or proof of concepts. It's cool, right? But constantly babysitting a chat window and approving every single terminal command is starting to feel like more work than it's saving.
->
-> The real magic happens when you stop chatting and start delegating.
->
-> In this hands-on workshop, we're going to cross the line from reactive AI to proactive autonomy. We'll be using NanoClaw, an autonomous agentic framework that lives on its own. This isn't just another GPT wrapper; it's a system with a "Heartbeat" that can wake up, scan your agenda, and execute tasks while you're grabbing a coffee.
->
-> We'll dive into: Deploying the Brain, the "Living Files" paradigm, Connecting the Dots with real-world APIs, and setting up Heartbeats so your agent does its thing even when you're not looking.
+The full session title, abstract, prerequisites, and takeaways live in [`workshop/abstract.md`](workshop/abstract.md).
 
 Session page: https://websummercamp.com/2026/session/beyond-the-chatbot-engineering-your-proactive-digital-twin
 
