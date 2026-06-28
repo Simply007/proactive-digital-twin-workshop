@@ -43,11 +43,19 @@ bash nanoclaw.sh
 
 When it finishes, DM your bot `ping` from your phone — the agent replies within ~60-90 seconds on first start, sub-10s after that.
 
-For a guided, prompt-by-prompt install, use the [`nanoclaw-install`](.agents/skills/nanoclaw-install/SKILL.md) skill.
+For a guided, prompt-by-prompt install, point an AI coding CLI at the [`nanoclaw-install`](.agents/skills/nanoclaw-install/SKILL.md) skill from the cloned repo:
+
+```bash
+# Claude Code
+claude "Follow the nanoclaw-install skill at .agents/skills/nanoclaw-install/SKILL.md and walk me through installing NanoClaw step by step."
+
+# Codex (auto-discovers skills in .agents/skills/)
+codex            # then type:  $ nanoclaw-install
+```
 
 ## What's in this repo
 
-```
+```plain
 .
 ├── workshop/
 │   ├── outline.md              # the workshop walkthrough (intro, exercises, schedule, wrap-up)
@@ -69,11 +77,9 @@ This kit ships Claude Code skills under [`.agents/skills/`](.agents/skills/) tha
 
 ## After the workshop - moving to an always-on host
 
-Your VM pauses when the laptop sleeps, so the agent goes quiet with it. **Once you're confident in the local VM playground**, you can move the agent to something always-on: a VPS (Hetzner, AWS, Oracle, GCP, Azure, Hostinger, Railway) or a home box (Mac Mini, Raspberry Pi). The wrap-up in [`workshop/outline.md`](workshop/outline.md) covers this.
+Your VM pauses when the laptop sleeps, so the agent goes quiet with it. **Once you're confident in the local VM playground**, you can move the agent to something always-on: a VPS (Hetzner, AWS, Oracle, GCP, Azure, Hostinger, Railway) or a home box (Mac Mini, Raspberry Pi). The wrap-up in [`workshop/providers.md`](workshop/providers.md) covers this.
 
 Every migration is the same shape: provision Linux, SSH in, run the same `bash nanoclaw.sh`. The `CLAUDE.md`, scheduled jobs, and integrations you built in the workshop all transfer.
-
-For a comparison of the providers we tested and how each fared, see [`workshop/providers.md`](workshop/providers.md). Note: **Docker-in-Docker is problematic** as a host - see [`dind-sandbox/findings.md`](dind-sandbox/findings.md) for the crash details.
 
 ## Presenter sandbox (Docker-in-Docker)
 
