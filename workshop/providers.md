@@ -1,6 +1,6 @@
 # Host Comparison
 
-Why the workshop runs on a local Ubuntu VM, and the VPS providers we tried (so you don't repeat our mistakes). This is general deployment reference. For the Docker-in-Docker sandbox specifics, see [`../dind-sandbox/`](../dind-sandbox/).
+Why the workshop runs on a local Ubuntu VM, and the VPS providers we tried (so you don't repeat our mistakes). This is general deployment reference.
 
 ## Agent framework
 
@@ -8,18 +8,18 @@ This kit runs **NanoClaw** (MIT, container-per-agent, native Anthropic Agents SD
 
 ## VPS providers we tried (and what happened)
 
-Tested 2026-06-09/10 before settling on **a local Ubuntu VM on the attendee's laptop**. Full crash logs and screenshots in [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md) and [`../dind-sandbox/recordings/`](../dind-sandbox/recordings/).
+Tested 2026-06-09/10 before settling on **a local Ubuntu VM on the attendee's laptop**.
 
 | Provider | Free? | CC required at signup | Workshop-day fit | What broke / why |
 |---|---|---|---|---|
 | **Local Ubuntu VM** (UTM / VirtualBox / KVM on the attendee's laptop) | Free | No | **Picked.** Works for every attendee, no signup, no credit card. | Trade-off: laptop sleep pauses the VM and the agent goes quiet. Wrap-up covers migration to an always-on host. |
-| Railway | $5 starter credit, no CC | No | **Excluded.** | Blocks Docker-in-Docker entirely. `--privileged` denied, `dockerd` crashes on cgroup mount with `Permission denied`. NanoClaw cannot run. See screenshot `04-railway-dind-crash.png`. |
-| Oracle Cloud Always Free | Forever-free | $1 hold (refunded same session) | **Excluded.** | A1 ARM is region-locked to your signup home region and frequently "Out of capacity" in EU regions. Amsterdam confirmed dead (`08-oracle-amsterdam-out-of-capacity.png`); community reports same in London and Paris. Frankfurt / Madrid / Stockholm have better odds but no guarantees. Cannot rely on it for workshop day. |
+| Railway | $5 starter credit, no CC | No | **Excluded.** | Does not allow the privileged containers NanoClaw needs to run its per-agent Docker. `--privileged` is denied and the Docker daemon crashes on cgroup mount with `Permission denied`, so NanoClaw cannot run. |
+| Oracle Cloud Always Free | Forever-free | $1 hold (refunded same session) | **Excluded.** | A1 ARM is region-locked to your signup home region and frequently "Out of capacity" in EU regions. Amsterdam confirmed dead; community reports same in London and Paris. Frankfurt / Madrid / Stockholm have better odds but no guarantees. Cannot rely on it for workshop day. |
 | AWS Free Tier (`t4g.small`) | Free 12 months, then ~$15/mo | $1 hold | **After-workshop option.** | Works fine, but the 12-month limit needs explicit disclosure. |
 | Hetzner CAX11 | Paid (~€4.51/mo) | Yes | **After-workshop option.** | A clean cloud option: a real ARM Linux box, no nesting, no capacity roulette. |
 | Hostinger (OpenClaw Managed / VPS) | Paid (24-mo commitment) | Yes | **After-workshop option.** | Pre-loaded AI credits, zero setup. But a 24-month minimum and locks you into the OpenClaw framework specifically. Not workshop-day friendly. |
 | GCP Always Free (`e2-micro`) | Forever-free | Yes | **Excluded.** | 0.25 vCPU / 1 GB RAM is below the NanoClaw container floor. |
-| Render free tier | Free Hobby | No | **Excluded.** | 512 MB RAM, web services only, no Docker-in-Docker. |
+| Render free tier | Free Hobby | No | **Excluded.** | 512 MB RAM, web services only, cannot run the privileged Docker NanoClaw needs. |
 | Fly.io | 2 VM hours / 7-day trial | Yes | **Excluded.** | Trial expires inside the conference window. |
 
 ## Bottom-line guidance

@@ -31,16 +31,16 @@ The reference architecture for this space (the OpenClaw video that kicked off th
 
 ### Agent framework: NanoClaw
 
-| Criterion | OpenClaw | **NanoClaw** | Hermes Agent | Agent Zero |
-|---|---|---|---|---|
-| Install model | VPS-native (Hostinger one-click) | Docker container per agent | Hosted via OpenRouter (no install) | Python framework, build-your-own |
-| License | Source-available | **MIT** | Open weights | MIT |
-| Native LLM SDK | Custom gateway | **Anthropic Agents SDK** (drop-in skills for OpenAI / OpenRouter / Ollama; `ANTHROPIC_BASE_URL` for any Claude-compatible endpoint) | Nous Hermes 3 (any provider) | Provider-agnostic |
-| "Living files" analog | 9 files: `AGENTS.md`, `SOUL.md`, `USER.md`, `HEARTBEAT.md`, `MEMORY.md`, `TOOLS.md`, `IDENTITY.md`, `BOOT.md`, `BOOTSTRAP.md` ([docs](https://github.com/openclaw/openclaw/blob/main/docs/concepts/agent-workspace.md)) | **Per-agent `CLAUDE.md` + memory + skills** | Built-in persistent memory | Roll your own |
-| Scheduled / proactive loop | Heartbeat + cron jobs | **Scheduled jobs via natural language** | Self-improving skills | Custom |
-| Multi-channel messaging | WhatsApp, Telegram, etc. | WhatsApp, Telegram, Discord, Slack, Microsoft Teams, iMessage, Matrix, Google Chat, Webex, Linear, GitHub, WeChat, email (Resend); Signal planned via `/add-signal` (community-requested skill, not shipped yet) | API-only | Custom |
-| Codebase size | Large microservices | ~35k tokens total | n/a (managed) | Medium |
-| Workshop fit | Heavier | **Light, clear, self-contained** | No infra to teach | Too low-level for 2.5h |
+| Criterion                  | OpenClaw                                                                                                                                                                                                                | **NanoClaw**                                                                                                                                                                                                     | Hermes Agent                       | Agent Zero                       |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | -------------------------------- |
+| Install model              | VPS-native (Hostinger one-click)                                                                                                                                                                                        | Docker container per agent                                                                                                                                                                                       | Hosted via OpenRouter (no install) | Python framework, build-your-own |
+| License                    | Source-available                                                                                                                                                                                                        | **MIT**                                                                                                                                                                                                          | Open weights                       | MIT                              |
+| Native LLM SDK             | Custom gateway                                                                                                                                                                                                          | **Anthropic Agents SDK** (drop-in skills for OpenAI / OpenRouter / Ollama; `ANTHROPIC_BASE_URL` for any Claude-compatible endpoint)                                                                              | Nous Hermes 3 (any provider)       | Provider-agnostic                |
+| "Living files" analog      | 9 files: `AGENTS.md`, `SOUL.md`, `USER.md`, `HEARTBEAT.md`, `MEMORY.md`, `TOOLS.md`, `IDENTITY.md`, `BOOT.md`, `BOOTSTRAP.md` ([docs](https://github.com/openclaw/openclaw/blob/main/docs/concepts/agent-workspace.md)) | **Per-agent `CLAUDE.md` + memory + skills**                                                                                                                                                                      | Built-in persistent memory         | Roll your own                    |
+| Scheduled / proactive loop | Heartbeat + cron jobs                                                                                                                                                                                                   | **Scheduled jobs via natural language**                                                                                                                                                                          | Self-improving skills              | Custom                           |
+| Multi-channel messaging    | WhatsApp, Telegram, etc.                                                                                                                                                                                                | WhatsApp, Telegram, Discord, Slack, Microsoft Teams, iMessage, Matrix, Google Chat, Webex, Linear, GitHub, WeChat, email (Resend); Signal planned via `/add-signal` (community-requested skill, not shipped yet) | API-only                           | Custom                           |
+| Codebase size              | Large microservices                                                                                                                                                                                                     | ~35k tokens total                                                                                                                                                                                                | n/a (managed)                      | Medium                           |
+| Workshop fit               | Heavier                                                                                                                                                                                                                 | **Light, clear, self-contained**                                                                                                                                                                                 | No infra to teach                  | Too low-level for 2.5h           |
 
 **Pick: NanoClaw.** It is the same mental model as OpenClaw (verbalize context, schedule proactive jobs, message channels) but with a smaller blast radius and a saner per-agent boundary. Importantly, it runs natively on the Anthropic Agents SDK, so the "what's actually happening" is teachable in the time we have. Container-per-agent gives attendees a safety story they can take back to their team.
 
@@ -58,7 +58,7 @@ Why the local VM playground:
 
 **The honest trade-off:** the VM pauses when the laptop sleeps. The "wake up at 09:00, scan your calendar, DM you a brief while you grab coffee" magic only fires while the laptop is awake and the VM is running. During the 2.5h workshop this is fine - laptops stay open. For the take-home story, the wrap-up covers migrating the agent to an always-on host.
 
-> **VPS later, not now.** VPS options exist and are listed in the wrap-up; we run the playground locally first. We tried hosted VPS trials (Railway, Oracle) and Docker-in-Docker; a comparison of every provider we tested is in [`./providers.md`](./providers.md), and Docker-in-Docker is problematic - see the findings list in [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md).
+> **VPS later, not now.** VPS options exist and are listed in the wrap-up; we run the playground locally first. We tried several hosted VPS options (Railway, Oracle) before settling on the local VM; a comparison of every provider we tested is in [`./providers.md`](./providers.md).
 
 ---
 
@@ -76,7 +76,7 @@ You will run the whole workshop inside an Ubuntu Linux VM on your laptop. Set up
 - **Windows 10/11**: Install [VirtualBox](https://www.virtualbox.org/) (free).
 - **Linux**: Use KVM / virt-manager (`sudo apt install virt-manager qemu-kvm`).
 
-Then download an **Ubuntu 24.04 or 22.04 LTS** ISO from https://ubuntu.com/download, create a new VM in your tool, and boot it through the installer until you reach an Ubuntu desktop or login. You do NOT install Docker yet - that happens inside the VM when you run `bash nanoclaw.sh` in Preparation 1.
+Then download an **Ubuntu 24.04 or 22.04 LTS** ISO from <https://ubuntu.com/download>, create a new VM in your tool, and boot it through the installer until you reach an Ubuntu desktop or login. You do NOT install Docker yet - that happens inside the VM when you run `bash nanoclaw.sh` in Preparation 1.
 
 Boot the VM successfully at least once before you walk in - we can't troubleshoot virtualization setups over Opatija's hotel WiFi in a 2.5h session.
 
@@ -84,10 +84,10 @@ Boot the VM successfully at least once before you walk in - we can't troubleshoo
 
 NanoClaw uses Claude (Anthropic) as the agent's brain. Before the workshop, set up **one** of these access paths so you can paste credentials when the script asks:
 
-| Path | What you need | Cost | Best for |
-|---|---|---|---|
-| **A. Claude Pro / Max subscription** (recommended if you already pay for Claude) | Active Claude.ai Pro ($20/mo) or Max subscription. OAuth login at workshop time. | $0 incremental (covered by your sub) | The fastest, smoothest path. No credit card friction beyond your existing subscription. |
-| **B. Anthropic API key + credit top-up** | Account at https://console.anthropic.com/, an API key starting `sk-ant-...`, $5 of credit loaded. Credit card required. | $5 lasts most attendees weeks. Actual workshop usage is <$1. | Anyone without a Claude subscription. |
+| Path                                                                             | What you need                                                                                                           | Cost                                                         | Best for                                                                                |
+| -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| **A. Claude Pro / Max subscription** (recommended if you already pay for Claude) | Active Claude.ai Pro ($20/mo) or Max subscription. OAuth login at workshop time.                                        | $0 incremental (covered by your sub)                         | The fastest, smoothest path. No credit card friction beyond your existing subscription. |
+| **B. Anthropic API key + credit top-up**                                         | Account at <https://console.anthropic.com/>, an API key starting `sk-ant-...`, $5 of credit loaded. Credit card required. | $5 lasts most attendees weeks. Actual workshop usage is <$1. | Anyone without a Claude subscription.                                                   |
 
 **You only need one of A / B.** Pick whichever matches your situation. Both give full Claude quality at speeds adequate for the workshop. Non-Anthropic alternatives (OpenRouter, local Ollama, etc.) can be swapped in **after** the workshop via NanoClaw's `/add-opencode` and `/add-ollama-provider` skills — covered in the wrap-up.
 
@@ -97,16 +97,16 @@ Install Telegram on your phone. DM [@BotFather](https://t.me/botfather): send `/
 
 ### Minimum laptop requirements
 
-| Resource | Minimum (will work, will be tight) | Recommended (comfortable) |
-|---|---|---|
-| **RAM** | 8 GB | 16 GB or more |
-| **Free disk space** | 10 GB | 20 GB+ |
-| **CPU** | Any 64-bit CPU from ~2018 onward (Intel Core i5+, AMD Ryzen 5+, Apple Silicon M1+, ARM64) | Same |
-| **OS** | macOS 11+ / Windows 10 build 2004+ with WSL2 / Linux kernel 4.x+ | macOS 13+ / Windows 11 / recent Ubuntu LTS |
-| **Admin rights** | Required (to install the virtualization tool) | Required |
-| **Network** | Stable WiFi, ~1 Mbps for the workshop | Same; conference WiFi is fine for the session itself |
-| **Phone** | With Telegram installed, to DM the bot | Same |
-| **Power** | Charger plugged in - Docker + LLM calls drain battery fast over 2.5h | Same |
+| Resource            | Minimum (will work, will be tight)                                                        | Recommended (comfortable)                            |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| **RAM**             | 8 GB                                                                                      | 16 GB or more                                        |
+| **Free disk space** | 10 GB                                                                                     | 20 GB+                                               |
+| **CPU**             | Any 64-bit CPU from ~2018 onward (Intel Core i5+, AMD Ryzen 5+, Apple Silicon M1+, ARM64) | Same                                                 |
+| **OS**              | macOS 11+ / Windows 10 build 2004+ with WSL2 / Linux kernel 4.x+                          | macOS 13+ / Windows 11 / recent Ubuntu LTS           |
+| **Admin rights**    | Required (to install the virtualization tool)                                             | Required                                             |
+| **Network**         | Stable WiFi, ~1 Mbps for the workshop                                                     | Same; conference WiFi is fine for the session itself |
+| **Phone**           | With Telegram installed, to DM the bot                                                    | Same                                                 |
+| **Power**           | Charger plugged in - Docker + LLM calls drain battery fast over 2.5h                      | Same                                                 |
 
 **Why 8 GB RAM is the floor:** your Ubuntu guest VM needs ~4 GB allocated to it to run NanoClaw + one agent container comfortably. Add your host OS, browser, terminal, maybe an IDE, and you're already past 6 GB. With less than 8 GB, the laptop will swap and exercises will feel sluggish.
 
@@ -130,41 +130,41 @@ Updated 2026-06-10 after end-to-end walkthrough validation. Times reflect what a
 
 **Goal: every attendee reaches ping/pong by 1:00.** Block B can then go deep on what the agent actually IS rather than burning the second half on more install firefighting.
 
-| Block | Length | Activity |
-|---|---|---|
-| **Block A – Foundations** (1h 15min) | 0:00 – 1:15 | Intro + ping/pong + first taste of Living Files |
-| Break (off-clock, 30 min) | between blocks | Water, restrooms, hallway track, 1:1 troubleshooting with stragglers |
-| **Block B – Memory Architecture + GitHub Sync + Use Cases** (1h 15min) | 1:15 – 2:30 | Living Files debrief, GitHub memory sync hands-on, run your use case, wrap-up |
+| Block                                                                  | Length         | Activity                                                                      |
+| ---------------------------------------------------------------------- | -------------- | ----------------------------------------------------------------------------- |
+| **Block A – Foundations** (1h 15min)                                   | 0:00 – 1:15    | Intro + ping/pong + first taste of Living Files                               |
+| Break (off-clock, 30 min)                                              | between blocks | Water, restrooms, hallway track, 1:1 troubleshooting with stragglers          |
+| **Block B – Memory Architecture + GitHub Sync + Use Cases** (1h 15min) | 1:15 – 2:30    | Living Files debrief, GitHub memory sync hands-on, run your use case, wrap-up |
 
 ### Block A breakdown (75 min)
 
-| Time | Length | What |
-|---|---|---|
+| Time        | Length | What                                                                                                                                                |
+| ----------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0:00 – 0:20 | 20 min | **Intro** — hook, framing, stack overview, Telegram bot setup (Claude access already done pre-workshop). 20 min buffers late arrivals + tech check. |
-| 0:20 – 1:00 | 40 min | **Exercise 1** — install NanoClaw + Telegram pairing + first ping/pong reply |
-| 1:00 – 1:15 | 15 min | **Exercise 2 (first taste)** — agent self-edits `CLAUDE.local.md` with 5-question profile; verify personalization. Sets up Block B's deep dive. |
+| 0:20 – 1:00 | 40 min | **Exercise 1** — install NanoClaw + Telegram pairing + first ping/pong reply                                                                        |
+| 1:00 – 1:15 | 15 min | **Exercise 2 (first taste)** — agent self-edits `CLAUDE.local.md` with 5-question profile; verify personalization. Sets up Block B's deep dive.     |
 
 ### Block B breakdown (75 min)
 
 The shift: from install to understanding. What did you just build, how does memory actually work, and where does it go next?
 
-| Time | Length | What |
-|---|---|---|
+| Time        | Length | What                                                                                                                                                                                                                                                                                                                      |
+| ----------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1:15 – 1:35 | 20 min | **Living Files debrief** — what you gave the agent (5 answers), what you got (`CLAUDE.local.md` profile). Walk the memory architecture: `CLAUDE.md` (always loaded) → memory files (recalled when relevant) → conversation history. Live: open the files, show the diff, ask the agent to re-read and prove it remembers. |
-| 1:35 – 2:00 | 25 min | **Exercise 3: GitHub memory sync** — back up your agent's memory to a GitHub repo. Attendees use `gh auth login` in the Linux terminal. TODO steps: create repo, write sync script, schedule hourly job. Post the use case voting poll here. |
-| 2:00 – 2:20 | 20 min | **Exercise 4: Run your use case** — attendees pick the poll winner (or their own choice) and set it up via one DM. Presenter circulates. Goal: at least one notification fires before the session ends. |
-| 2:20 – 2:30 | 10 min | **Wrap-up** — what they have, where to take it next, QR + follow-up |
+| 1:35 – 2:00 | 25 min | **Exercise 3: GitHub memory sync** — back up your agent's memory to a GitHub repo. Attendees use `gh auth login` in the Linux terminal. TODO steps: create repo, write sync script, schedule hourly job. Post the use case voting poll here.                                                                              |
+| 2:00 – 2:20 | 20 min | **Exercise 4: Run your use case** — attendees pick the poll winner (or their own choice) and set it up via one DM. Presenter circulates. Goal: at least one notification fires before the session ends.                                                                                                                   |
+| 2:20 – 2:30 | 10 min | **Wrap-up** — what they have, where to take it next, QR + follow-up                                                                                                                                                                                                                                                       |
 
 ### Time estimates per exercise (from the 2026-06-10 walkthrough)
 
-| Exercise | Smooth-path | With buffer | Notes |
-|---|---|---|---|
-| **Ex 1 — Install + ping/pong** | 25 min | 40 min | Container build 3-5 min on laptop overlay2 (was 12 min in DinD VFS). Telegram pairing 2-3 min. First-message cold start 60-90s. Pad for Docker-not-started, wrong-token attendees. |
-| **Ex 2 — Living Files first taste** | 10 min | 15 min | Agent does most of the work. Five questions + answers + diff + verification took ~7 min including reads. |
-| **Living Files debrief** | 15 min | 20 min | Show the diff from Exercise 2, open `CLAUDE.local.md` and memory files live, ask agent to re-read and prove it remembers a detail. |
-| **Ex 3 — GitHub memory sync** | 20 min | 25 min | `gh auth login` → create repo → write sync script → `schedule hourly`. Covers scheduled jobs naturally. Pad for attendees without a GitHub account. |
-| **Ex 4 — Run your use case** | 15 min | 20 min | One DM to set up. Presenter circulates. Goal: at least one notification fires before wrap-up. |
-| **Wrap-up** | 5 min | 10 min | Where to go next, always-on recipes, QR. |
+| Exercise                            | Smooth-path | With buffer | Notes                                                                                                                                                                              |
+| ----------------------------------- | ----------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Ex 1 — Install + ping/pong**      | 25 min      | 40 min      | Container build 3-5 min in the VM. Telegram pairing 2-3 min. First-message cold start 60-90s. Pad for Docker-not-started, wrong-token attendees. |
+| **Ex 2 — Living Files first taste** | 10 min      | 15 min      | Agent does most of the work. Five questions + answers + diff + verification took ~7 min including reads.                                                                           |
+| **Living Files debrief**            | 15 min      | 20 min      | Show the diff from Exercise 2, open `CLAUDE.local.md` and memory files live, ask agent to re-read and prove it remembers a detail.                                                 |
+| **Ex 3 — GitHub memory sync**       | 20 min      | 25 min      | `gh auth login` → create repo → write sync script → `schedule hourly`. Covers scheduled jobs naturally. Pad for attendees without a GitHub account.                                |
+| **Ex 4 — Run your use case**        | 15 min      | 20 min      | One DM to set up. Presenter circulates. Goal: at least one notification fires before wrap-up.                                                                                      |
+| **Wrap-up**                         | 5 min       | 10 min      | Where to go next, always-on recipes, QR.                                                                                                                                           |
 
 ### Cut candidates (in order, if running slow)
 
@@ -180,6 +180,7 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 **Hook (3 min):** "I bet most of you have spent some time chatting with AI, maybe even one-shotting a few websites. Cool, right? But constantly babysitting a chat window and approving every terminal command is starting to feel like more work than it's saving. The real magic happens when you stop chatting and start delegating."
 
 **Framing in 3 beats (2 min):**
+
 1. Reactive AI (today): you type, it answers, you copy.
 2. Proactive AI (today, but rare): an always-on process with verbalized context wakes up, checks something, acts.
 3. The gap between (1) and (2) is not a model upgrade. It is a deployment shape - container, files, schedule, channel.
@@ -188,7 +189,7 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 - On phone, open Telegram → DM @BotFather → `/newbot` → pick a name → save the token. You'll paste it during Preparation 1.
 
-**Stack overview (narrated while attendees do credentials):** an Ubuntu VM on your laptop. NanoClaw as the agent framework. Anthropic Sonnet 4.5 as the model. Telegram as the channel. Why a local VM? It is isolated and disposable, needs no signup or credit card, and works for every attendee on day-of. (We tried VPS and Docker-in-Docker paths; see the findings doc.)
+**Stack overview (narrated while attendees do credentials):** an Ubuntu VM on your laptop. NanoClaw as the agent framework. Anthropic Sonnet 4.5 as the model. Telegram as the channel. Why a local VM? It is isolated and disposable, needs no signup or credit card, and works for every attendee on day-of. (We tried hosted VPS options too; the comparison is in `providers.md`.)
 
 **Set expectations:** "By the break you will have a personal agent running on your laptop that knows who you are. By the end you will have it message you on Telegram, on a schedule, without you asking. That's the digital twin we're shipping today. Your laptop has to stay awake for the schedule to fire - I'll show you how to make it always-on after the workshop in the wrap-up."
 
@@ -203,43 +204,42 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 **Stretch goal:** add a second channel (Discord or Slack) via `/add-discord`.
 
 **Demo cue (presenter):**
+
 - Open a terminal on the presenter laptop, run the install commands, walk through what `nanoclaw.sh` does (verifies Docker, installs Node + pnpm if missing, registers your Anthropic credential, builds the agent container, pairs your first channel).
 - Show the Telegram pairing handshake live - the token flow.
 - Say "pong" out loud after the bot replies.
 
 **Attendee task:**
+
 1. Open a terminal inside your Ubuntu VM. (Docker, Node, and pnpm get installed for you by `bash nanoclaw.sh` in the next step - nothing to verify yet.)
 2. Clone and bootstrap NanoClaw inside the VM (as your normal user, not root):
+
    ```bash
    git clone https://github.com/nanocoai/nanoclaw.git nanoclaw-v2
    cd nanoclaw-v2
    bash nanoclaw.sh
    ```
+
 3. When prompted, paste your **Anthropic API key** (from the intro).
 4. When prompted for a channel, choose **Telegram**, paste your **BotFather token** (from the intro), name the agent (suggest your first name).
 5. From your phone, DM the bot: `ping`.
 
-> ⚠️ **If `nanoclaw.sh` warns "you are running as root"** (only happens on a fresh VPS, a DinD sandbox, or anywhere your shell is root by default - it should NOT happen on a normal macOS/Windows/Linux laptop session):
+> ⚠️ **If `nanoclaw.sh` warns "you are running as root"** (only happens on a fresh VPS or anywhere your shell is root by default - it should NOT happen in a normal Ubuntu VM where you log in as your own user). This is mainly relevant for the post-workshop VPS migration:
 >
 > 1. Pick **option 1** ("Show me instructions for creating a new Linux user") - this is the recommended path.
-> 2. **On a minimal Ubuntu image** (Docker `ubuntu:22.04`, Hetzner/AWS "Minimal" images, etc.), the `sudo` package is not pre-installed. You must install it before the script's instructions will work:
+> 2. **On a minimal Ubuntu image** (Hetzner/AWS "Minimal" images, etc.), the `sudo` package is not pre-installed. Install it first:
+>
 >    ```bash
 >    apt update && apt install -y sudo curl git ca-certificates
 >    ```
->    Cloud Ubuntu Server images (the default Hetzner/AWS Ubuntu) have these pre-installed; only minimal images need this step. Don't forget on workshop day.
-> 3. Follow the script's printed instructions verbatim (`adduser nanoclaw`, `usermod -aG sudo nanoclaw`, the sudoers `echo`).
-> 4. Log out (`exit`), then log back in as the new user:
->    - On a real VPS: `ssh nanoclaw@your-server`
->    - In a Docker sandbox: `docker exec -it -u nanoclaw -w /work -e USER=nanoclaw <container-name> bash` (the `-e USER=nanoclaw` is required — NanoClaw's installer dies with `unbound variable: $USER` otherwise)
-> 5. Clone the repo again and re-run `bash nanoclaw.sh`.
 >
-> **Sandbox-only extras** (do NOT do these on a real host):
-> - Set `ONECLI_BIND_HOST=127.0.0.1` in `/etc/environment` AND `/etc/bash.bashrc` before running. OneCLI can't auto-detect a bind address inside an unprivileged container.
-> - Force the inner dockerd's storage driver to `vfs` (overlay-on-overlay fails). Pre-write `/etc/docker/daemon.json` as `{"storage-driver":"vfs"}`.
-> - Manually `nohup node dist/index.js &` to start the agent service — no systemd to do it for you.
-> - Bridge OneCLI ports from the sandbox loopback to the inner bridge gateway with `socat` so spawned agent containers can reach it. See [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md) for the full recipe; the `dind-sandbox/` folder bakes all of these into the sandbox image automatically.
+>    Cloud Ubuntu Server images (the default Hetzner/AWS Ubuntu) have these pre-installed; only minimal images need this step.
+> 3. Follow the script's printed instructions verbatim (`adduser nanoclaw`, `usermod -aG sudo nanoclaw`, the sudoers `echo`).
+> 4. Log out (`exit`), then log back in as the new user (`ssh nanoclaw@your-server`).
+> 5. Clone the repo again and re-run `bash nanoclaw.sh`.
 
 **Expected output / checkpoint:**
+
 - Telegram replies with a contextual greeting within **~60-90 seconds of the first message** (the agent container has to cold-start on the first DM; subsequent messages reply in <10s).
 - Presenter asks for thumbs up. Aim for 80% before moving on.
 
@@ -247,18 +247,18 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 **Troubleshooting:**
 
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| `docker` fails with "Cannot connect to the Docker daemon" (inside the VM) | Docker daemon not started in the guest | In the VM: `sudo systemctl start docker` |
-| `docker` command not found (inside the VM) | `bash nanoclaw.sh` hasn't installed Docker yet | Run `bash nanoclaw.sh`; if it already ran, re-run it - it installs Docker, Node, and pnpm |
-| `bash nanoclaw.sh` fails on Docker permission step (Linux) | User not in `docker` group | `sudo usermod -aG docker $USER && newgrp docker`, re-run script |
-| Telegram bot never responds (first message, within 60s) | Cold-start delay — agent container is spawning + first LLM call | Wait up to 90s before retrying. Don't send a second `ping` until the first reply lands. |
-| Telegram bot never responds (>2 min, no reply) | Pairing race — agent service started after the code expired, queue swallowed an old code | DM the bot `/start` again from your phone. If still silent, presenter runs the bundled `pair-telegram-recover.sh` (drains queue + restarts pair-telegram step). |
-| Anthropic API returns 401 | Key not saved, or wrong region | Re-paste key, confirm it starts with `sk-ant-`, check Anthropic console for org region |
-| Container exits immediately after `bash nanoclaw.sh` | Not enough RAM allocated to the VM | Allocate ~4-6 GB to the VM in your virtualization tool's settings, restart the VM, re-run |
-| Agent container logs show `API retry (retryable: true)` forever | Agent container can't reach OneCLI vault (network issue) | Should not happen in a normal Ubuntu VM - `host.docker.internal` is wired by Docker. If it does, restart Docker in the VM (`sudo systemctl restart docker`). If you're inside a sandboxed/nested Docker setup, see [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md) for the socat bridge fix. |
+| Symptom                                                                   | Likely cause                                                                             | Fix                                                                                                                                                                                                                                                                                                       |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `docker` fails with "Cannot connect to the Docker daemon" (inside the VM) | Docker daemon not started in the guest                                                   | In the VM: `sudo systemctl start docker`                                                                                                                                                                                                                                                                  |
+| `docker` command not found (inside the VM)                                | `bash nanoclaw.sh` hasn't installed Docker yet                                           | Run `bash nanoclaw.sh`; if it already ran, re-run it - it installs Docker, Node, and pnpm                                                                                                                                                                                                                 |
+| `bash nanoclaw.sh` fails on Docker permission step (Linux)                | User not in `docker` group                                                               | `sudo usermod -aG docker $USER && newgrp docker`, re-run script                                                                                                                                                                                                                                           |
+| Telegram bot never responds (first message, within 60s)                   | Cold-start delay — agent container is spawning + first LLM call                          | Wait up to 90s before retrying. Don't send a second `ping` until the first reply lands.                                                                                                                                                                                                                   |
+| Telegram bot never responds (>2 min, no reply)                            | Pairing race — agent service started after the code expired, queue swallowed an old code | DM the bot `/start` again from your phone. If still silent, presenter runs the bundled `pair-telegram-recover.sh` (drains queue + restarts pair-telegram step).                                                                                                                                           |
+| Anthropic API returns 401                                                 | Key not saved, or wrong region                                                           | Re-paste key, confirm it starts with `sk-ant-`, check Anthropic console for org region                                                                                                                                                                                                                    |
+| Container exits immediately after `bash nanoclaw.sh`                      | Not enough RAM allocated to the VM                                                       | Allocate ~4-6 GB to the VM in your virtualization tool's settings, restart the VM, re-run                                                                                                                                                                                                                 |
+| Agent container logs show `API retry (retryable: true)` forever           | Agent container can't reach OneCLI vault (network issue)                                 | Should not happen in a normal Ubuntu VM - `host.docker.internal` is wired by Docker. If it does, restart Docker in the VM (`sudo systemctl restart docker`). |
 
-**Sources / refs:** https://github.com/nanocoai/nanoclaw , https://core.telegram.org/bots#how-do-i-create-a-bot
+**Sources / refs:** <https://github.com/nanocoai/nanoclaw> , <https://core.telegram.org/bots#how-do-i-create-a-bot>
 
 ---
 
@@ -271,12 +271,14 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 **Stretch goal:** add a `business/goals.md` and `personal/goals.md`, then have the agent self-edit `CLAUDE.md` to link to them.
 
 **Demo cue (presenter):**
+
 - Open the agent's workspace folder, show the freshly-created `CLAUDE.md`.
 - DM the bot: `ask me 5 questions to get to know me, then write a draft user profile into CLAUDE.md`.
 - Read the questions out loud, answer 2 of them on stage, show the diff in `CLAUDE.md`.
 - "Notice what just happened. We didn't write code. We verbalized."
 
 **Attendee task:**
+
 1. From Telegram, send: `show me the current contents of CLAUDE.md`.
 2. Send: `ask me 5 short questions to learn the basics about me - role, stack, time zone, what I'm working on this week, communication style.`
 3. Answer them in chat.
@@ -284,18 +286,19 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 5. Test: send `given what you now know about me, what should I focus on this afternoon?` - check that the reply is specific to you.
 
 **Expected output / checkpoint:**
+
 - `CLAUDE.md` shows your name, role, stack, and current focus, written in the agent's voice.
 - The "what should I focus on" reply mentions at least one detail from your answers (not generic).
 
 **Troubleshooting:**
 
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| Agent says it can't edit files | Workspace mount missing or read-only | Check `docker inspect <container>` for the workspace mount, re-run `bash nanoclaw.sh` if missing |
-| `CLAUDE.md` change doesn't persist between messages | Per-session container, no volume | NanoClaw mounts a per-agent volume by default; if persistence fails, the install picked a transient container - re-bootstrap and pick "keep state" when prompted |
-| Reply is generic despite saved context | Context not loaded into the system prompt | DM `re-read your CLAUDE.md from disk before answering` once, then retry |
+| Symptom                                             | Likely cause                              | Fix                                                                                                                                                              |
+| --------------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Agent says it can't edit files                      | Workspace mount missing or read-only      | Check `docker inspect <container>` for the workspace mount, re-run `bash nanoclaw.sh` if missing                                                                 |
+| `CLAUDE.md` change doesn't persist between messages | Per-session container, no volume          | NanoClaw mounts a per-agent volume by default; if persistence fails, the install picked a transient container - re-bootstrap and pick "keep state" when prompted |
+| Reply is generic despite saved context              | Context not loaded into the system prompt | DM `re-read your CLAUDE.md from disk before answering` once, then retry                                                                                          |
 
-**Sources / refs:** NanoClaw per-agent workspace docs, the OpenClaw "living files" framing (https://www.youtube.com/watch?v=cod50CWlZeU)
+**Sources / refs:** NanoClaw per-agent workspace docs, the OpenClaw "living files" framing (<https://www.youtube.com/watch?v=cod50CWlZeU>)
 
 ---
 
@@ -339,6 +342,7 @@ Water, restrooms, hallway track. Presenter stays in the room for 1:1 troubleshoo
 **Goal:** attendees understand what they just built and why it works.
 
 **Demo cue (presenter):**
+
 - Open the agent's workspace in the terminal: `ls` the files, `cat CLAUDE.local.md`, open the memory folder.
 - Show the diff from Preparation 2 — these are the actual words the agent will carry into every future conversation.
 - DM the agent: `re-read your CLAUDE.local.md and tell me one specific thing you remember about me that you didn't know before this workshop.`
@@ -359,6 +363,7 @@ Water, restrooms, hallway track. Presenter stays in the room for 1:1 troubleshoo
 **No external credential vault needed.** Attendees authenticate with GitHub directly from the Linux terminal using the `gh` CLI. No OneCLI, no OAuth app setup.
 
 **Demo cue (presenter):**
+
 - Show the memory files live: `ls ~/nanoclaw-workspace/<group>/memory/`
 - Create a repo on GitHub (via the UI or `gh repo create`), run `gh auth login` in the terminal to authenticate.
 - Write a sync script live (or paste from the workshop repo's `scripts/` folder), run it once, verify the files appear on GitHub.
@@ -403,21 +408,23 @@ bash ~/sync-memory.sh
 ```
 
 **Then DM your agent:**
+
 > `schedule a recurring job: every hour, run the script at ~/sync-memory.sh`
 
 **Expected output / checkpoint:**
+
 - The repo on GitHub shows the memory files.
 - `list my scheduled jobs` shows an hourly sync job.
 - DM: `run that job now, once` — a new commit appears on GitHub within ~60 seconds.
 
 **Troubleshooting:**
 
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| `gh auth login` fails | `gh` CLI not installed | `sudo apt install gh` or download from https://cli.github.com |
-| `git push` asks for credentials | gh auth not wired to git | Run `gh auth setup-git` |
-| Script can't find the memory folder | Wrong `<group>` path | `ls ~/nanoclaw-workspace/` to find the correct group folder name |
-| Scheduled job runs but nothing commits | No changes since last run | Expected — the script exits cleanly when there's nothing new |
+| Symptom                                | Likely cause              | Fix                                                              |
+| -------------------------------------- | ------------------------- | ---------------------------------------------------------------- |
+| `gh auth login` fails                  | `gh` CLI not installed    | `sudo apt install gh` or download from <https://cli.github.com>    |
+| `git push` asks for credentials        | gh auth not wired to git  | Run `gh auth setup-git`                                          |
+| Script can't find the memory folder    | Wrong `<group>` path      | `ls ~/nanoclaw-workspace/` to find the correct group folder name |
+| Scheduled job runs but nothing commits | No changes since last run | Expected — the script exits cleanly when there's nothing new     |
 
 ---
 
@@ -429,6 +436,7 @@ bash ~/sync-memory.sh
 Post the voting poll in the workshop Telegram group. Announce the winner at 2:00.
 
 **What attendees do:**
+
 - Pick the winning use case (or their own favourite — no pressure)
 - Send the DM from the use case card in `use-cases-relatable.md`
 - Verify the job is scheduled: DM `list my scheduled jobs`
@@ -443,6 +451,7 @@ Post the voting poll in the workshop Telegram group. Announce the winner at 2:00
 ## Wrap-up & take-home (5 min)
 
 **What you have right now:**
+
 - A NanoClaw container running inside a VM on your laptop.
 - A `CLAUDE.md` (and `personal/` folder) that describes the actual you.
 - A web-research tool wired to OpenRouter.
@@ -457,8 +466,6 @@ Your laptop sleeps and the VM pauses with it. To get the "wakes up while you gra
 
 All of these follow the same shape: `git clone nanoclaw && bash nanoclaw.sh` on the destination, then the `CLAUDE.md`/jobs transfer (the install script asks if you want to import an existing agent workspace). The `CLAUDE.md` you built today, the OpenRouter rule, the scheduled jobs - all of it carries over.
 
-Docker-in-Docker is problematic; see [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md).
-
 ### Other things to do next
 
 - **Swap LLM provider.** Don't want to pay Anthropic forever? Inside the agent run `/add-codex` for OpenAI (ChatGPT subscription or API key), `/add-opencode` for OpenRouter / Google / DeepSeek, or `/add-ollama-provider` for local open-weight models. The `CLAUDE.md` you built today works as-is - it's a Claude Code convention, not a hard provider lock.
@@ -468,10 +475,11 @@ Docker-in-Docker is problematic; see [`../dind-sandbox/findings.md`](../dind-san
 - **Want the "easy button" instead?** Hostinger offers a one-click managed OpenClaw option if you prefer zero setup with a different framework and file model (9 files vs `CLAUDE.md`).
 
 **Follow-up:**
-- Workshop repo: https://github.com/<placeholder> (issues welcome, especially "I tried X and Y broke")
-- Verification log of the host paths we tried and why we run the local VM playground: [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md) (Railway DinD failure + Oracle Amsterdam capacity failure, with screenshots).
+
+- Workshop repo: <https://github.com/><placeholder> (issues welcome, especially "I tried X and Y broke")
+- Comparison of the host paths we tried and why we run the local VM playground: [`./providers.md`](./providers.md).
 - Ondrej on LinkedIn / Bluesky - find me after for a 1:1
-- Slide deck + this outline live at https://ondrej.chrastina.dev/
+- Slide deck + this outline live at <https://ondrej.chrastina.dev/>
 - QR on the last slide
 
 ---
@@ -482,10 +490,10 @@ Docker-in-Docker is problematic; see [`../dind-sandbox/findings.md`](../dind-san
 
 Your laptop sleeps and the VM pauses with it. To make the agent always-on, migrate it to any Linux box. Same install command everywhere.
 
-| Option | Notes |
-|---|---|
+| Option                                                         | Notes                                                 |
+| -------------------------------------------------------------- | ----------------------------------------------------- |
 | **VPS** (Hetzner, AWS, Oracle, GCP, Azure, Hostinger, Railway) | Provision a Linux VM, SSH in, run `bash nanoclaw.sh`. |
-| **Home box** (Mac Mini, Raspberry Pi) | SSH from anywhere, run `bash nanoclaw.sh`. |
+| **Home box** (Mac Mini, Raspberry Pi)                          | SSH from anywhere, run `bash nanoclaw.sh`.            |
 
 ### What services can store agent memory
 
@@ -512,34 +520,33 @@ The same pattern that wired Telegram and GitHub works for anything with an API:
 
 ## Backup plans
 
-| Dependency | Failure mode | Backup |
-|---|---|---|
-| Attendee VM setup | Didn't set up the VM pre-workshop, or boot fails on-site | Pair with a neighbor (read-only follow-along), 1:1 setup help during the break, take-home recipe for post-workshop |
-| Attendee VM | Crashes / out-of-memory mid-session | Allocate more RAM to the VM (~4-6 GB) in your virtualization tool's settings, restart the VM, re-run last command |
-| Attendee laptop too low-spec | Can't allocate enough RAM to Docker, exercises feel unusable | Pair with a neighbor; presenter offers their spare laptop or a screen-share session as fallback |
-| Anthropic API | Outage or 529 | Presenter runs `/add-codex` (OpenAI) or `/add-opencode` (OpenRouter) on the demo agent to keep the live walkthrough moving; attendees pair with someone whose region is unaffected |
-| Telegram | Banned country / phone issues | Discord via `/add-discord` - same flow, different token; attendee pairs with someone who has Telegram for the demo and switches at home |
-| Venue WiFi | Down or unusable | Presenter hotspots from phone; attendees pair to share. Critical because Anthropic API + Telegram + OpenRouter all need outbound HTTPS. Worst case, present from a pre-recorded screencast of Exercise 1-4 and let attendees follow along offline-then-deploy |
-| NanoClaw repo down | Rare but happens | Pre-mirrored tarball on a USB stick + on the workshop repo |
+| Dependency                   | Failure mode                                                 | Backup                                                                                                                                                                                                                                                        |
+| ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Attendee VM setup            | Didn't set up the VM pre-workshop, or boot fails on-site     | Pair with a neighbor (read-only follow-along), 1:1 setup help during the break, take-home recipe for post-workshop                                                                                                                                            |
+| Attendee VM                  | Crashes / out-of-memory mid-session                          | Allocate more RAM to the VM (~4-6 GB) in your virtualization tool's settings, restart the VM, re-run last command                                                                                                                                             |
+| Attendee laptop too low-spec | Can't allocate enough RAM to Docker, exercises feel unusable | Pair with a neighbor; presenter offers their spare laptop or a screen-share session as fallback                                                                                                                                                               |
+| Anthropic API                | Outage or 529                                                | Presenter runs `/add-codex` (OpenAI) or `/add-opencode` (OpenRouter) on the demo agent to keep the live walkthrough moving; attendees pair with someone whose region is unaffected                                                                            |
+| Telegram                     | Banned country / phone issues                                | Discord via `/add-discord` - same flow, different token; attendee pairs with someone who has Telegram for the demo and switches at home                                                                                                                       |
+| Venue WiFi                   | Down or unusable                                             | Presenter hotspots from phone; attendees pair to share. Critical because Anthropic API + Telegram + OpenRouter all need outbound HTTPS. Worst case, present from a pre-recorded screencast of Exercise 1-4 and let attendees follow along offline-then-deploy |
+| NanoClaw repo down           | Rare but happens                                             | Pre-mirrored tarball on a USB stick + on the workshop repo                                                                                                                                                                                                    |
 
 ---
 
 ## Sources
 
-- **Provider comparison (every host we tested):** [`./providers.md`](./providers.md).
-- **Verification log of the host paths we tried and rejected:** [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md) - records Railway DinD failure (Permission denied on cgroup mount, 2026-06-09) and Oracle Cloud Amsterdam capacity failure (Out of capacity for `VM.Standard.A1.Flex`, 2026-06-09). Screenshots in [`../dind-sandbox/recordings/`](../dind-sandbox/recordings/).
-- OpenClaw walkthrough video (reference architecture): https://www.youtube.com/watch?v=cod50CWlZeU
-- OpenClaw agent-workspace docs (9-file system, verbatim purposes): https://github.com/openclaw/openclaw/blob/main/docs/concepts/agent-workspace.md
-- OpenClaw bootstrapping docs: https://docs.openclaw.ai/start/bootstrapping
-- OpenClaw default AGENTS.md reference: https://docs.openclaw.ai/reference/AGENTS.default
-- NanoClaw repo: https://github.com/nanocoai/nanoclaw
-- Virtualization tools: UTM (https://mac.getutm.app/), VirtualBox (https://www.virtualbox.org/)
-- Docker Engine install for Linux (one-liner): https://get.docker.com
-- Hetzner Cloud (CAX11 ARM): https://www.hetzner.com/cloud
-- AWS EC2 Free Tier (t4g.small ARM): https://aws.amazon.com/free/
-- Oracle Cloud: https://www.oracle.com/cloud/free/
-- Hostinger OpenClaw hosting: https://www.hostinger.com/vps/openclaw-hosting
-- OpenClaw on Hostinger install guide: https://docs.openclaw.ai/install/hostinger
-- OpenRouter Sonar Pro Search: https://openrouter.ai/perplexity/sonar-pro-search
-- Web Summer Camp 2026 AI track: https://websummercamp.com/2026/program/ai
+- **Provider comparison (every host we tested, with what broke and why):** [`./providers.md`](./providers.md).
+- OpenClaw walkthrough video (reference architecture): <https://www.youtube.com/watch?v=cod50CWlZeU>
+- OpenClaw agent-workspace docs (9-file system, verbatim purposes): <https://github.com/openclaw/openclaw/blob/main/docs/concepts/agent-workspace.md>
+- OpenClaw bootstrapping docs: <https://docs.openclaw.ai/start/bootstrapping>
+- OpenClaw default AGENTS.md reference: <https://docs.openclaw.ai/reference/AGENTS.default>
+- NanoClaw repo: <https://github.com/nanocoai/nanoclaw>
+- Virtualization tools: UTM (<https://mac.getutm.app/>), VirtualBox (<https://www.virtualbox.org/>)
+- Docker Engine install for Linux (one-liner): <https://get.docker.com>
+- Hetzner Cloud (CAX11 ARM): <https://www.hetzner.com/cloud>
+- AWS EC2 Free Tier (t4g.small ARM): <https://aws.amazon.com/free/>
+- Oracle Cloud: <https://www.oracle.com/cloud/free/>
+- Hostinger OpenClaw hosting: <https://www.hostinger.com/vps/openclaw-hosting>
+- OpenClaw on Hostinger install guide: <https://docs.openclaw.ai/install/hostinger>
+- OpenRouter Sonar Pro Search: <https://openrouter.ai/perplexity/sonar-pro-search>
+- Web Summer Camp 2026 AI track: <https://websummercamp.com/2026/program/ai>
 - User's working outline (Notion, private): "Beyond the Chatbot: Engineering Your Proactive Digital Twin"
