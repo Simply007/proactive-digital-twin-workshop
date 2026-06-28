@@ -124,7 +124,8 @@ Every migration is the same shape: provision Linux, SSH in, run the same `bash n
 
 ### NOGO Docker-in-Docker setup
 
-> **Warning - TL;DR:** Do not try to run the Docker-in-Docker setup of NanoClaw. I went through the pain so that you don't have to.
+> [!CAUTION]
+> **TL;DR:** Do not try to run the [Docker-in-Docker setup](https://www.docker.com/resources/docker-in-docker-containerized-ci-workflows-dockercon-2023/) of NanoClaw. I went through the pain so that you don't have to.
 
 See [`dind-sandbox/README.md`](dind-sandbox/README.md) to run it, [`dind-sandbox/findings.md`](dind-sandbox/findings.md) for the 9 DinD-specific issues, and [`dind-sandbox/architecture.md`](dind-sandbox/architecture.md) for the full setup explanation.
 
