@@ -153,7 +153,7 @@ The shift: from install to understanding. What did you just build, how does memo
 | Time        | Length | What                                                                                                                                                                                                                                                                                                                      |
 | ----------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1:15 – 1:35 | 20 min | **Living Files debrief** — what you gave the agent (5 answers), what you got (`CLAUDE.local.md` profile). Walk the memory architecture: `CLAUDE.md` (always loaded) → memory files (recalled when relevant) → conversation history. Live: open the files, show the diff, ask the agent to re-read and prove it remembers. |
-| 1:35 – 2:00 | 25 min | **Exercise 3: GitHub memory sync** — back up your agent's memory to a GitHub repo. Attendees use `gh auth login` in the Linux terminal. TODO steps: create repo, write sync script, schedule hourly job. Post the use case voting poll here.                                                                              |
+| 1:35 – 2:00 | 25 min | **Exercise 3: GitHub memory sync** — connect GitHub to OneCLI via an OAuth app, then DM the agent to back up its memory to a private repo and schedule an hourly sync. Introduces scheduled jobs. Post the use case voting poll here.                                                                              |
 | 2:00 – 2:20 | 20 min | **Exercise 4: Run your use case** — attendees pick the poll winner (or their own choice) and set it up via one DM. Presenter circulates. Goal: at least one notification fires before the session ends.                                                                                                                   |
 | 2:20 – 2:30 | 10 min | **Wrap-up** — what they have, where to take it next, QR + follow-up                                                                                                                                                                                                                                                       |
 
@@ -164,7 +164,7 @@ The shift: from install to understanding. What did you just build, how does memo
 | **Ex 1 — Install + ping/pong**      | 25 min      | 40 min      | Container build 3-5 min in the VM. Telegram pairing 2-3 min. First-message cold start 60-90s. Pad for Docker-not-started, wrong-token attendees. |
 | **Ex 2 — Living Files first taste** | 10 min      | 15 min      | Agent does most of the work. Five questions + answers + diff + verification took ~7 min including reads.                                                                           |
 | **Living Files debrief**            | 15 min      | 20 min      | Show the diff from Exercise 2, open `CLAUDE.local.md` and memory files live, ask agent to re-read and prove it remembers a detail.                                                 |
-| **Ex 3 — GitHub memory sync**       | 20 min      | 25 min      | `gh auth login` → create repo → write sync script → `schedule hourly`. Covers scheduled jobs naturally. Pad for attendees without a GitHub account.                                |
+| **Ex 3 — GitHub memory sync**       | 25 min      | 30 min      | Connect GitHub to OneCLI (OAuth app) → DM the agent to sync memory → `schedule hourly`. Covers scheduled jobs naturally. Pad for the OAuth-app setup + attendees without a GitHub account.                                |
 | **Ex 4 — Run your use case**        | 15 min      | 20 min      | One DM to set up. Presenter circulates. Goal: at least one notification fires before wrap-up.                                                                                      |
 | **Wrap-up**                         | 5 min       | 10 min      | Where to go next, always-on recipes, QR.                                                                                                                                           |
 
@@ -356,77 +356,48 @@ Water, restrooms, hallway track. Presenter stays in the room for 1:1 troubleshoo
 
 ### Exercise 3: GitHub Memory Sync (25 min)
 
-**Time budget:** ~20 min (minimum viable) / +5 min (stretch)
+**Time budget:** ~25 min (minimum viable) / +5 min (stretch)
 **Goal (minimum viable):** agent memory backed up to a private GitHub repo, syncing on a schedule. Memory survives container rebuilds and is version-controlled.
-**Stretch goal:** add a second scheduled job that auto-commits the conversation history folder too.
+**Stretch goal:** schedule a second sync for a different file set, or switch the recurring job to "only ping me when it fails".
 
-**Why this exercise:** the agent's memory lives in files on the container. If the container is rebuilt, the files survive (named volume), but a version-controlled off-site backup adds a safety net — and it shows scheduled jobs in a real-world use case rather than a toy example.
+**Why this exercise:** the agent's memory lives in files. A version-controlled off-site backup adds a safety net - and it introduces **scheduled jobs** in a real-world use case rather than a toy example.
 
-**No external credential vault needed.** Attendees authenticate with GitHub directly from the Linux terminal using the `gh` CLI. No OneCLI, no OAuth app setup.
+**The approach - the agent does the sync (verbalize, don't code).** You connect GitHub to **OneCLI** (the credential vault) once via an OAuth app, then **ask the agent** to back up its memory. The agent writes the sync script, pushes through the **GitHub API** (OneCLI injects the token at the proxy level), and schedules the recurring job itself. You never write a sync script or run `git`. This is the verified path; the full step-by-step lives in the [`github-memory-sync`](../.claude/skills/github-memory-sync/SKILL.md) skill. (A host-side `gh` CLI + cron alternative is in that skill's "Alternative" section for anyone who would rather not create an OAuth app.)
 
 **Demo cue (presenter):**
 
-- Show the memory files live: `ls ~/nanoclaw-workspace/<group>/memory/`
-- Create a repo on GitHub (via the UI or `gh repo create`), run `gh auth login` in the terminal to authenticate.
-- Write a sync script live (or paste from the workshop repo's `scripts/` folder), run it once, verify the files appear on GitHub.
-- DM the agent: `schedule an hourly job to run the sync script at ~/sync-memory.sh`.
-- Show the scheduled job in the agent's list.
+- Show the memory files live on the host: `ls -R ~/nanoclaw/groups/<folder>/memory` (in-container they are at `/workspace/agent/memory`).
+- Open the OneCLI dashboard (find it with `sudo docker ps` - port `10254`, e.g. `http://127.0.0.1:10254` or `http://172.17.0.1:10254`), Connections -> GitHub OAuth. Copy the callback URL.
+- On GitHub, create an OAuth App (Settings -> Developer settings -> OAuth Apps) with that callback URL, copy the Client ID, generate a Client Secret, paste both back into OneCLI, and log in. **The secret is a password - it goes only into the OneCLI form.**
+- Create an empty **private** repo (e.g. `my-agent-memory`).
+- DM the agent: `do you have GitHub access? which user are you, and which repos can you see?` then `keep your memory in sync with <owner>/<repo> - copy /workspace/agent/memory into the repo under memory/ and push.`
+- DM the agent: `schedule this sync every hour, and only ping me if it fails.` Show the task id, then `run the sync once now` and refresh GitHub.
 
-**Attendee TODO steps:**
+**Attendee task:**
 
-```bash
-# 1. Authenticate with GitHub
-gh auth login   # pick HTTPS, browser-based auth
-
-# 2. Create a memory backup repo
-gh repo create my-agent-memory --private --confirm
-
-# 3. Clone it and copy in your current memory files
-git clone https://github.com/<you>/my-agent-memory ~/my-agent-memory
-cp -r ~/nanoclaw-workspace/<group>/memory/. ~/my-agent-memory/memory/
-cp ~/nanoclaw-workspace/<group>/CLAUDE.local.md ~/my-agent-memory/
-
-# 4. First commit
-cd ~/my-agent-memory
-git add -A && git commit -m "Initial memory snapshot" && git push
-
-# 5. Write the sync script
-cat > ~/sync-memory.sh << 'EOF'
-#!/bin/bash
-set -e
-REPO=~/my-agent-memory
-cp -r ~/nanoclaw-workspace/<group>/memory/. "$REPO/memory/"
-cp ~/nanoclaw-workspace/<group>/CLAUDE.local.md "$REPO/"
-cd "$REPO"
-git add -A
-git diff --cached --quiet && exit 0
-git commit -m "Sync $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-git push
-EOF
-chmod +x ~/sync-memory.sh
-
-# 6. Test it
-bash ~/sync-memory.sh
-```
-
-**Then DM your agent:**
-
-> `schedule a recurring job: every hour, run the script at ~/sync-memory.sh`
+1. **Find OneCLI** with `sudo docker ps` (port `10254`) and open it in the VM browser. Go to Connections -> GitHub OAuth and copy the callback URL.
+2. **Create a GitHub OAuth App** (Settings -> Developer settings -> OAuth Apps -> New OAuth App). Set the callback URL (reuse it for the homepage), copy the Client ID, generate a Client Secret.
+3. **Connect** in OneCLI: paste Client ID + Secret, set the callback, log in. (Note which GitHub account you authorize - the agent acts as that account.)
+4. **Create an empty private repo** on GitHub (e.g. `my-agent-memory`).
+5. **DM the agent** to confirm access, then to sync `/workspace/agent/memory` into the repo under `memory/`.
+6. **DM the agent** to schedule the sync hourly, waking you only on failure. Then `run the sync once now`.
 
 **Expected output / checkpoint:**
 
-- The repo on GitHub shows the memory files.
-- `list my scheduled jobs` shows an hourly sync job.
-- DM: `run that job now, once` — a new commit appears on GitHub within ~60 seconds.
+- GitHub auth is active in the agent (`who are you on GitHub?` returns the authorized user + scopes like `repo, user, workflow`).
+- The private repo shows your memory files (e.g. `memory/memories/people/<you>.md`).
+- `list my scheduled tasks` shows the hourly sync; `run the sync once now` lands a new commit within ~60 seconds.
 
 **Troubleshooting:**
 
-| Symptom                                | Likely cause              | Fix                                                              |
-| -------------------------------------- | ------------------------- | ---------------------------------------------------------------- |
-| `gh auth login` fails                  | `gh` CLI not installed    | `sudo apt install gh` or download from <https://cli.github.com>    |
-| `git push` asks for credentials        | gh auth not wired to git  | Run `gh auth setup-git`                                          |
-| Script can't find the memory folder    | Wrong `<group>` path      | `ls ~/nanoclaw-workspace/` to find the correct group folder name |
-| Scheduled job runs but nothing commits | No changes since last run | Expected — the script exits cleanly when there's nothing new     |
+| Symptom                                       | Likely cause                                          | Fix                                                                                                   |
+| --------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Agent reports `401 Requires authentication`   | A raw `fetch`/`git` call bypassed the OneCLI proxy    | OneCLI injects auth at the proxy level; ask the agent to retry via its authenticated GitHub API path  |
+| `git push` does nothing / cannot prompt       | No interactive credential prompt inside the container | Expected - the agent pushes via the GitHub commit/tree API instead                                    |
+| Agent acts as the wrong GitHub user           | OAuth connection authorized a different account       | `who are you on GitHub?`, then re-authorize the OneCLI GitHub connection with the right account        |
+| New repo not in the agent's repo list         | GitHub `/user/repos` listing lag                      | Expected - access by `owner/repo` or search works immediately                                         |
+| `Turn timed out after 600000ms`               | Long first sync hit the ~10-min per-turn ceiling      | Ask `what is the status?` - the work usually finished; keep the sync its own focused request          |
+| Scheduled job runs but nothing commits        | No changes since last run                             | Expected - the sync detects no diff and stays quiet                                                   |
 
 ---
 
