@@ -111,7 +111,7 @@ NanoClaw uses Claude (Anthropic) as the agent's brain. Before the workshop, set 
 
 ### 3. Telegram bot — quick, can be done in the workshop intro
 
-Install Telegram on your phone. DM [@BotFather](https://t.me/botfather): send `/newbot`, pick a name, save the token. You'll need this token in Exercise 1. Takes ~2 min, no pre-workshop urgency.
+Install Telegram on your phone. DM [@BotFather](https://t.me/botfather): send `/newbot`, pick a name, save the token. You'll need this token in Preparation 1. Takes ~2 min, no pre-workshop urgency.
 
 ### Minimum laptop requirements
 
@@ -152,7 +152,7 @@ Updated 2026-06-10 after end-to-end walkthrough validation. Times reflect what a
 |---|---|---|
 | **Block A – Foundations** (1h 15min) | 0:00 – 1:15 | Intro + ping/pong + first taste of Living Files |
 | Break (off-clock, 30 min) | between blocks | Water, restrooms, hallway track, 1:1 troubleshooting with stragglers |
-| **Block B – Living Files + Capabilities + Use Cases** (1h 15min) | 1:15 – 2:30 | Deep dive on what `CLAUDE.local.md` is, capability tour, realistic use cases, wrap-up |
+| **Block B – Memory Architecture + GitHub Sync + Use Cases** (1h 15min) | 1:15 – 2:30 | Living Files debrief, GitHub memory sync hands-on, run your use case, wrap-up |
 
 ### Block A breakdown (75 min)
 
@@ -164,33 +164,30 @@ Updated 2026-06-10 after end-to-end walkthrough validation. Times reflect what a
 
 ### Block B breakdown (75 min)
 
-The shift: less "install more tools," more "understand what you just built and stretch its real-world reach."
+The shift: from install to understanding. What did you just build, how does memory actually work, and where does it go next?
 
 | Time | Length | What |
 |---|---|---|
-| 1:15 – 1:35 | 20 min | **Living Files deep dive** — `CLAUDE.md` composition (the fragment imports), `CLAUDE.local.md` for per-agent memory, why this scales vs prompt-injection. Live edit + agent re-reads. |
-| 1:35 – 1:55 | 20 min | **Capability tour** — Exercise 3 (research tool swap: default → custom search rule), bonus voice (OpenAI Whisper connect), extra channels (`/add-discord`, `/add-slack`). Pick 2 of 3 based on attendee energy. |
-| 1:55 – 2:20 | 25 min | **Use cases** — Exercise 4 (scheduled morning brief), CKEditor cameo (presenter demo, real-world API integration). Frame both as "any external API plugs in the same way." |
-| 2:20 – 2:30 | 10 min | **Wrap-up** — what they have, 3 always-on migration recipes, where to go next, QR + follow-up |
+| 1:15 – 1:35 | 20 min | **Living Files debrief** — what you gave the agent (5 answers), what you got (`CLAUDE.local.md` profile). Walk the memory architecture: `CLAUDE.md` (always loaded) → memory files (recalled when relevant) → conversation history. Live: open the files, show the diff, ask the agent to re-read and prove it remembers. |
+| 1:35 – 2:00 | 25 min | **Exercise 3: GitHub memory sync** — back up your agent's memory to a GitHub repo. Attendees use `gh auth login` in the Linux terminal. TODO steps: create repo, write sync script, schedule hourly job. Post the use case voting poll here. |
+| 2:00 – 2:20 | 20 min | **Exercise 4: Run your use case** — attendees pick the poll winner (or their own choice) and set it up via one DM. Presenter circulates. Goal: at least one notification fires before the session ends. |
+| 2:20 – 2:30 | 10 min | **Wrap-up** — what they have, where to take it next, QR + follow-up |
 
 ### Time estimates per exercise (from the 2026-06-10 walkthrough)
 
-| Exercise | Smooth-path | With buffer | What the walkthrough actually showed |
+| Exercise | Smooth-path | With buffer | Notes |
 |---|---|---|---|
 | **Ex 1 — Install + ping/pong** | 25 min | 40 min | Container build 3-5 min on laptop overlay2 (was 12 min in DinD VFS). Telegram pairing 2-3 min. First-message cold start 60-90s. Pad for Docker-not-started, wrong-token attendees. |
 | **Ex 2 — Living Files first taste** | 10 min | 15 min | Agent does most of the work. Five questions + answers + diff + verification took ~7 min including reads. |
-| **Living Files deep dive** | 15 min | 20 min | Walk the composition pattern (`@./.claude-fragments/*.md`), show how `CLAUDE.local.md` overlays. Live edit + `re-read your CLAUDE.local.md before answering`. |
-| **Capability tour** | 15 min | 20 min | Pick 2 of {search swap, voice, extra channel}. Each is 5-8 min when smooth. |
-| **Ex 4 — Scheduled job** | 10 min | 15 min | Schedule create → list → run-once → reply: ~8 min in the walkthrough. Pad for time-zone confusion. |
-| **CKEditor cameo** | 5 min | 5 min | Pure presenter demo. No attendee time. |
-| **Wrap-up** | 5 min | 10 min | Always-on migration table (Hetzner / AWS / Pi), the "where to next" list, QR. |
+| **Living Files debrief** | 15 min | 20 min | Show the diff from Exercise 2, open `CLAUDE.local.md` and memory files live, ask agent to re-read and prove it remembers a detail. |
+| **Ex 3 — GitHub memory sync** | 20 min | 25 min | `gh auth login` → create repo → write sync script → `schedule hourly`. Covers scheduled jobs naturally. Pad for attendees without a GitHub account. |
+| **Ex 4 — Run your use case** | 15 min | 20 min | One DM to set up. Presenter circulates. Goal: at least one notification fires before wrap-up. |
+| **Wrap-up** | 5 min | 10 min | Where to go next, always-on recipes, QR. |
 
 ### Cut candidates (in order, if running slow)
 
-1. **Bonus voice** in capability tour — drop entirely if the room is energy-low at 1:45.
-2. **CKEditor cameo** — skip the live demo, mention as a "same pattern" closing line in wrap-up.
-3. **Exercise 4 attendee task** — keep as presenter demo only at 2:00; skip the hands-on schedule create from attendees.
-4. **Capability tour shrunk to 1 capability** — drop to just the search swap (Ex 3 Part B from the old plan).
+1. **Exercise 3 attendee task** — keep as presenter demo only; skip the hands-on schedule create from attendees.
+2. **Exercise 4** — cut to presenter demo only; pick the top-voted use case and set it up live while attendees watch.
 
 If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely into Block B and start Block B with "we'll do the personalization that catches everyone up" — 15 min slack for stragglers, no one feels left behind.
 
@@ -207,7 +204,7 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 **Credentials setup, in parallel (3 min):** Claude access should already be sorted from pre-workshop (Pro subscription, Anthropic API key, or OpenRouter free key). Confirm with attendees that they have it; help anyone who didn't get it set up. Then everyone does the one quick credential left:
 
-- On phone, open Telegram → DM @BotFather → `/newbot` → pick a name → save the token. You'll paste it during Exercise 1.
+- On phone, open Telegram → DM @BotFather → `/newbot` → pick a name → save the token. You'll paste it during Preparation 1.
 
 **Stack overview (narrated while attendees do credentials):** Local Docker on your laptop. NanoClaw as the agent framework. Anthropic Sonnet 4.5 as the model. Telegram as the channel. Why local Docker? Because we tested the VPS options and they don't work for everyone on day-of (see the findings doc). Local is the only path where every attendee walks out with something running.
 
@@ -217,7 +214,7 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 ## Block A - Foundations (1h 5min)
 
-### Exercise 1: Deploying the Brain
+### Preparation 1: Deploying the Brain
 
 **Time budget:** ~30 min (minimum viable) / +5 min (stretch)
 **Goal (minimum viable):** NanoClaw running in a Docker container on your laptop, paired to your Telegram bot, answering "ping" with "pong".
@@ -287,7 +284,7 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 ---
 
-### Exercise 2: Living Files
+### Preparation 2: Living Files
 
 > **Heads-up on the file shape.** Where OpenClaw splits context across 9 files (`soul.md`, `user.md`, `heartbeat.md`, `tools.md`, `identity.md`, ...), NanoClaw uses **one `CLAUDE.md` per agent**, plus the agent's memory, plus installable skills. Same mental model, one file to learn first. Tone, identity, rules, and API references all live as sections inside `CLAUDE.md`; long-term recall lives in the agent's memory; new capabilities arrive as skills (`/add-*`). The file name is a Claude Code convention - if you swap the provider via `/add-codex` or `/add-opencode`, the file stays `CLAUDE.md` (NanoClaw reads it regardless of provider).
 
@@ -347,6 +344,8 @@ NanoClaw + Telegram bots accept voice notes out of the box, but transcription re
 
 Presenter walks the room. Anyone stuck on Exercise 1 gets a 1:1; anyone past Exercise 2 starts on a stretch goal. Last bullet before the break: **"Don't close your laptop or let it sleep during the break - the container dies with the host. Plug into power. If your laptop must sleep, the bot will go silent and you'll need to restart the container after."**
 
+**Before breaking:** post the use case voting poll in the workshop Telegram group. Attendees vote during the break and the first half of Block B. Results drive Exercise 4.
+
 ---
 
 ## Break (15 min)
@@ -355,92 +354,111 @@ Water, restrooms, hallway track. Presenter stays in the room for 1:1 troubleshoo
 
 ---
 
-## Block B - Proactivity & Real-world Hooks (55 min)
+## Block B - Memory Architecture + GitHub Sync + Use Cases (75 min)
 
-### Exercise 3: Connecting the Dots
+### Living Files debrief (20 min)
 
-**Time budget:** ~25 min (minimum viable) / +5 min (stretch)
-**Goal (minimum viable):** first get the agent answering research questions with its **out-of-the-box** web-search tool, then swap that tool for Perplexity Sonar Pro Search via OpenRouter and confirm the upgrade landed.
-**Stretch goal:** swap the web-search tool for a calendar webhook (Google Calendar via Make.com free tier) and have the agent summarize tomorrow's events.
-
-**Why this two-step shape:** the pedagogical point of the workshop isn't "use Perplexity" - it's "the agent rewires its own tools when you ask it to in plain English." Seeing the default work first, then watching it swap, makes the pattern stick.
+**Goal:** attendees understand what they just built and why it works.
 
 **Demo cue (presenter):**
-- Part A - default: DM the agent: `which web-search tool are you using right now? Do a quick search for "Web Summer Camp 2026 Opatija" and name the tool you called.` Read the answer out loud - that's the baseline.
-- Part B - upgrade: DM the agent: `from now on, when I say "research X", call the OpenRouter model perplexity/sonar-pro-search with my OpenRouter API key. Save this rule under a "Research tools" section in CLAUDE.md.`
-- Test live: `research the latest changes in the Anthropic Agents SDK this month and message me a 3-bullet summary.`
+- Open the agent's workspace in the terminal: `ls` the files, `cat CLAUDE.local.md`, open the memory folder.
+- Show the diff from Preparation 2 — these are the actual words the agent will carry into every future conversation.
+- DM the agent: `re-read your CLAUDE.local.md and tell me one specific thing you remember about me that you didn't know before this workshop.`
+- Point at the structure: `CLAUDE.md` (always loaded — identity, rules, skills) vs `CLAUDE.local.md` (per-agent memory — who you are, what you care about) vs memory files (longer-term recall, recalled when relevant) vs conversation history (searchable transcripts).
 
-**Attendee task:**
-
-**Part A - use the default (~5 min)**
-1. DM your agent: `which web-search tool are you using right now? Do a quick search for "Web Summer Camp 2026 Opatija" and tell me the tool name plus one URL you found.`
-2. Confirm you got a tool name and at least one URL back.
-
-**Part B - upgrade to Perplexity via OpenRouter (~15 min)**
-1. Sign up at https://openrouter.ai/ (free, GitHub login). Top up $1.
-2. Copy your OpenRouter API key.
-3. DM your agent: `when I say "research X", use OpenRouter (key: sk-or-...) with the perplexity/sonar-pro-search model. Save this as a tool rule in CLAUDE.md.`
-4. DM: `research the top 3 hands-on AI agent workshops in Europe this year and message me back with links.`
-
-**Expected output / checkpoint:**
-- Part A: a reply naming the default tool (likely Anthropic's built-in WebSearch via the Agents SDK) and at least one URL.
-- Part B: a reply with 3 bullets, each citing a URL. Confirm by checking the OpenRouter activity dashboard that the call actually went through OpenRouter, not the default tool.
-
-**Troubleshooting:**
-
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| Part A: agent says it has no web tool | The default channel/agent skipped granting WebSearch | DM `enable web search for this agent and try again`; if still blocked, jump to Part B early and use OpenRouter |
-| Part B: agent returns generic info, no URLs | It still used the default tool, not OpenRouter | DM `you must use OpenRouter for this research. Show me which tool you used.` and inspect the reply |
-| OpenRouter returns 402 | No credit on the account | Top up $1 on openrouter.ai/credits |
-| Reply takes >60s | Sonar Pro Search latency on long queries | Acceptable - point out that the scheduled job we set in Exercise 4 won't block on this |
-
-**Sources / refs:** https://openrouter.ai/perplexity/sonar-pro-search , NanoClaw README "web access" capability, OpenClaw video segment on Perplexity swap (~11:00 mark)
+**Framing line:** "This is just text. Text you wrote in a chat window. The agent reads it every time it wakes up. That's the whole trick — verbalized context beats clever prompting."
 
 ---
 
-### Exercise 4: Proactive Logic (cut candidate if running short)
+### Exercise 3: GitHub Memory Sync (25 min)
 
 **Time budget:** ~20 min (minimum viable) / +5 min (stretch)
-**Goal (minimum viable):** a scheduled job that DMs you a short morning brief every weekday at 09:00 in your local time zone. It must include one item the agent actually fetched (calendar, news, or yesterday's CLAUDE.md changes).
-**Stretch goal:** add a second job that runs every Friday afternoon and asks you 3 retro questions, then appends your answers to `personal/retro.md`.
+**Goal (minimum viable):** agent memory backed up to a private GitHub repo, syncing on a schedule. Memory survives container rebuilds and is version-controlled.
+**Stretch goal:** add a second scheduled job that auto-commits the conversation history folder too.
 
-> **Laptop-sleep caveat (call this out loud before the exercise starts):** scheduled jobs only fire while the container is running. Since your container is on your laptop, **the schedule pauses when your laptop sleeps or shuts down**. We'll prove the job works using `run that job now, once`, then talk about how to make it always-on in the wrap-up (Hetzner, AWS, Mac Mini / Raspberry Pi recipes). The 09:00 cron is the *intent*; today we're validating the *plumbing*.
+**Why this exercise:** the agent's memory lives in files on the container. If the container is rebuilt, the files survive (named volume), but a version-controlled off-site backup adds a safety net — and it shows scheduled jobs in a real-world use case rather than a toy example.
+
+**No external credential vault needed.** Attendees authenticate with GitHub directly from the Linux terminal using the `gh` CLI. No OneCLI, no OAuth app setup.
 
 **Demo cue (presenter):**
-- DM the agent: `schedule a job: every weekday at 09:00 Europe/Zagreb, research the top developer news of yesterday and DM me a 3-bullet brief. Confirm by listing the job.`
-- Show the resulting job entry in the agent's scheduled-jobs view.
-- Trigger it manually: `run that job now, just once, for testing.`
-- Out loud: "On a VPS this would fire tomorrow at 09:00. On your laptop, it fires tomorrow at 09:00 *if* your laptop is awake and the container is running. The wrap-up has 3 recipes to fix that after today."
+- Show the memory files live: `ls ~/nanoclaw-workspace/<group>/memory/`
+- Create a repo on GitHub (via the UI or `gh repo create`), run `gh auth login` in the terminal to authenticate.
+- Write a sync script live (or paste from the workshop repo's `scripts/` folder), run it once, verify the files appear on GitHub.
+- DM the agent: `schedule an hourly job to run the sync script at ~/sync-memory.sh`.
+- Show the scheduled job in the agent's list.
 
-**Attendee task:**
-1. DM your agent: `set up a recurring job: every weekday at 09:00 in <your time zone>, research <something you care about - your stack, your industry, your hobby> and message me a 3-bullet brief.`
-2. DM: `list my scheduled jobs.`
-3. DM: `run that job now, once, so I can see what the morning message will look like.`
+**Attendee TODO steps:**
+
+```bash
+# 1. Authenticate with GitHub
+gh auth login   # pick HTTPS, browser-based auth
+
+# 2. Create a memory backup repo
+gh repo create my-agent-memory --private --confirm
+
+# 3. Clone it and copy in your current memory files
+git clone https://github.com/<you>/my-agent-memory ~/my-agent-memory
+cp -r ~/nanoclaw-workspace/<group>/memory/. ~/my-agent-memory/memory/
+cp ~/nanoclaw-workspace/<group>/CLAUDE.local.md ~/my-agent-memory/
+
+# 4. First commit
+cd ~/my-agent-memory
+git add -A && git commit -m "Initial memory snapshot" && git push
+
+# 5. Write the sync script
+cat > ~/sync-memory.sh << 'EOF'
+#!/bin/bash
+set -e
+REPO=~/my-agent-memory
+cp -r ~/nanoclaw-workspace/<group>/memory/. "$REPO/memory/"
+cp ~/nanoclaw-workspace/<group>/CLAUDE.local.md "$REPO/"
+cd "$REPO"
+git add -A
+git diff --cached --quiet && exit 0
+git commit -m "Sync $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+git push
+EOF
+chmod +x ~/sync-memory.sh
+
+# 6. Test it
+bash ~/sync-memory.sh
+```
+
+**Then DM your agent:**
+> `schedule a recurring job: every hour, run the script at ~/sync-memory.sh`
 
 **Expected output / checkpoint:**
-- A brief DM arrives within ~60 seconds containing the 3-bullet structure.
-- `list my scheduled jobs` shows your job with the correct cron-style trigger.
+- The repo on GitHub shows the memory files.
+- `list my scheduled jobs` shows an hourly sync job.
+- DM: `run that job now, once` — a new commit appears on GitHub within ~60 seconds.
 
 **Troubleshooting:**
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Job never runs at the scheduled time | Container's TZ is UTC, not your TZ | DM `set the agent's time zone to <yours> and re-confirm the job's next run time` |
-| `run that job now` produces nothing | Scheduler sweep is 60s, the agent waits | Wait 90 seconds; if still nothing, check the agent's logs via `docker logs <container>` |
-| Brief is generic / no links | The job uses default tools, not OpenRouter | DM `update the job to use the OpenRouter research rule we set earlier` |
-
-**Sources / refs:** NanoClaw scheduled jobs (`@<agent> ... every weekday morning at 9am` syntax)
+| `gh auth login` fails | `gh` CLI not installed | `sudo apt install gh` or download from https://cli.github.com |
+| `git push` asks for credentials | gh auth not wired to git | Run `gh auth setup-git` |
+| Script can't find the memory folder | Wrong `<group>` path | `ls ~/nanoclaw-workspace/` to find the correct group folder name |
+| Scheduled job runs but nothing commits | No changes since last run | Expected — the script exits cleanly when there's nothing new |
 
 ---
 
-### CKEditor cameo (5 min)
+### Exercise 4: Run your use case (20 min)
 
-Pure presenter demo, no attendee task. Goal: show one realistic, non-trivial integration that uses CKEditor's API.
+**Goal:** each attendee picks one use case from the voting results and sets it up with their agent in a single DM.
 
-- DM the demo agent: `take the bullets from this morning's brief and post them into the WSC weekly notes CKEditor doc (https://...) as a new section dated today.`
-- The agent calls CKEditor's REST API (token pre-loaded in `CLAUDE.md` under an "Available APIs" section), creates a new section, replies with the document URL.
-- One-line takeaway: "Same shape as the Telegram channel. Same shape as OpenRouter. Any API your day-job touches plugs in the same way."
+**Setup (presenter, during Exercise 3):**
+Post the voting poll in the workshop Telegram group. Announce the winner at 2:00.
+
+**What attendees do:**
+- Pick the winning use case (or their own favourite — no pressure)
+- Send the DM from the use case card in `use-cases-relatable.md`
+- Verify the job is scheduled: DM `list my scheduled jobs`
+- If it can fire during the workshop, time it so it fires during wrap-up
+
+**Presenter circulates.** Anyone who finishes early tries a second use case.
+
+**The one moment that must happen:** at least one attendee's notification arrives before the session ends. Prime the room at the start: "we're going to try to make something fire before we wrap up."
 
 ---
 
@@ -480,6 +498,42 @@ All four migrations follow the same shape: `git clone nanoclaw && bash nanoclaw.
 - Ondrej on LinkedIn / Bluesky - find me after for a 1:1
 - Slide deck + this outline live at https://ondrej.chrastina.dev/
 - QR on the last slide
+
+---
+
+## Backup content (use if ahead of schedule)
+
+### Where to host real agents
+
+Your laptop sleeps. To make the agent always-on, migrate it to any Linux box. Same install command everywhere.
+
+| Option | Cost | Notes |
+|---|---|---|
+| **Hetzner CAX11** | €4.51/mo | ARM VM, instant CC signup, EU datacenters. Recommended. |
+| **AWS t4g.small** | Free 12 months | ARM Graviton, then ~$15/mo. Best for the "free workshop year" path. |
+| **Mac Mini / Pi at home** | Free (if owned) | SSH from anywhere, run `bash nanoclaw.sh`. |
+| ~~Oracle Cloud Always Free~~ | Forever-free | Capacity roulette — A1 ARM frequently "Out of capacity" in EU. Not reliable. |
+
+### What services can store agent memory
+
+Markdown files in a GitHub repo are the floor. Three paths up:
+
+**Obsidian** — same markdown, human-readable vault, syncs to your phone via iCloud or Obsidian Sync. Zero migration — the files you just pushed to GitHub are already valid Obsidian notes. Good for: personal knowledge management, you want to read and edit memory yourself.
+
+**PostgreSQL + pgvector** — memory as vector embeddings. Instead of loading all 50 notes into context, the agent runs a semantic search: "what did I work on last quarter similar to this?" Returns the 3 most relevant. Good for: large memory sets, "find similar" queries, sharing memory across agents.
+
+**MCP memory server** — structured memory tools via Model Context Protocol: `remember(key, value)`, `recall(query)`, `forget(key)`. Swappable backend (SQLite, Postgres, cloud). Good for: production setups, audit trails, multi-agent memory sharing.
+
+**Framing line:** "Markdown files make it transparent — you can read exactly what the agent knows. When you outgrow that, swap the store. The agent's behavior doesn't change. Only the backend does."
+
+### What other services you can connect to
+
+The same pattern that wired Telegram and GitHub works for anything with an API:
+
+- **Swap LLM provider** — `/add-codex` (OpenAI), `/add-opencode` (OpenRouter / Gemini / DeepSeek), `/add-ollama-provider` (local open-weight models).
+- **Add a second channel** — `/add-slack`, `/add-discord`, `/add-whatsapp`.
+- **Connect Google Calendar** — agent reads your schedule, sends pre-meeting briefs, reacts to event changes.
+- **Any HTTP API** — Resend for email, GitHub for code, Notion for notes, Todoist for tasks. If it has an endpoint, the agent can call it.
 
 ---
 

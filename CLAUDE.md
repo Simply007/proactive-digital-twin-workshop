@@ -146,13 +146,12 @@ are all owned by the same normal user, so none of this is needed.
 
 End-to-end validation done in DinD sandbox on 2026-06-09/10:
 
-- ✅ Exercise 1: install → Telegram pairing → ping/pong
-- ✅ Exercise 2: Living Files (CLAUDE.local.md self-edit, personalization confirmed)
-- ✅ Exercise 3 Part A: default web search baseline
-- ✅ Exercise 3 Part B: research tool swap (tried OpenRouter Perplexity, then DDG Instant Answers as free fallback — DDG comes up dry on event-specific queries, which is itself a useful demo moment)
-- ✅ Exercise 4: scheduled morning brief (create + list + run-once)
+- ✅ Preparation 1: install → Telegram pairing → ping/pong
+- ✅ Preparation 2: Living Files (CLAUDE.local.md self-edit, personalization confirmed)
+- ✅ Preparation 3 Part A: default web search baseline
+- ✅ Preparation 3 Part B: research tool swap (tried OpenRouter Perplexity, then DDG Instant Answers as free fallback — DDG comes up dry on event-specific queries, which is itself a useful demo moment)
+- ✅ Preparation 4: scheduled morning brief (create + list + run-once)
 - ✅ Bonus voice messages: graceful fallback when no OpenAI key, OneCLI URL flow
-- ⏸ CKEditor cameo: pending (needs API choice + token + doc ID from presenter)
 - ⏸ Full clean-slate DinD validation with the current Dockerfile (this kit)
 - ⏸ `docker compose stop && start` recovery test
 
@@ -180,7 +179,6 @@ See `workshop/findings.md` for full reproduction details.
 
 ## Pending / open items
 
-- **CKEditor cameo** (workshop Exercise / wrap-up demo): needs concrete CKEditor API endpoint, auth token, and target document ID to wire into the agent's `CLAUDE.local.md`.
 - **Pre-workshop email** to attendees (1 week before): not yet drafted. Should cover Docker install + Claude access path (Pro sub or API key) + Telegram phone-app reminder.
 - **Slide deck**: not yet started. The author's private content-generation tooling (the `ai-library` submodule) can generate slide-by-slide from the workshop outline if needed.
 - **Run sheet for July 2**: cut-candidate ladder is in `workshop/outline.md`; a presenter-friendly minute-by-minute card is still TODO.

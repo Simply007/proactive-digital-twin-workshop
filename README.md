@@ -1,84 +1,87 @@
 # Proactive Digital Twin — Workshop Kit
 
-A reproducible Docker-based environment for running the **"Beyond the Chatbot: Engineering Your Proactive Digital Twin"** workshop. Spins up an isolated sandbox on your laptop that hosts an autonomous agent (NanoClaw), pairs it to Telegram, gives it a credential vault, and lets you build the "agent that wakes up while you grab coffee" without touching your host OS.
+A hands-on workshop kit for **"Beyond the Chatbot: Engineering Your Proactive Digital Twin"**. You spin up a Linux Ubuntu VM, install NanoClaw (an autonomous agent framework), pair it to Telegram, and build an agent that wakes up on its own schedule — while you grab a coffee.
 
-Built and validated for **Web Summer Camp 2026, Opatija** (July 2-4). Pre-tested host options, captured every failure mode, and pinned the working setup so attendees don't have to debug it from scratch.
+Built and validated for **Web Summer Camp 2026, Opatija** (July 2). Every failure mode is captured and the working setup is pinned so you don't debug from scratch.
 
-## What's in this repo
+## Quick start (primary path — Linux VM)
 
-```
-.
-├── docker-compose.yml          # one command spins everything up
-├── docker/                     # the privileged sandbox image (Ubuntu + DinD + VFS + OneCLI bind + non-root user)
-├── workshop/
-│   ├── outline.md              # the workshop walkthrough (intro, exercises, schedule, wrap-up)
-│   ├── findings.md             # everything we tried and rejected (Railway, Oracle, DinD gotchas)
-│   └── recordings/             # screenshots from the validation runs
-└── docs/
-    ├── architecture.md         # what the sandbox runs and why each piece exists
-    └── providers.md            # agent-framework + VPS comparison + verdicts
-```
+### 1. Spin up a Linux Ubuntu LTS VM
 
-## Prereqs
+| Host OS | Virtualization tool |
+|---------|---------------------|
+| macOS | [UTM](https://mac.getutm.app/) (free) |
+| Windows | [VirtualBox](https://www.virtualbox.org/) (free) |
+| Linux | KVM / `virt-manager` (free) |
 
-- **Docker Desktop** (macOS / Windows) or **Docker Engine** (Linux), 8 GB+ RAM, 10 GB+ free disk. See [`workshop/outline.md`](workshop/outline.md) for the full minimum-laptop table.
-- A **Claude Pro/Max subscription** OR an **Anthropic API key with $5 credit**. The agent needs one of these.
-- A **Telegram account** (on your phone/laptop). You'll create a bot via `@BotFather` to communicate with your twin.
+Download **Ubuntu 24.04 LTS** (or 22.04). Allocate at least 4 GB RAM and 20 GB disk. Start the VM, complete the Ubuntu setup wizard, and open a terminal.
 
-## Quick start
-
-Four steps. The only thing you configure is `.env`, at the start.
+### 2. Install NanoClaw inside the VM
 
 ```bash
-# 1. Clone
-git clone https://github.com/Simply007/proactive-digital-twin-workshop
-cd proactive-digital-twin-workshop
-cp .env.example .env          # optional — defaults are safe
-
-# 2. Build + start the sandbox (first build ~2 min)
-docker compose up -d
-
-# 3. Enter the sandbox (lands you in /work as the nanoclaw user)
-docker compose exec -u nanoclaw sandbox bash
-
-# 4. Inside the sandbox, install NanoClaw
+# Inside the Ubuntu VM terminal
 git clone https://github.com/nanocoai/nanoclaw.git
 cd nanoclaw
 bash nanoclaw.sh
 ```
 
-`nanoclaw.sh` asks everything it needs up front (Claude sign-in, time zone, Telegram bot token). When it finishes, DM your bot `ping` from your phone — the agent replies within ~60-90 seconds on the cold start, then sub-10s after that.
+`nanoclaw.sh` installs Node, pnpm, and Docker automatically. It then asks for your AI credentials, time zone, and Telegram bot token.
 
-To stop: `docker compose down` (your agent state in `AGENT_WORKSPACE` persists). To reset completely, also delete that directory.
+When it finishes, DM your bot `ping` from your phone — the agent replies within ~60-90 seconds on first start, sub-10s after that.
 
-## Configuration
+### 3. What you need before the workshop
 
-Everything tunable lives in `.env`. Defaults are safe:
+- **VM software** — UTM, VirtualBox, or KVM (see above, all free).
+- **Ubuntu 24.04 or 22.04 LTS** ISO — download from [ubuntu.com](https://ubuntu.com/download/desktop).
+- **AI access** — one of:
+  - Claude: [Pro or higher subscription](https://claude.ai) **or** [Anthropic API key](https://console.anthropic.com)
+  - OpenAI: [ChatGPT Plus or higher](https://openai.com) **or** [API key](https://platform.openai.com) — install the `/add-codex` skill after setup to switch providers
+- **Telegram** on your phone (any account). You'll create a bot via `@BotFather`.
 
-| Var | Default | Purpose |
-|---|---|---|
-| `AGENT_WORKSPACE` | `~/nanoclaw-workspace` | Where the agent's persistent files live on your host (CLAUDE.local.md, logs, scheduled jobs, etc.). Bind-mounted into the sandbox at `/work`. |
-| `ONECLI_BIND_HOST` | `127.0.0.1` | Where OneCLI (the credential vault) binds. The default works because `docker-compose.yml` publishes `127.0.0.1:10254-10255` from the sandbox to your host loopback. |
-| `SANDBOX_CONTAINER` | `agent-sandbox` | The Docker container name. Change to run multiple sandboxes side by side. |
+## What's in this repo
 
-## Why the sandbox approach
+```
+.
+├── docker-compose.yml          # presenter sandbox (Docker-in-Docker) — not the primary attendee path
+├── docker/                     # sandbox image (Ubuntu + DinD + VFS + OneCLI bind)
+├── workshop/
+│   ├── outline.md              # the workshop walkthrough (intro, exercises, schedule, wrap-up)
+│   ├── findings.md             # everything we tried and rejected (Railway, Oracle, DinD gotchas)
+│   ├── use-cases.md            # 10 free-tier integration ideas for the "Connecting the Dots" exercise
+│   └── recordings/             # screenshots from validation runs
+└── docs/
+    ├── architecture.md         # what NanoClaw runs and why each piece exists
+    └── providers.md            # host comparison + verdicts
+```
 
-NanoClaw's `bash nanoclaw.sh` is opinionated — it installs Node, pnpm, and Docker on the host, then runs containers from there. That's fine on a fresh VPS or a dedicated laptop, less fine on a work machine where you don't want a third-party install script with root reach. The sandbox isolates all of that inside a single container you can `docker compose down` when you're done.
+## After the workshop — moving to a real always-on host
 
-The sandbox is **also** what we used to validate the workshop end-to-end on Ondřej's laptop without touching it. Every gotcha we hit (overlay-on-overlay, missing `sudo`, OneCLI bind address, Telegram pairing race) is documented in [`workshop/findings.md`](workshop/findings.md) and baked into the Dockerfile + entrypoint here, so a fresh `docker compose up` skips all of them.
-
-## Pivoting to a real always-on host
-
-The wrap-up section of [`workshop/outline.md`](workshop/outline.md) covers four options:
+The wrap-up section of [`workshop/outline.md`](workshop/outline.md) covers four options for making your agent permanent:
 
 - **Hetzner CAX11** (€4.51/mo, recommended)
 - **AWS `t4g.small`** (free 12 months, then ~$15/mo)
 - **Mac Mini / Raspberry Pi at home** (free if you own one)
 - ~~Oracle Cloud Always Free~~ (capacity roulette, see [`workshop/findings.md`](workshop/findings.md))
 
-All four follow the same shape: provision Linux, SSH in, run the same `bash nanoclaw.sh`. The CLAUDE.local.md, scheduled jobs, and OpenRouter rule you built locally all transfer.
+All four: provision Linux, SSH in, run the same `bash nanoclaw.sh`. The `CLAUDE.local.md`, scheduled jobs, and integrations you built in the workshop all transfer — just copy your agent workspace.
 
-> The repo declares one private git submodule (the author's content tooling). It isn't needed to run the kit and isn't fetched by a normal `git clone`.
+## Presenter sandbox (Docker-in-Docker)
+
+The `docker-compose.yml` here is for **presenter-side validation** — it runs NanoClaw inside a privileged container so the presenter can test the full flow without touching their host. Attendees on a fresh Ubuntu VM don't need this.
+
+See [`workshop/findings.md`](workshop/findings.md) for the 9 DinD-specific gotchas baked into the Dockerfile, and [`docs/architecture.md`](docs/architecture.md) for the full setup explanation.
+
+## Workshop abstract
+
+> I bet most of you have spent some time chatting with AI, maybe even oneshotting a few websites or proof of concepts. It's cool, right? But constantly babysitting a chat window and approving every single terminal command is starting to feel like more work than it's saving.
+>
+> The real magic happens when you stop chatting and start delegating.
+>
+> In this hands-on workshop, we're going to cross the line from reactive AI to proactive autonomy. We'll be using NanoClaw, an autonomous agentic framework that lives on its own. This isn't just another GPT wrapper; it's a system with a "Heartbeat" that can wake up, scan your agenda, and execute tasks while you're grabbing a coffee.
+>
+> We'll dive into: Deploying the Brain, the "Living Files" paradigm, Connecting the Dots with real-world APIs, and setting up Heartbeats so your agent does its thing even when you're not looking.
+
+Session page: https://websummercamp.com/2026/session/beyond-the-chatbot-engineering-your-proactive-digital-twin
 
 ## License
 
@@ -87,5 +90,4 @@ MIT. Take it, fork it, run your own workshop. Credit appreciated, not required.
 ## Acknowledgements
 
 - **NanoClaw** maintainers — the underlying framework.
-- **OpenClaw** project — the original "living files" architecture that inspired the workshop's narrative.
 - **Web Summer Camp 2026 organizers** — for booking a hands-on slot in the AI Engineering track.
