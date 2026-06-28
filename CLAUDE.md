@@ -11,7 +11,7 @@ Presenter: Ondřej Chrastina (Developer Advocate at CKEditor).
 The repo is, first and foremost, **the workshop, its outline, and a Skill that walks you through it**:
 
 - the workshop walkthrough (`workshop/outline.md`) and its use cases (`workshop/use-cases-*.md`)
-- a Claude Code skill, `.agents/skills/workshop-walkthrough/`, that guides a person through the workshop step by step
+- Claude Code skills under `.agents/skills/` that guide a person through the workshop (starting with `nanoclaw-install`; more are being split out)
 - the author's private content tooling (`ai-library` git submodule - not needed to run the kit)
 
 The canonical playground for the workshop is **an Ubuntu Linux VM on the attendee's laptop** (UTM / VirtualBox / KVM). Inside the VM, `bash nanoclaw.sh` installs Docker, Node, and pnpm. VPS deployment is an after-you're-confident step.
@@ -32,7 +32,7 @@ Everything Docker-in-Docker (DinD) and the hosting-provider trials (Railway, Ora
 │   ├── use-cases-relatable.md      # use cases for the use-case exercise
 │   └── use-cases-untested.md       # extra ideas not yet validated in the flow
 ├── .agents/skills/
-│   └── workshop-walkthrough/       # the core Skill that guides you through the workshop
+│   └── nanoclaw-install/           # install walkthrough skill (more skills being split out)
 ├── ai-library/                     # private git submodule (author tooling; not fetched by a normal clone)
 └── dind-sandbox/                   # ISOLATED, presenter-only - not core
     ├── README.md                   # how the DinD sandbox works + all the operational notes

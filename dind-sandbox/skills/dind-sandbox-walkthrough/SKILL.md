@@ -9,7 +9,7 @@ description: Use when running or validating the Proactive Digital Twin workshop 
 
 Guide a person through the **4-step flow** in [`../README.md`](../README.md) inside this repo's Docker-in-Docker sandbox (the presenter-validation path). The kit bakes in the fixes from [`../../findings.md`](../../findings.md); your job is to verify each layer came up clean, flag the DinD-only gotchas as **expected vs. real**, and stop at ping/pong to ask how they want to continue.
 
-**This is the DinD path, NOT the attendee VM/laptop.** On a clean VM or laptop Docker the gotchas below don't exist - point those users at the root [`../../README.md`](../../README.md) and the `workshop-walkthrough` skill directly.
+**This is the DinD path, NOT the attendee VM/laptop.** On a clean VM or laptop Docker the gotchas below don't exist - point those users at the root [`../../README.md`](../../README.md) and the `nanoclaw-install` skill directly.
 
 ## When to Use
 
