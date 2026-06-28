@@ -7,6 +7,9 @@ A hands-on workshop kit for **"Beyond the Chatbot: Engineering Your Proactive Di
 ## Contents
 
 - [Getting started](#getting-started)
+  - [1. Install NanoClaw](#1-install-nanoclaw)
+  - [2. Living files](#2-living-files)
+  - [3. GitHub memory sync](#3-github-memory-sync)
 - [What's in this repo](#whats-in-this-repo)
 - [After the workshop](#after-the-workshop---moving-to-an-always-on-host)
 - [Gotchas](#gotchas)
@@ -40,7 +43,7 @@ Download **Ubuntu 24.04 LTS** (or 22.04) from [ubuntu.com](https://ubuntu.com/do
 - Claude: [Pro or higher subscription](https://claude.ai) **or** [Anthropic API key](https://console.anthropic.com)
 - OpenAI: [ChatGPT Plus or higher](https://openai.com) **or** [API key](https://platform.openai.com) — install the `/add-codex` skill after setup to switch providers
 
-### Install NanoClaw
+### 1. Install NanoClaw
 
 In one pass, you'll:
 
@@ -70,22 +73,30 @@ claude "/nanoclaw-install"
 codex   # then type:  Follow .claude/skills/nanoclaw-install/SKILL.md and walk me through installing NanoClaw step by step.
 ```
 
-### Living files
+### 2. Living files
 
 Teach the agent who you are. Ask it how its memory is structured, look at the `system/definition.md` that defines that structure, then have it interview you and write a profile into its memory - so its replies become specific to you, not generic. This is the "verbalize, don't code" core of the workshop.
 
 ```bash
+# Claude Code (auto-discovers skills in .claude/skills/)
 claude "/living-files"
+
+# Codex (alternative) - point it at the skill file
+codex   # then type:  Follow .claude/skills/living-files/SKILL.md and walk me through giving my agent its memory.
 ```
 
 See the [`living-files`](.claude/skills/living-files/SKILL.md) skill for the full walkthrough.
 
-### GitHub memory sync
+### 3. GitHub memory sync
 
 Back up the agent's memory to a **private GitHub repo, on a schedule**. You connect GitHub to OneCLI once (via an OAuth app), then ask the agent to sync its memory and schedule a recurring job - which is where the workshop introduces **scheduled jobs**.
 
 ```bash
+# Claude Code (auto-discovers skills in .claude/skills/)
 claude "/github-memory-sync"
+
+# Codex (alternative) - point it at the skill file
+codex   # then type:  Follow .claude/skills/github-memory-sync/SKILL.md and walk me through backing my agent's memory up to GitHub.
 ```
 
 See the [`github-memory-sync`](.claude/skills/github-memory-sync/SKILL.md) skill for the full walkthrough.
