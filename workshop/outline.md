@@ -58,7 +58,7 @@ Why the local VM playground:
 
 **The honest trade-off:** the VM pauses when the laptop sleeps. The "wake up at 09:00, scan your calendar, DM you a brief while you grab coffee" magic only fires while the laptop is awake and the VM is running. During the 2.5h workshop this is fine - laptops stay open. For the take-home story, the wrap-up covers migrating the agent to an always-on host.
 
-> **VPS later, not now.** VPS options exist and are listed in the wrap-up; we run the playground locally first. We also tried Docker-in-Docker and hosted VPS trials (Railway, Oracle); Docker-in-Docker is problematic - see the findings list in [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md).
+> **VPS later, not now.** VPS options exist and are listed in the wrap-up; we run the playground locally first. We tried hosted VPS trials (Railway, Oracle) and Docker-in-Docker; a comparison of every provider we tested is in [`./providers.md`](./providers.md), and Docker-in-Docker is problematic - see the findings list in [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md).
 
 ---
 
@@ -526,6 +526,7 @@ The same pattern that wired Telegram and GitHub works for anything with an API:
 
 ## Sources
 
+- **Provider comparison (every host we tested):** [`./providers.md`](./providers.md).
 - **Verification log of the host paths we tried and rejected:** [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md) - records Railway DinD failure (Permission denied on cgroup mount, 2026-06-09) and Oracle Cloud Amsterdam capacity failure (Out of capacity for `VM.Standard.A1.Flex`, 2026-06-09). Screenshots in [`../dind-sandbox/recordings/`](../dind-sandbox/recordings/).
 - OpenClaw walkthrough video (reference architecture): https://www.youtube.com/watch?v=cod50CWlZeU
 - OpenClaw agent-workspace docs (9-file system, verbatim purposes): https://github.com/openclaw/openclaw/blob/main/docs/concepts/agent-workspace.md

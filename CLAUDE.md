@@ -27,6 +27,8 @@ Everything Docker-in-Docker (DinD) and the hosting-provider trials (Railway, Ora
 ├── LICENSE                         # MIT
 ├── workshop/
 │   ├── outline.md                  # the walkthrough (intro, exercises, schedule, wrap-up)
+│   ├── abstract.md                 # session title, abstract, prerequisites, takeaways
+│   ├── providers.md                # host/VPS comparison (which providers were tested)
 │   ├── use-cases-relatable.md      # use cases for the use-case exercise
 │   └── use-cases-untested.md       # extra ideas not yet validated in the flow
 ├── .agents/skills/
@@ -41,8 +43,7 @@ Everything Docker-in-Docker (DinD) and the hosting-provider trials (Railway, Ora
     ├── skills/dind-sandbox-walkthrough/   # presenter-only DinD walkthrough skill
     ├── findings.md                 # Railway + Oracle failures, 9 DinD gotchas, validation log
     ├── recordings/                 # 8 screenshots from validation runs
-    ├── architecture.md             # what the sandbox runs and why each piece exists
-    └── providers.md                # host/VPS comparison
+    └── architecture.md             # what the sandbox runs and why each piece exists
 ```
 
 ## The DinD sandbox

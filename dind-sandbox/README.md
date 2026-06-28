@@ -111,5 +111,5 @@ These hit only the presenter validating in this sandbox. Attendees on laptop Doc
 
 - [`findings.md`](findings.md) - full reproduction of the 9 DinD gotchas plus the Railway and Oracle Cloud rejection log.
 - [`architecture.md`](architecture.md) - what the sandbox runs and why each piece exists.
-- [`providers.md`](providers.md) - host/VPS provider comparison and verdicts.
+- [`../workshop/providers.md`](../workshop/providers.md) - host/VPS provider comparison (general deployment reference, not DinD-specific).
 - [`skills/dind-sandbox-walkthrough/SKILL.md`](skills/dind-sandbox-walkthrough/SKILL.md) - the Claude-guided walkthrough of this same flow.

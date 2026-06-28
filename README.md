@@ -43,6 +43,8 @@ When it finishes, DM your bot `ping` from your phone — the agent replies withi
 .
 ├── workshop/
 │   ├── outline.md              # the workshop walkthrough (intro, exercises, schedule, wrap-up)
+│   ├── abstract.md             # session title, abstract, prerequisites, takeaways
+│   ├── providers.md            # host/VPS comparison - which providers were tested and how they fared
 │   ├── use-cases-relatable.md  # use cases for the "Connecting the Dots" / use-case exercise
 │   └── use-cases-untested.md   # extra ideas not yet validated in the flow
 ├── .agents/skills/
@@ -63,7 +65,7 @@ Your VM pauses when the laptop sleeps, so the agent goes quiet with it. **Once y
 
 Every migration is the same shape: provision Linux, SSH in, run the same `bash nanoclaw.sh`. The `CLAUDE.md`, scheduled jobs, and integrations you built in the workshop all transfer.
 
-Note: **Docker-in-Docker is problematic** as a host. See [`dind-sandbox/findings.md`](dind-sandbox/findings.md) for the full list of what we tried (Railway, Oracle) and why.
+For a comparison of the providers we tested and how each fared, see [`workshop/providers.md`](workshop/providers.md). Note: **Docker-in-Docker is problematic** as a host - see [`dind-sandbox/findings.md`](dind-sandbox/findings.md) for the crash details.
 
 ## Presenter sandbox (Docker-in-Docker)
 
@@ -73,7 +75,13 @@ See [`dind-sandbox/README.md`](dind-sandbox/README.md) to run it, [`dind-sandbox
 
 ## Workshop abstract
 
-The full session title, abstract, prerequisites, and takeaways live in [`workshop/abstract.md`](workshop/abstract.md).
+> I bet most of you have spent some time chatting with AI, maybe even oneshotting a few websites or proof of concepts. It's cool, right? But constantly babysitting a chat window and approving every single terminal command is starting to feel like more work than it's saving.
+>
+> The real magic happens when you stop chatting and start delegating.
+>
+> In this hands-on workshop, we're going to cross the line from reactive AI to proactive autonomy. We'll be using NanoClaw, an autonomous agentic framework that lives on its own. This isn't just another GPT wrapper; it's a system with a "Heartbeat" that can wake up, scan your agenda, and execute tasks while you're grabbing a coffee.
+>
+> We'll dive into: Deploying the Brain, the "Living Files" paradigm, Connecting the Dots with real-world APIs, and setting up Heartbeats so your agent does its thing even when you're not looking.
 
 Session page: https://websummercamp.com/2026/session/beyond-the-chatbot-engineering-your-proactive-digital-twin
 
