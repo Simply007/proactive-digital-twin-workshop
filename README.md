@@ -23,17 +23,13 @@ Download **Ubuntu 24.04 LTS** (or 22.04) from [ubuntu.com](https://ubuntu.com/do
 - Claude: [Pro or higher subscription](https://claude.ai) **or** [Anthropic API key](https://console.anthropic.com)
 - OpenAI: [ChatGPT Plus or higher](https://openai.com) **or** [API key](https://platform.openai.com) — install the `/add-codex` skill after setup to switch providers
 
-### 3. Telegram
-
-Telegram on your phone (any account). You'll create a bot via [@BotFather](https://t.me/botfather).
-
 ## Quick start — install NanoClaw
 
 In one pass, you'll:
 
 1. **Install NanoClaw** — clone the repo and run the installer (it sets up Docker, Node, and pnpm).
 2. **Add your AI key** — paste your Claude subscription login or Anthropic API key when prompted.
-3. **Hook up Telegram** — paste your bot token and pair the bot so you can DM your agent.
+3. **Hook up Telegram** — create a bot with [@BotFather](https://t.me/botfather), paste its token, and pair the bot so you can DM your agent. (Have Telegram on your phone.)
 
 Open a terminal inside your Ubuntu VM and run:
 
