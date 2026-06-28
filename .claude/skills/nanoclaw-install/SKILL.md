@@ -1,6 +1,6 @@
 ---
 name: nanoclaw-install
-description: Use when installing NanoClaw on a fresh machine (the Ubuntu VM playground, a laptop, or a VPS) - cloning the repo, running `bash nanoclaw.sh`, choosing the right answers at each installer prompt, and reaching the first ping/pong. Host-agnostic. For Docker-in-Docker sandbox gotchas it links out to dind-sandbox/findings.md rather than covering them inline.
+description: Use when installing NanoClaw on a fresh machine (the Ubuntu VM playground, a laptop, or a VPS) - cloning the repo, running `bash nanoclaw.sh`, choosing the right answers at each installer prompt, and reaching the first ping/pong. Host-agnostic.
 ---
 
 # NanoClaw Install
@@ -13,9 +13,7 @@ host-agnostic: the canonical target is an Ubuntu Linux VM on the laptop, but the
 works on a plain laptop or a VPS.
 
 This is the **install** step only. For the full workshop (Living Files, memory sync, use
-cases) follow the outline in [`../../../workshop/outline.md`](../../../workshop/outline.md). For
-the presenter-only Docker-in-Docker sandbox and its extra gotchas, see
-[`dind-sandbox-walkthrough`](../../../dind-sandbox/skills/dind-sandbox-walkthrough/SKILL.md).
+cases) follow the outline in [`../../../workshop/outline.md`](../../../workshop/outline.md).
 
 ## How to guide
 
@@ -31,7 +29,7 @@ the presenter-only Docker-in-Docker sandbox and its extra gotchas, see
 - Claude access: a Claude Pro/Max subscription or an Anthropic API key (`sk-ant-...`).
 - A Telegram bot token from `@BotFather`.
 
-(See [`../../../workshop/abstract.md`](../../../workshop/abstract.md) for the prerequisite list and
+(See [`../../../work.md`](../../../workshop/abstract.md) for the prerequisite list and
 [`../../../workshop/providers.md`](../../../workshop/providers.md) for host options.)
 
 ## Step 1 - Clone and run the installer
@@ -68,18 +66,15 @@ From the phone, DM the bot `ping`.
 
 - The **first reply takes ~60-90s** (the agent container cold-starts on the first message);
   under 10s after that. Send `ping` once and wait - repeated pings queue up.
-- The first agent image build can take several minutes; longer in the DinD sandbox under
-  VFS. This is expected, not a hang.
+- The first agent image build can take several minutes. This is expected, not a hang.
 
 ## Gotchas
 
-On a normal VM or laptop the install is clean. The fiddly failure modes (VFS slow build,
-`host.docker.internal` gateway / socat bridge, the "API retry" hang, the Telegram pairing
-race, the no-systemd hand-start, two-surface Claude auth) are **specific to the
-Docker-in-Docker sandbox** - they are documented in
-[`../../../dind-sandbox/findings.md`](../../../dind-sandbox/findings.md) and walked through in the
-[`dind-sandbox-walkthrough`](../../../dind-sandbox/skills/dind-sandbox-walkthrough/SKILL.md)
-skill. Do not reproduce them here; link out.
+On a normal Ubuntu VM or laptop the install is clean. The usual hiccups: a Docker
+group/permission error on first run (`sudo usermod -aG docker $USER && newgrp docker`, then
+re-run), a wrong or expired Telegram bot token, or mistaking the first-message cold start
+for a hang. See the troubleshooting tables in `workshop/outline.md` (Preparation 1) for the
+full list.
 
 ## Checkpoint - after ping/pong works, STOP and ask
 
