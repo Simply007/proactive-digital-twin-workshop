@@ -18,11 +18,14 @@ credential vault) once, then **ask the agent** to sync its memory. The agent wri
 script, pushes through the **GitHub API** (credentials injected by OneCLI), and schedules the
 recurring job itself.
 
-> **Why not the `gh` CLI?** An earlier draft assumed `gh auth login` + a host-side bash script.
-> In practice the agent runs **inside a container** where `git push` cannot prompt for
-> credentials, and raw `git`/Node `fetch` calls do not carry the vault's auth. Routing through
-> OneCLI's GitHub OAuth connection + the GitHub API is what actually works, and it keeps the
-> secret in the vault, never in a script.
+> **OneCLI OAuth is the primary path; a host-side `gh` CLI is the alternative.** The agent runs
+> **inside a container** where `git push` cannot prompt for credentials and raw `git`/Node
+> `fetch` calls do not carry the vault's auth - so the *agent-driven* sync has to route through
+> OneCLI's GitHub OAuth connection + the GitHub API (this skill). If you would rather not create
+> an OAuth app, the alternative is fully **host-side**: `gh auth login` on the host, a small
+> `~/sync-memory.sh` that copies `~/nanoclaw/groups/<folder>/memory` into a repo and pushes, and
+> a host **cron** entry to run it - see "Alternative" at the end. The OneCLI path keeps the
+> secret in the vault and is more "verbalize, don't code," which is why it leads.
 
 This is the **memory sync** step. For the full workshop follow the outline in
 [`../../../workshop/outline.md`](../../../workshop/outline.md). Do the
@@ -190,3 +193,39 @@ with a `script` hook (no wake unless it fails) is the safe default.
 > file like `memory/memories/people/<you>.md` exists on GitHub), and an hourly sync task is
 > scheduled that only wakes the agent on failure. Asking `run the sync once now` lands a new
 > commit within a minute. Continue into the use-case exercise, or take it from here?
+
+## Alternative - host-side `gh` CLI + cron (no OAuth app)
+
+If you would rather not create a GitHub OAuth app, run the whole backup **on the host**, outside
+the agent's container. This trades the "agent does it" elegance for a plain script you control,
+and it sidesteps the container's no-credential-prompt limit because `gh` is authenticated on the
+host.
+
+```bash
+# On the host (the VM), once:
+gh auth login          # HTTPS, browser/device flow
+gh auth setup-git      # so git push uses the gh credential
+gh repo create my-agent-memory --private
+
+# A sync script that commits only when memory changed:
+cat > ~/sync-memory.sh <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+SRC=~/nanoclaw/groups/<folder>/memory      # Claude provider: back up CLAUDE.local.md instead
+REPO=~/my-agent-memory
+git -C "$REPO" pull --quiet || true
+rsync -a --delete "$SRC/" "$REPO/memory/"
+git -C "$REPO" add -A
+git -C "$REPO" diff --cached --quiet && exit 0   # nothing changed
+git -C "$REPO" commit -qm "memory sync $(date -u +%FT%TZ)"
+git -C "$REPO" push --quiet
+EOF
+chmod +x ~/sync-memory.sh
+
+# Schedule it with host cron (hourly):
+( crontab -l 2>/dev/null; echo "0 * * * * ~/sync-memory.sh" ) | crontab -
+```
+
+Here the **host's cron** runs the job, not the agent's `schedule_task` - the agent's scheduled
+tasks run inside its container and cannot reach a host script. Use this path when OAuth-app setup
+is unwanted; use the OneCLI path (above) when you want the agent to own the sync.
