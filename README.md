@@ -42,34 +42,35 @@ When it finishes, DM your bot `ping` from your phone — the agent replies withi
 
 ```
 .
-├── docker-compose.yml          # presenter sandbox (Docker-in-Docker) — not the primary attendee path
-├── docker/                     # sandbox image (Ubuntu + DinD + VFS + OneCLI bind)
 ├── workshop/
 │   ├── outline.md              # the workshop walkthrough (intro, exercises, schedule, wrap-up)
-│   ├── findings.md             # everything we tried and rejected (Railway, Oracle, DinD gotchas)
-│   ├── use-cases.md            # 10 free-tier integration ideas for the "Connecting the Dots" exercise
-│   └── recordings/             # screenshots from validation runs
-└── docs/
-    ├── architecture.md         # what NanoClaw runs and why each piece exists
-    └── providers.md            # host comparison + verdicts
+│   ├── use-cases-relatable.md  # use cases for the "Connecting the Dots" / use-case exercise
+│   └── use-cases-untested.md   # extra ideas not yet validated in the flow
+├── .agents/skills/
+│   └── workshop-walkthrough/   # a Skill that guides you through the workshop step by step
+└── dind-sandbox/               # presenter-only Docker-in-Docker sandbox + what we tried and rejected
+    ├── README.md               # how the sandbox works and how to run it
+    ├── findings.md             # Railway, Oracle, and DinD gotchas (why DinD is problematic)
+    └── ...                     # docker-compose.yml, docker/, scripts/, the dind skill, recordings/
 ```
 
-## After the workshop — moving to a real always-on host
+## The Skill that walks you through it
 
-The wrap-up section of [`workshop/outline.md`](workshop/outline.md) covers four options for making your agent permanent:
+This kit ships a Claude Code skill, [`.agents/skills/workshop-walkthrough`](.agents/skills/workshop-walkthrough/SKILL.md), that guides a person through the whole workshop one step at a time: spin up the VM, install NanoClaw, pair Telegram, get ping/pong, then Living Files, GitHub memory sync, and a real use case. You drive the commands; the skill highlights the exact next step and runs only read-only checks.
 
-- **Hetzner CAX11** (€4.51/mo, recommended)
-- **AWS `t4g.small`** (free 12 months, then ~$15/mo)
-- **Mac Mini / Raspberry Pi at home** (free if you own one)
-- ~~Oracle Cloud Always Free~~ (capacity roulette, see [`workshop/findings.md`](workshop/findings.md))
+## After the workshop - moving to an always-on host
 
-All four: provision Linux, SSH in, run the same `bash nanoclaw.sh`. The `CLAUDE.local.md`, scheduled jobs, and integrations you built in the workshop all transfer — just copy your agent workspace.
+Your VM pauses when the laptop sleeps, so the agent goes quiet with it. **Once you're confident in the local VM playground**, you can move the agent to something always-on: a VPS (Hetzner, AWS, Oracle, GCP, Azure, Hostinger, Railway) or a home box (Mac Mini, Raspberry Pi). The wrap-up in [`workshop/outline.md`](workshop/outline.md) covers this.
+
+Every migration is the same shape: provision Linux, SSH in, run the same `bash nanoclaw.sh`. The `CLAUDE.md`, scheduled jobs, and integrations you built in the workshop all transfer.
+
+Note: **Docker-in-Docker is problematic** as a host. See [`dind-sandbox/findings.md`](dind-sandbox/findings.md) for the full list of what we tried (Railway, Oracle) and why.
 
 ## Presenter sandbox (Docker-in-Docker)
 
-The `docker-compose.yml` here is for **presenter-side validation** — it runs NanoClaw inside a privileged container so the presenter can test the full flow without touching their host. Attendees on a fresh Ubuntu VM don't need this.
+The [`dind-sandbox/`](dind-sandbox/) folder is **presenter-only validation** infrastructure - it runs NanoClaw inside a privileged container so the presenter can test the full flow without touching their host. Attendees on a fresh Ubuntu VM don't need it.
 
-See [`workshop/findings.md`](workshop/findings.md) for the 9 DinD-specific gotchas baked into the Dockerfile, and [`docs/architecture.md`](docs/architecture.md) for the full setup explanation.
+See [`dind-sandbox/README.md`](dind-sandbox/README.md) to run it, [`dind-sandbox/findings.md`](dind-sandbox/findings.md) for the 9 DinD-specific gotchas, and [`dind-sandbox/architecture.md`](dind-sandbox/architecture.md) for the full setup explanation.
 
 ## Workshop abstract
 

@@ -9,10 +9,10 @@ audience: "AI Engineering track, Web Summer Camp 2026 - intermediate web devs co
 core_message: "Stop chatting, start delegating - an always-on agent with verbalized context outperforms any chat window."
 stack:
   agent_framework: NanoClaw (MIT, container-per-agent, Anthropic Agents SDK native)
-  host: Local Docker on attendee's laptop (Docker Desktop on macOS/Windows, Docker Engine on Linux). No VPS, no signup, no credit card.
+  host: An Ubuntu Linux LTS VM on the attendee's laptop (free virtualization - UTM on macOS, VirtualBox on Windows, KVM/virt-manager on Linux). No VPS, no signup, no credit card for the playground.
   llm_provider: Anthropic API (Sonnet 4.5 default; Opus 4.6 for stretch exercises)
   messaging_channel: Telegram (lowest friction for live demo - long-polls Telegram's servers, no public webhook required, works behind NAT)
-  post_workshop_upgrades: "Hetzner CAX11 (€4.51/mo ARM, real Docker, recommended) or AWS t4g.small (free 12 months) for always-on; Mac Mini / Raspberry Pi at home if you own one; provider swap via NanoClaw skills (/add-codex, /add-opencode, /add-ollama-provider) for non-Anthropic models"
+  post_workshop_upgrades: "Move to an always-on host (a VPS such as Hetzner, AWS, Oracle, GCP, Azure, Hostinger, or Railway, or a home Mac Mini / Raspberry Pi) only after you are confident in the local VM playground. Provider swap via NanoClaw skills (/add-codex, /add-opencode, /add-ollama-provider) for non-Anthropic models."
 status: draft
 session_url: https://websummercamp.com/2026/session/beyond-the-chatbot-engineering-your-proactive-digital-twin
 ---
@@ -46,35 +46,19 @@ The reference architecture for this space (the OpenClaw video that kicked off th
 
 > **Note for organizers:** NanoClaw is not Anthropic-locked. Drop-in provider skills exist for OpenAI (`/add-codex`), OpenRouter / Google / DeepSeek (`/add-opencode`), local Ollama (`/add-ollama-provider`), and any Claude-compatible endpoint via `ANTHROPIC_BASE_URL`. We picked Anthropic for the unified walkthrough to keep the workshop simple - the swap is presented as a "where to go next" item in the wrap-up, not a mid-session choice.
 
-### Host: Local Docker on the attendee's laptop
+### Host: an Ubuntu Linux VM on the attendee's laptop
 
-| Option | Workshop-day friction | Capacity reliability | Always-on after workshop | Workshop verdict |
-|---|---|---|---|---|
-| **Local Docker (laptop)** | **Docker install pre-workshop, ~15 min at home** | **100%** (your own laptop) | No - laptop sleeps. Migration recipes in wrap-up. | **Picked.** Only path that works for every attendee on day-of. |
-| Railway | None (no CC, web shell) | n/a | n/a | **Excluded.** Tested 2026-06-09: blocks Docker-in-Docker (no privileged mode). NanoClaw cannot run. |
-| Oracle Cloud Always Free | $1 CC hold, signup ~15 min | **Unreliable** - A1 ARM is region-locked to home region and frequently "Out of capacity" in EU regions (Amsterdam confirmed dead 2026-06-09) | Yes (when capacity exists) | **Excluded.** Capacity roulette can block any attendee on workshop day. Forever-free promise not worth the day-of risk. |
-| AWS Free Tier | $1 CC hold, signup ~15 min | Reliable | Yes, for 12 months; then ~$15/mo | Demoted to wrap-up "where to go next" option for attendees who want always-on. |
-| Hetzner CAX11 | CC required, ~3 min signup, €4.51/mo | Reliable | Yes, paid | Demoted to wrap-up as the recommended **paid** always-on option. |
-| Hostinger (OpenClaw bundles) | Paid 24-month commitment | Reliable | Yes, paid | Demoted to wrap-up as the "different framework, zero setup, pre-loaded AI credits" easy-button option. |
+Every attendee runs NanoClaw inside a free Ubuntu Linux LTS VM on their own laptop - a disposable playground in a virtual environment. Inside the VM, `bash nanoclaw.sh` installs Docker, Node, and pnpm, so all the Docker mechanics still apply, just inside the guest VM rather than directly on the host.
 
-**Pick: Local Docker, no branching.** Every attendee runs NanoClaw on their own machine. Docker Desktop (macOS/Windows) or Docker Engine (Linux). No VPS signup, no credit card for hosting, no capacity blockers. Docker-in-Docker works on local Docker because local containers have access to privileged mode (the exact thing Railway refused to grant). Telegram works without any tunnel because the bot **long-polls** Telegram's servers - it doesn't need a public webhook URL.
+Why the local VM playground:
 
-**The honest trade-off:** local Docker dies when the laptop sleeps. The "wake up at 09:00, scan your calendar, DM you a brief while you grab coffee" magic only fires while the laptop is awake. During the 2.5h workshop this is fine - laptops stay open. For the take-home story, the wrap-up gives attendees three concrete recipes to migrate the agent to always-on (Hetzner, AWS, Mac Mini / Raspberry Pi at home).
+- **Works for every attendee, no signup, no credit card.** Nothing to provision, nothing to pay for, no capacity blockers on workshop day.
+- **Isolated and disposable.** The agent and everything it installs live inside the VM. If something breaks, you throw the VM away and start over - your host laptop stays clean.
+- **Needs the laptop awake.** The only requirement is a running laptop with the VM booted.
 
-> **Why not a VPS?** Tested on 2026-06-09: Railway blocks Docker-in-Docker outright (privileged mode denied; `dockerd` crashes on cgroup mount with "Permission denied"). Oracle Cloud Always Free A1 is region-locked to your signup region and frequently "Out of capacity" - confirmed dead in Amsterdam, community reports same in other EU regions. Both paths can leave attendees stranded on workshop day with no recourse. Local Docker is the only "works for everyone, no signup, no CC" path we've found that NanoClaw can actually run on. See `findings.md` in the workshop repo for the full verification log.
+**The honest trade-off:** the VM pauses when the laptop sleeps. The "wake up at 09:00, scan your calendar, DM you a brief while you grab coffee" magic only fires while the laptop is awake and the VM is running. During the 2.5h workshop this is fine - laptops stay open. For the take-home story, the wrap-up covers migrating the agent to an always-on host.
 
-### Hostinger + OpenClaw (the reference architecture, for context)
-
-The video that kicked off this workshop walks through Hostinger's one-click OpenClaw setup. We're not using it - attendees would have to pay and commit to 24 months - but it's worth knowing what it offers since it's the "easy button" answer in the space right now:
-
-| Plan | Price (promo / renewal) | Specs | What's pre-installed |
-|---|---|---|---|
-| **Managed OpenClaw** | $5.99/mo intro, $11.99/mo renewal (24-mo term) | Hosted, no root access | OpenClaw CLI, Telegram + WhatsApp pairing, web search, agentic email, **AI credits pre-loaded** (no API key needed). Zero maintenance. |
-| **OpenClaw on VPS (KVM2)** | $8.99/mo intro, $14.99/mo renewal (24-mo term) | 2 vCPU, 8 GB RAM, 100 GB NVMe, 8 TB bandwidth | Full root + terminal, OpenClaw Docker template pre-installed, AI credits pre-loaded |
-
-Both include a 30-day money-back guarantee. Sources: [hostinger.com/vps/openclaw-hosting](https://www.hostinger.com/vps/openclaw-hosting), [docs.openclaw.ai/install/hostinger](https://docs.openclaw.ai/install/hostinger).
-
-**Why we skipped it:** introductory price needs a 24-month commitment, which is a tough ask in a 2.5h session. Worth flagging in the wrap-up as the "different framework, zero setup, pre-loaded AI credits" path for attendees who don't want to maintain anything and are happy to pay.
+> **VPS later, not now.** VPS options exist and are listed in the wrap-up; we run the playground locally first. We also tried Docker-in-Docker and hosted VPS trials (Railway, Oracle); Docker-in-Docker is problematic - see the findings list in [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md).
 
 ---
 
@@ -84,19 +68,17 @@ Email subject: **"Beyond the Chatbot - 20 min of prep before Friday"**
 
 There are **two hard pre-requirements** (one technical, one account-based) plus a quick in-workshop credential. Tackle them at home; do NOT leave them for conference WiFi.
 
-### 1. Install Docker and verify it works
+### 1. Install a virtualization tool and boot an Ubuntu LTS VM
 
-- **macOS**: Install [Docker Desktop](https://www.docker.com/products/docker-desktop/). Pick the right build for your chip - Apple Silicon (M-series) or Intel.
-- **Windows 10/11**: Install [Docker Desktop](https://www.docker.com/products/docker-desktop/). It will guide you through enabling WSL2 if needed.
-- **Linux**: One-liner: `curl -fsSL https://get.docker.com | sh && sudo usermod -aG docker $USER && newgrp docker`
+You will run the whole workshop inside an Ubuntu Linux VM on your laptop. Set up the VM at home, not on conference WiFi.
 
-**Verify** by running this in a terminal:
+- **macOS**: Install [UTM](https://mac.getutm.app/) (free).
+- **Windows 10/11**: Install [VirtualBox](https://www.virtualbox.org/) (free).
+- **Linux**: Use KVM / virt-manager (`sudo apt install virt-manager qemu-kvm`).
 
-```bash
-docker run --rm hello-world
-```
+Then download an **Ubuntu 24.04 or 22.04 LTS** ISO from https://ubuntu.com/download, create a new VM in your tool, and boot it through the installer until you reach an Ubuntu desktop or login. You do NOT install Docker yet - that happens inside the VM when you run `bash nanoclaw.sh` in Preparation 1.
 
-You should see a "Hello from Docker!" message. If you don't, fix it before you walk in - we can't troubleshoot Docker installs over Opatija's hotel WiFi in a 2.5h session.
+Boot the VM successfully at least once before you walk in - we can't troubleshoot virtualization setups over Opatija's hotel WiFi in a 2.5h session.
 
 ### 2. Decide how you'll connect to Claude (pick ONE of two paths)
 
@@ -121,19 +103,19 @@ Install Telegram on your phone. DM [@BotFather](https://t.me/botfather): send `/
 | **Free disk space** | 10 GB | 20 GB+ |
 | **CPU** | Any 64-bit CPU from ~2018 onward (Intel Core i5+, AMD Ryzen 5+, Apple Silicon M1+, ARM64) | Same |
 | **OS** | macOS 11+ / Windows 10 build 2004+ with WSL2 / Linux kernel 4.x+ | macOS 13+ / Windows 11 / recent Ubuntu LTS |
-| **Admin rights** | Required (to install Docker) | Required |
+| **Admin rights** | Required (to install the virtualization tool) | Required |
 | **Network** | Stable WiFi, ~1 Mbps for the workshop | Same; conference WiFi is fine for the session itself |
 | **Phone** | With Telegram installed, to DM the bot | Same |
 | **Power** | Charger plugged in - Docker + LLM calls drain battery fast over 2.5h | Same |
 
-**Why 8 GB RAM is the floor:** Docker Desktop on macOS/Windows runs everything inside a Linux VM that wants ~2 GB just to exist. NanoClaw + one agent container is another ~1 GB. Add your OS, browser, terminal, maybe an IDE, and you're already past 6 GB. With less than 8 GB, the laptop will swap and exercises will feel sluggish.
+**Why 8 GB RAM is the floor:** your Ubuntu guest VM needs ~4 GB allocated to it to run NanoClaw + one agent container comfortably. Add your host OS, browser, terminal, maybe an IDE, and you're already past 6 GB. With less than 8 GB, the laptop will swap and exercises will feel sluggish.
 
-**If your laptop is borderline (8 GB exactly):** close everything you don't need during the workshop (Slack, Zoom, Spotify, Chrome tabs you're not using). Bump Docker Desktop's memory allocation to 4 GB in **Settings → Resources**.
+**If your laptop is borderline (8 GB exactly):** close everything you don't need during the workshop (Slack, Zoom, Spotify, Chrome tabs you're not using). Allocate ~4 GB to the VM in your virtualization tool's settings.
 
 ### Known blockers, please DM Ondrej before the workshop if any apply
 
 - **Corporate laptop where you can't install software** - bring a personal device or pair with a neighbor.
-- **Docker Desktop blocked by IT** - same advice. (Docker Desktop is free for individuals + small biz; some companies block it for licensing reasons.)
+- **Virtualization blocked, or VT-x / AMD-V disabled in BIOS** - same advice. (Some corporate laptops block virtualization tools, or hardware virtualization is turned off in BIOS/UEFI and you can't enable it.)
 - **Less than 8 GB RAM on your laptop** - the workshop will work but it'll be tight. Close other apps during the session.
 
 If anything breaks during setup, message #ai-engineering-workshop on the conference Discord or DM Ondrej directly. Better to fix it before Friday than during.
@@ -206,7 +188,7 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 - On phone, open Telegram → DM @BotFather → `/newbot` → pick a name → save the token. You'll paste it during Preparation 1.
 
-**Stack overview (narrated while attendees do credentials):** Local Docker on your laptop. NanoClaw as the agent framework. Anthropic Sonnet 4.5 as the model. Telegram as the channel. Why local Docker? Because we tested the VPS options and they don't work for everyone on day-of (see the findings doc). Local is the only path where every attendee walks out with something running.
+**Stack overview (narrated while attendees do credentials):** an Ubuntu VM on your laptop. NanoClaw as the agent framework. Anthropic Sonnet 4.5 as the model. Telegram as the channel. Why a local VM? It is isolated and disposable, needs no signup or credit card, and works for every attendee on day-of. (We tried VPS and Docker-in-Docker paths; see the findings doc.)
 
 **Set expectations:** "By the break you will have a personal agent running on your laptop that knows who you are. By the end you will have it message you on Telegram, on a schedule, without you asking. That's the digital twin we're shipping today. Your laptop has to stay awake for the schedule to fire - I'll show you how to make it always-on after the workshop in the wrap-up."
 
@@ -217,7 +199,7 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 ### Preparation 1: Deploying the Brain
 
 **Time budget:** ~30 min (minimum viable) / +5 min (stretch)
-**Goal (minimum viable):** NanoClaw running in a Docker container on your laptop, paired to your Telegram bot, answering "ping" with "pong".
+**Goal (minimum viable):** NanoClaw running inside an Ubuntu VM on your laptop, paired to your Telegram bot, answering "ping" with "pong".
 **Stretch goal:** add a second channel (Discord or Slack) via `/add-discord`.
 
 **Demo cue (presenter):**
@@ -226,12 +208,8 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 - Say "pong" out loud after the bot replies.
 
 **Attendee task:**
-1. Verify Docker is running. Open a terminal and run:
-   ```bash
-   docker run --rm hello-world
-   ```
-   If this prints "Hello from Docker!", continue. If it fails, raise your hand - we'll pair you with a neighbor while you fix it.
-2. Clone and bootstrap NanoClaw on your laptop (as your normal user, not root):
+1. Open a terminal inside your Ubuntu VM. (Docker, Node, and pnpm get installed for you by `bash nanoclaw.sh` in the next step - nothing to verify yet.)
+2. Clone and bootstrap NanoClaw inside the VM (as your normal user, not root):
    ```bash
    git clone https://github.com/nanocoai/nanoclaw.git nanoclaw-v2
    cd nanoclaw-v2
@@ -259,7 +237,7 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 > - Set `ONECLI_BIND_HOST=127.0.0.1` in `/etc/environment` AND `/etc/bash.bashrc` before running. OneCLI can't auto-detect a bind address inside an unprivileged container.
 > - Force the inner dockerd's storage driver to `vfs` (overlay-on-overlay fails). Pre-write `/etc/docker/daemon.json` as `{"storage-driver":"vfs"}`.
 > - Manually `nohup node dist/index.js &` to start the agent service — no systemd to do it for you.
-> - Bridge OneCLI ports from the sandbox loopback to the inner bridge gateway with `socat` so spawned agent containers can reach it. See [`./findings.md`](./findings.md) for the full recipe; this repo's `docker compose up` bakes all of these into the sandbox image automatically.
+> - Bridge OneCLI ports from the sandbox loopback to the inner bridge gateway with `socat` so spawned agent containers can reach it. See [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md) for the full recipe; the `dind-sandbox/` folder bakes all of these into the sandbox image automatically.
 
 **Expected output / checkpoint:**
 - Telegram replies with a contextual greeting within **~60-90 seconds of the first message** (the agent container has to cold-start on the first DM; subsequent messages reply in <10s).
@@ -271,14 +249,14 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| `docker run --rm hello-world` fails with "Cannot connect to the Docker daemon" | Docker Desktop not running (macOS/Win) or daemon not started (Linux) | Start Docker Desktop from Applications/Start Menu; on Linux: `sudo systemctl start docker` |
-| `docker` command not found | Docker not installed | Pair with a neighbor for this session, install Docker tonight |
+| `docker` fails with "Cannot connect to the Docker daemon" (inside the VM) | Docker daemon not started in the guest | In the VM: `sudo systemctl start docker` |
+| `docker` command not found (inside the VM) | `bash nanoclaw.sh` hasn't installed Docker yet | Run `bash nanoclaw.sh`; if it already ran, re-run it - it installs Docker, Node, and pnpm |
 | `bash nanoclaw.sh` fails on Docker permission step (Linux) | User not in `docker` group | `sudo usermod -aG docker $USER && newgrp docker`, re-run script |
 | Telegram bot never responds (first message, within 60s) | Cold-start delay — agent container is spawning + first LLM call | Wait up to 90s before retrying. Don't send a second `ping` until the first reply lands. |
 | Telegram bot never responds (>2 min, no reply) | Pairing race — agent service started after the code expired, queue swallowed an old code | DM the bot `/start` again from your phone. If still silent, presenter runs the bundled `pair-telegram-recover.sh` (drains queue + restarts pair-telegram step). |
 | Anthropic API returns 401 | Key not saved, or wrong region | Re-paste key, confirm it starts with `sk-ant-`, check Anthropic console for org region |
-| Container exits immediately after `bash nanoclaw.sh` | Not enough RAM allocated to Docker Desktop (default 2 GB on macOS) | Docker Desktop → Settings → Resources → bump Memory to 4-6 GB, restart Docker |
-| Agent container logs show `API retry (retryable: true)` forever | Agent container can't reach OneCLI vault (network issue) | Should not happen on a normal laptop Docker — `host.docker.internal` is wired by Docker Desktop. If it does, restart Docker Desktop. If you're inside a sandboxed/nested Docker setup, see `findings.md` for the socat bridge fix. |
+| Container exits immediately after `bash nanoclaw.sh` | Not enough RAM allocated to the VM | Allocate ~4-6 GB to the VM in your virtualization tool's settings, restart the VM, re-run |
+| Agent container logs show `API retry (retryable: true)` forever | Agent container can't reach OneCLI vault (network issue) | Should not happen in a normal Ubuntu VM - `host.docker.internal` is wired by Docker. If it does, restart Docker in the VM (`sudo systemctl restart docker`). If you're inside a sandboxed/nested Docker setup, see [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md) for the socat bridge fix. |
 
 **Sources / refs:** https://github.com/nanocoai/nanoclaw , https://core.telegram.org/bots#how-do-i-create-a-bot
 
@@ -342,7 +320,7 @@ NanoClaw + Telegram bots accept voice notes out of the box, but transcription re
 
 ### Block A checkpoint (10 min buffer)
 
-Presenter walks the room. Anyone stuck on Exercise 1 gets a 1:1; anyone past Exercise 2 starts on a stretch goal. Last bullet before the break: **"Don't close your laptop or let it sleep during the break - the container dies with the host. Plug into power. If your laptop must sleep, the bot will go silent and you'll need to restart the container after."**
+Presenter walks the room. Anyone stuck on Exercise 1 gets a 1:1; anyone past Exercise 2 starts on a stretch goal. Last bullet before the break: **"Don't close your laptop or let it sleep during the break - the VM pauses when the laptop sleeps and the bot goes silent. Plug into power. If your laptop must sleep, you'll need to resume the VM (and restart the container if it stopped) after."**
 
 **Before breaking:** post the use case voting poll in the workshop Telegram group. Attendees vote during the break and the first half of Block B. Results drive Exercise 4.
 
@@ -465,24 +443,21 @@ Post the voting poll in the workshop Telegram group. Announce the winner at 2:00
 ## Wrap-up & take-home (5 min)
 
 **What you have right now:**
-- A NanoClaw container running on your laptop.
+- A NanoClaw container running inside a VM on your laptop.
 - A `CLAUDE.md` (and `personal/` folder) that describes the actual you.
 - A web-research tool wired to OpenRouter.
 - A scheduled morning brief on Telegram - **as long as your laptop is awake**.
 - A working mental model for the next 10 integrations you'll add.
 
-### Make your agent always-on (3 named recipes)
+### Make your agent always-on
 
-Your laptop sleeps. The agent dies with it. To get the "wakes up while you grab coffee" magic, migrate the container to something that's always on:
+Your laptop sleeps and the VM pauses with it. To get the "wakes up while you grab coffee" magic, migrate the agent to something that's always on - either a VPS (Hetzner, AWS, Oracle, GCP, Azure, Hostinger, Railway) or a home box you own (Mac Mini, Raspberry Pi).
 
-| Option | Cost | Friction | Setup time |
-|---|---|---|---|
-| **Hetzner CAX11** (Germany or Finland) | **€4.51/mo** | CC required, instant signup | ~10 min: provision ARM VM, SSH in, run the same `bash nanoclaw.sh`. Recommended path. |
-| **AWS t4g.small** | **Free 12 months**, then ~$15/mo | CC required, $1 hold | ~15 min: EC2 wizard, ARM Graviton instance, security group for SSH, run `bash nanoclaw.sh`. Pick this for the "free for the workshop year" path. |
-| **Mac Mini / Raspberry Pi at home** | **Free** (if owned) | None | ~20 min if you have one running: SSH from anywhere, run `bash nanoclaw.sh`. Best home-lab option. |
-| ~~Oracle Cloud Always Free~~ | Forever-free | CC, ~15 min signup | **Capacity roulette.** A1 ARM is region-locked and frequently "Out of capacity" (see `findings.md`). Tempting on paper but not reliable enough to recommend. Try it if you must, have a backup. |
+**The rule:** move to an always-on host only after you are confident in the local VM playground.
 
-All four migrations follow the same shape: `git clone nanoclaw && bash nanoclaw.sh` on the destination host. The `CLAUDE.md` you built today, the OpenRouter rule, the scheduled jobs - all of it transfers (the install script asks if you want to import an existing agent workspace).
+All of these follow the same shape: `git clone nanoclaw && bash nanoclaw.sh` on the destination, then the `CLAUDE.md`/jobs transfer (the install script asks if you want to import an existing agent workspace). The `CLAUDE.md` you built today, the OpenRouter rule, the scheduled jobs - all of it carries over.
+
+Docker-in-Docker is problematic; see [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md).
 
 ### Other things to do next
 
@@ -490,11 +465,11 @@ All four migrations follow the same shape: `git clone nanoclaw && bash nanoclaw.
 - **Add a second channel.** Slack for work, Discord for community, WhatsApp for friends. `/add-slack`, `/add-discord`, etc.
 - **Connect Google Calendar.** Pick up the calendar-webhook stretch from Exercise 3.
 - **Write a `personal/playbooks/` folder** with one SOP per recurring task you do.
-- **Want the "easy button" instead?** Hostinger ships a one-click **Managed OpenClaw** ($5.99/mo intro, AI credits pre-loaded) or **OpenClaw on VPS** ($8.99/mo intro, 2 vCPU / 8 GB / 100 GB NVMe). Different framework, different file model (9 files vs `CLAUDE.md`), but zero setup and a 30-day money-back to try it.
+- **Want the "easy button" instead?** Hostinger offers a one-click managed OpenClaw option if you prefer zero setup with a different framework and file model (9 files vs `CLAUDE.md`).
 
 **Follow-up:**
 - Workshop repo: https://github.com/<placeholder> (issues welcome, especially "I tried X and Y broke")
-- Verification log of the host paths we tried and why we picked local Docker: `findings.md` in the workshop repo (Railway DinD failure + Oracle Amsterdam capacity failure, with screenshots).
+- Verification log of the host paths we tried and why we run the local VM playground: [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md) (Railway DinD failure + Oracle Amsterdam capacity failure, with screenshots).
 - Ondrej on LinkedIn / Bluesky - find me after for a 1:1
 - Slide deck + this outline live at https://ondrej.chrastina.dev/
 - QR on the last slide
@@ -505,14 +480,12 @@ All four migrations follow the same shape: `git clone nanoclaw && bash nanoclaw.
 
 ### Where to host real agents
 
-Your laptop sleeps. To make the agent always-on, migrate it to any Linux box. Same install command everywhere.
+Your laptop sleeps and the VM pauses with it. To make the agent always-on, migrate it to any Linux box. Same install command everywhere.
 
-| Option | Cost | Notes |
-|---|---|---|
-| **Hetzner CAX11** | €4.51/mo | ARM VM, instant CC signup, EU datacenters. Recommended. |
-| **AWS t4g.small** | Free 12 months | ARM Graviton, then ~$15/mo. Best for the "free workshop year" path. |
-| **Mac Mini / Pi at home** | Free (if owned) | SSH from anywhere, run `bash nanoclaw.sh`. |
-| ~~Oracle Cloud Always Free~~ | Forever-free | Capacity roulette — A1 ARM frequently "Out of capacity" in EU. Not reliable. |
+| Option | Notes |
+|---|---|
+| **VPS** (Hetzner, AWS, Oracle, GCP, Azure, Hostinger, Railway) | Provision a Linux VM, SSH in, run `bash nanoclaw.sh`. |
+| **Home box** (Mac Mini, Raspberry Pi) | SSH from anywhere, run `bash nanoclaw.sh`. |
 
 ### What services can store agent memory
 
@@ -541,8 +514,8 @@ The same pattern that wired Telegram and GitHub works for anything with an API:
 
 | Dependency | Failure mode | Backup |
 |---|---|---|
-| Attendee Docker install | Didn't install pre-workshop, or install fails on-site | Pair with a neighbor (read-only follow-along), 1:1 install help during the break, take-home recipe for post-workshop |
-| Attendee Docker Desktop | Crashes / out-of-memory mid-session | Restart Docker Desktop, bump RAM allocation to 4-6 GB in Settings → Resources, re-run last command |
+| Attendee VM setup | Didn't set up the VM pre-workshop, or boot fails on-site | Pair with a neighbor (read-only follow-along), 1:1 setup help during the break, take-home recipe for post-workshop |
+| Attendee VM | Crashes / out-of-memory mid-session | Allocate more RAM to the VM (~4-6 GB) in your virtualization tool's settings, restart the VM, re-run last command |
 | Attendee laptop too low-spec | Can't allocate enough RAM to Docker, exercises feel unusable | Pair with a neighbor; presenter offers their spare laptop or a screen-share session as fallback |
 | Anthropic API | Outage or 529 | Presenter runs `/add-codex` (OpenAI) or `/add-opencode` (OpenRouter) on the demo agent to keep the live walkthrough moving; attendees pair with someone whose region is unaffected |
 | Telegram | Banned country / phone issues | Discord via `/add-discord` - same flow, different token; attendee pairs with someone who has Telegram for the demo and switches at home |
@@ -553,18 +526,18 @@ The same pattern that wired Telegram and GitHub works for anything with an API:
 
 ## Sources
 
-- **Verification log of the host paths we tried and rejected:** [`./findings.md`](./findings.md) - records Railway DinD failure (Permission denied on cgroup mount, 2026-06-09) and Oracle Cloud Amsterdam capacity failure (Out of capacity for `VM.Standard.A1.Flex`, 2026-06-09). Screenshots in [`./recordings/`](./recordings/).
+- **Verification log of the host paths we tried and rejected:** [`../dind-sandbox/findings.md`](../dind-sandbox/findings.md) - records Railway DinD failure (Permission denied on cgroup mount, 2026-06-09) and Oracle Cloud Amsterdam capacity failure (Out of capacity for `VM.Standard.A1.Flex`, 2026-06-09). Screenshots in [`../dind-sandbox/recordings/`](../dind-sandbox/recordings/).
 - OpenClaw walkthrough video (reference architecture): https://www.youtube.com/watch?v=cod50CWlZeU
 - OpenClaw agent-workspace docs (9-file system, verbatim purposes): https://github.com/openclaw/openclaw/blob/main/docs/concepts/agent-workspace.md
 - OpenClaw bootstrapping docs: https://docs.openclaw.ai/start/bootstrapping
 - OpenClaw default AGENTS.md reference: https://docs.openclaw.ai/reference/AGENTS.default
 - NanoClaw repo: https://github.com/nanocoai/nanoclaw
-- Docker Desktop download (macOS/Windows): https://www.docker.com/products/docker-desktop/
+- Virtualization tools: UTM (https://mac.getutm.app/), VirtualBox (https://www.virtualbox.org/)
 - Docker Engine install for Linux (one-liner): https://get.docker.com
 - Hetzner Cloud (CAX11 ARM): https://www.hetzner.com/cloud
 - AWS EC2 Free Tier (t4g.small ARM): https://aws.amazon.com/free/
-- Oracle Cloud Always Free (not recommended, capacity roulette): https://www.oracle.com/cloud/free/
-- Hostinger OpenClaw hosting (Managed + VPS plans, "easy button" paid option): https://www.hostinger.com/vps/openclaw-hosting
+- Oracle Cloud: https://www.oracle.com/cloud/free/
+- Hostinger OpenClaw hosting: https://www.hostinger.com/vps/openclaw-hosting
 - OpenClaw on Hostinger install guide: https://docs.openclaw.ai/install/hostinger
 - OpenRouter Sonar Pro Search: https://openrouter.ai/perplexity/sonar-pro-search
 - Web Summer Camp 2026 AI track: https://websummercamp.com/2026/program/ai
