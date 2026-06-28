@@ -217,16 +217,40 @@ Check your Telegram"). Open Telegram (desktop or phone) and reply, e.g. `ping`.
 connected to the internet. For always-on availability, move it to a cloud VM or keep the
 machine awake - see [`../../../workshop/providers.md`](../../../workshop/providers.md).
 
+## Agents and how they're organized
+
+NanoClaw is **container-per-agent**. Agents are **agent groups** under
+`~/nanoclaw/groups/<name>/` - each with its own workspace, memory, `CLAUDE.md`, container,
+and personality. They are **isolated siblings; there is no "boss"/main agent over the
+others.**
+
+- **`groups/main`** - the **default** agent.
+- **`groups/global`** - shared base config every agent inherits (each agent's `CLAUDE.md`
+  starts with `@./.claude-global.md`). It is config, **not** an agent.
+- **`groups/dm-with-<you>`** - the agent wired to your Telegram owner DM, created at pairing.
+  This is the one you actually chat with on Telegram.
+
+Channels (a Telegram chat, the terminal, etc.) are decoupled from agents and wired
+many-to-many, with three isolation levels (shared session / same-agent-separate-sessions /
+separate agents) - see `reference/nanoclaw/docs/isolation-model.md`. Inspect your setup:
+
+```bash
+ls -1 ~/nanoclaw/groups/                 # one dir per agent group
+docker ps --format '{{.Names}}'          # one nanoclaw-v2-<group>-... container per active agent
+```
+
 ## Gotchas
 
 On a normal Ubuntu VM or laptop the install is clean. The usual hiccups:
 
 - **`Couldn't install the basics` / `STATUS: node_missing`** (in `logs/setup-steps/01-bootstrap.log`). Two common causes, often together: (1) `curl: command not found` - clean Ubuntu has no curl, so `setup/install-node.sh` can't fetch Node; fix by installing it (`sudo apt install curl`, see Step 1). (2) `sudo: timed out` - the sudo password prompt expired because nobody answered it; run `sudo -v` first and stay at the keyboard. Recovery: install `git curl`, run `sudo -v`, then re-run `bash nanoclaw.sh`.
 - **`Couldn't prepare the sandbox` / `ERROR: docker_group_not_active`** (fresh install, very common): the installer added you to the `docker` group but your shell does not have it yet, so the Docker socket is not accessible. **Re-running `bash nanoclaw.sh` in the same terminal fails identically** - you must first start a session that has the group. `newgrp docker` spawns such a shell; **logging out and back in (or rebooting the VM) is the most reliable**, especially in a desktop session. Note that on a **Minimal Ubuntu install `newgrp` is not even present** (`Command 'newgrp' not found` - it lives in `util-linux-extra`), so logout/reboot is the path of least resistance there. Confirm with `docker ps` (no `sudo`, no permission error), then re-run the installer.
-- **Disk fills up (root near 90%).** A full install + Docker images uses ~19-20 GB, and each
-  provider rebuild leaves dangling images + build cache behind. Check with `docker system df`;
-  reclaim with `docker builder prune` and `docker image prune -a`. Best avoided by sizing the
-  VM disk to 30-40 GB up front (see Prerequisites).
+- **Disk fills up (root near 90%).** A full install + Docker uses ~19 GB (measured: agent
+  image ~3.4 GB, OneCLI ~0.7 GB, Postgres ~0.4 GB, build cache ~2.9 GB). Provider switches
+  **reuse the same image tag**, so dangling images do *not* pile up - on a real run almost
+  nothing is reclaimable (`docker system df` showed ~34 MB). Pruning won't rescue you here;
+  **the real fix is sizing the VM disk to 30-40 GB up front** (see Prerequisites). Use
+  `docker system df` to see what's using space.
 - A **wrong or expired Telegram bot token**, or mistaking the first-message cold start for a hang.
 
 See the troubleshooting tables in `workshop/outline.md` (Preparation 1) for the full list.
