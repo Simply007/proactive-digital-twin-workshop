@@ -460,11 +460,9 @@ Post the voting poll in the workshop Telegram group. Announce the winner at 2:00
 
 ### Make your agent always-on
 
-Your laptop sleeps and the VM pauses with it. To get the "wakes up while you grab coffee" magic, migrate the agent to something that's always on - either a VPS (Hetzner, AWS, Oracle, GCP, Azure, Hostinger, Railway) or a home box you own (Mac Mini, Raspberry Pi).
+Your laptop sleeps and the VM pauses with it. To get the "wakes up while you grab coffee" magic, migrate the agent to an always-on host. Move only after you are confident in the local VM playground. Every option follows the same shape - `git clone nanoclaw && bash nanoclaw.sh` on the destination, then your `CLAUDE.md` and scheduled jobs transfer (the installer offers to import an existing workspace).
 
-**The rule:** move to an always-on host only after you are confident in the local VM playground.
-
-All of these follow the same shape: `git clone nanoclaw && bash nanoclaw.sh` on the destination, then the `CLAUDE.md`/jobs transfer (the install script asks if you want to import an existing agent workspace). The `CLAUDE.md` you built today, the OpenRouter rule, the scheduled jobs - all of it carries over.
+See [`./providers.md`](./providers.md) for the hosts we tested (VPS and home-box options) and how each fared.
 
 ### Other things to do next
 
@@ -485,15 +483,6 @@ All of these follow the same shape: `git clone nanoclaw && bash nanoclaw.sh` on 
 ---
 
 ## Backup content (use if ahead of schedule)
-
-### Where to host real agents
-
-Your laptop sleeps and the VM pauses with it. To make the agent always-on, migrate it to any Linux box. Same install command everywhere.
-
-| Option                                                         | Notes                                                 |
-| -------------------------------------------------------------- | ----------------------------------------------------- |
-| **VPS** (Hetzner, AWS, Oracle, GCP, Azure, Hostinger, Railway) | Provision a Linux VM, SSH in, run `bash nanoclaw.sh`. |
-| **Home box** (Mac Mini, Raspberry Pi)                          | SSH from anywhere, run `bash nanoclaw.sh`.            |
 
 ### What services can store agent memory
 
