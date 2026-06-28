@@ -132,8 +132,10 @@ order, with the answer to pick:
    - **Manage / revoke credentials later:**
      - Subscription logins (OAuth): <https://claude.ai/new#settings/claude-code>
      - API keys: <https://console.anthropic.com/settings/keys>
-   - **API-key path** (instead of the subscription): TODO - confirm the exact prompt when we
-     test it; you supply an `sk-ant-...` key, stored in the same OneCLI vault entry.
+   - **API-key path** (instead of the subscription): create and generate an Anthropic API key
+     at <https://console.anthropic.com/settings/keys>, then paste the `sk-ant-...` key at the
+     prompt; it's stored in the same OneCLI vault entry (`Anthropic`). (We walked the
+     subscription path live; the exact API-key prompt wording wasn't captured.)
 6b. **Codex runtime - connect:** prompt **"How would you like to connect Codex?"**
    - **Sign in with my ChatGPT subscription** -> requires the **Codex CLI** to be installed.
      If it isn't, you get: *"The Codex CLI is not installed on this machine. Install it with
@@ -148,8 +150,9 @@ order, with the answer to pick:
      "Codex installed properly." (Once the CLI is installed, the runtime option also drops the
      "installs now" suffix - it reads just "Codex (OpenAI - ChatGPT subscription or API
      key)".)
-   - **API key** -> paste your OpenAI `sk-...` key; stored in the OneCLI vault (like the
-     Anthropic entry). [Manage URL - TODO: confirm.]
+   - **API key** -> create and generate an OpenAI API key at
+     <https://platform.openai.com/api-keys>, then paste the `sk-...` key at the prompt; stored
+     in the OneCLI vault (like the Anthropic entry).
    - **OAuth from another machine? Hand the callback back to the VM.** Both the Claude and
      Codex browser sign-ins finish on a **localhost callback served by the VM** (Codex:
      `http://localhost:1455/auth/callback?code=...&state=...`). If you complete the login in a
@@ -182,8 +185,9 @@ order, with the answer to pick:
 > OpenAI subscription / API key) and the Telegram bot token are secrets. Paste them only into
 > the installer prompt - never into chat, screen shares, or commits. If one leaks, rotate it:
 > Claude OAuth at <https://claude.ai/new#settings/claude-code>, Anthropic API keys at
-> <https://console.anthropic.com/settings/keys>, OpenAI keys at the OpenAI dashboard, and a
-> Telegram bot token via `@BotFather` -> `/revoke`.
+> <https://console.anthropic.com/settings/keys>, OpenAI keys at
+> <https://platform.openai.com/api-keys>, and a Telegram bot token via `@BotFather` ->
+> `/revoke`.
 
 13. **Telegram pairing** -> the installer pairs ("Telegram paired."), then asks:
     - **"How should this Telegram account be registered?"** -> **Owner** (you are the account
