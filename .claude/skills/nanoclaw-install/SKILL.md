@@ -251,6 +251,15 @@ On a normal Ubuntu VM or laptop the install is clean. The usual hiccups:
   nothing is reclaimable (`docker system df` showed ~34 MB). Pruning won't rescue you here;
   **the real fix is sizing the VM disk to 30-40 GB up front** (see Prerequisites). Use
   `docker system df` to see what's using space.
+- **`npm run chat` / `pnpm run chat` times out (`no reply in 120000ms`).** The CLI socket is
+  fine (the log shows "CLI client connected"), but **no agent is wired to the Local CLI
+  channel** - by default only the channel you set up during install (e.g. Telegram) gets
+  wired, so terminal chat routes nowhere. Confirm with `ncl wirings list` (look for a row
+  whose `messaging_group_id` is the `cli/local` group from `ncl messaging-groups list`). Fix:
+  wire an agent to it via Claude Code `/manage-channels`, or `ncl wirings create
+  --messaging-group-id <cli-mg-id> --agent-group-id <agent-id> --engage-mode pattern
+  --engage-pattern . --sender-scope all --ignored-message-policy drop --session-mode shared`.
+  Or just chat via the channel that is wired (Telegram).
 - A **wrong or expired Telegram bot token**, or mistaking the first-message cold start for a hang.
 
 See the troubleshooting tables in `workshop/outline.md` (Preparation 1) for the full list.
