@@ -13,9 +13,9 @@ host-agnostic: the canonical target is an Ubuntu Linux VM on the laptop, but the
 works on a plain laptop or a VPS.
 
 This is the **install** step only. For the full workshop (Living Files, memory sync, use
-cases) follow the outline in [`../../workshop/outline.md`](../../workshop/outline.md). For
+cases) follow the outline in [`../../../workshop/outline.md`](../../../workshop/outline.md). For
 the presenter-only Docker-in-Docker sandbox and its extra gotchas, see
-[`dind-sandbox-walkthrough`](../../dind-sandbox/skills/dind-sandbox-walkthrough/SKILL.md).
+[`dind-sandbox-walkthrough`](../../../dind-sandbox/skills/dind-sandbox-walkthrough/SKILL.md).
 
 ## How to guide
 
@@ -31,8 +31,8 @@ the presenter-only Docker-in-Docker sandbox and its extra gotchas, see
 - Claude access: a Claude Pro/Max subscription or an Anthropic API key (`sk-ant-...`).
 - A Telegram bot token from `@BotFather`.
 
-(See [`../../workshop/abstract.md`](../../workshop/abstract.md) for the prerequisite list and
-[`../../workshop/providers.md`](../../workshop/providers.md) for host options.)
+(See [`../../../workshop/abstract.md`](../../../workshop/abstract.md) for the prerequisite list and
+[`../../../workshop/providers.md`](../../../workshop/providers.md) for host options.)
 
 ## Step 1 - Clone and run the installer
 
@@ -77,8 +77,8 @@ On a normal VM or laptop the install is clean. The fiddly failure modes (VFS slo
 `host.docker.internal` gateway / socat bridge, the "API retry" hang, the Telegram pairing
 race, the no-systemd hand-start, two-surface Claude auth) are **specific to the
 Docker-in-Docker sandbox** - they are documented in
-[`../../dind-sandbox/findings.md`](../../dind-sandbox/findings.md) and walked through in the
-[`dind-sandbox-walkthrough`](../../dind-sandbox/skills/dind-sandbox-walkthrough/SKILL.md)
+[`../../../dind-sandbox/findings.md`](../../../dind-sandbox/findings.md) and walked through in the
+[`dind-sandbox-walkthrough`](../../../dind-sandbox/skills/dind-sandbox-walkthrough/SKILL.md)
 skill. Do not reproduce them here; link out.
 
 ## Checkpoint - after ping/pong works, STOP and ask

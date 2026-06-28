@@ -11,12 +11,12 @@ Presenter: Ondřej Chrastina (Developer Advocate at CKEditor).
 The repo is, first and foremost, **the workshop, its outline, and a Skill that walks you through it**:
 
 - the workshop walkthrough (`workshop/outline.md`) and its use cases (`workshop/use-cases-*.md`)
-- Claude Code skills under `.agents/skills/` that guide a person through the workshop (starting with `nanoclaw-install`; more are being split out)
+- Claude Code skills under `.claude/skills/` that walk a person through the workshop (starting with `nanoclaw-install`; more being split out). Claude Code auto-discovers them (`/nanoclaw-install`); Codex can follow the same `SKILL.md` files by path
 - the author's private content tooling (`ai-library` git submodule - not needed to run the kit)
 
 The canonical playground for the workshop is **an Ubuntu Linux VM on the attendee's laptop** (UTM / VirtualBox / KVM). Inside the VM, `bash nanoclaw.sh` installs Docker, Node, and pnpm. VPS deployment is an after-you're-confident step.
 
-Everything Docker-in-Docker (DinD) and the hosting-provider trials (Railway, Oracle) are **isolated in [`dind-sandbox/`](dind-sandbox/)** - presenter-only validation infrastructure, not the core of the workshop. See [`dind-sandbox/README.md`](dind-sandbox/README.md).
+The attendee-facing host/VPS comparison (Railway, Oracle, and the rest) lives in [`workshop/providers.md`](workshop/providers.md). Everything Docker-in-Docker (DinD) - the sandbox machinery plus the detailed crash logs and screenshots - is **isolated in [`dind-sandbox/`](dind-sandbox/)**, presenter-only validation infrastructure, not the core of the workshop. DinD is a dead end and is **not mentioned in the attendee-facing workshop content**. See [`dind-sandbox/README.md`](dind-sandbox/README.md).
 
 ## Repo structure
 
@@ -31,8 +31,8 @@ Everything Docker-in-Docker (DinD) and the hosting-provider trials (Railway, Ora
 │   ├── providers.md                # host/VPS comparison (which providers were tested)
 │   ├── use-cases-relatable.md      # use cases for the use-case exercise
 │   └── use-cases-untested.md       # extra ideas not yet validated in the flow
-├── .agents/skills/
-│   └── nanoclaw-install/           # install walkthrough skill (more skills being split out)
+├── .claude/skills/
+│   └── nanoclaw-install/           # install walkthrough skill (Claude-native; more being split out)
 ├── ai-library/                     # private git submodule (author tooling; not fetched by a normal clone)
 └── dind-sandbox/                   # ISOLATED, presenter-only - not core
     ├── README.md                   # how the DinD sandbox works + all the operational notes
@@ -60,6 +60,8 @@ Attendees never need the sandbox; they run the workshop in an Ubuntu VM on their
 | **VPS deployment is an after-you're-confident step, named not recommended** | The workshop ships a working agent in the local VM first. The wrap-up names always-on options (Hetzner, AWS, Oracle, GCP, Azure, Hostinger, Railway, home Mac Mini / Pi) without recommending one. |
 | **NanoClaw as the agent framework** | MIT, container-per-agent, native Anthropic Agents SDK, collapses OpenClaw's 9 living files into one `CLAUDE.md` per agent. Light and teachable in 2.5h. See `workshop/outline.md`. |
 | **DinD sandbox isolated in `dind-sandbox/`** | It is presenter-only validation, not the core of the workshop. Its many implementation decisions (VFS storage, Ubuntu base, baked node, socat bridges, named volume, entrypoint auto-start) are documented in `dind-sandbox/`. |
+| **Docker-in-Docker dropped as a dead end; removed from attendee-facing content** | DinD doesn't work for attendees (presenter-only experiment). `outline.md` and `providers.md` carry no DinD references; the record stays in `dind-sandbox/`. |
+| **Skills live in `.claude/skills/` (Claude Code native)** | Claude Code auto-discovers them (`/nanoclaw-install`); Codex follows the same `SKILL.md` by path. The presenter `dind-sandbox-walkthrough` skill stays in `dind-sandbox/skills/` (not auto-discovered, presenter-only). |
 
 ## Validation status
 
@@ -82,7 +84,7 @@ End-to-end validation done in the DinD sandbox on 2026-06-09/10:
 
 ## Pending / open items
 
-- **Pre-workshop email** to attendees (1 week before): not yet drafted. Should cover the VM + Ubuntu ISO setup, Claude access path (Pro sub or API key), and the Telegram phone-app reminder.
+- **Pre-workshop email** to attendees (1 week before): not yet drafted. Should cover the VM + Ubuntu ISO setup and the Claude access path (Pro sub or API key). Telegram is now part of the install, not a prerequisite.
 - **Slide deck**: not yet started. The `ai-library` submodule can generate slide-by-slide from the workshop outline if needed.
 - **Run sheet for July 2**: cut-candidate ladder is in `workshop/outline.md`; a presenter-friendly minute-by-minute card is still TODO.
 - **Push this repo to GitHub.** The `ai-library` submodule is private and isn't fetched by a normal clone, so it won't block a public push.

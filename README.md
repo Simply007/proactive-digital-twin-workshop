@@ -2,6 +2,8 @@
 
 A hands-on workshop kit for **"Beyond the Chatbot: Engineering Your Proactive Digital Twin"**. You spin up a Linux Ubuntu VM, install NanoClaw (an autonomous agent framework), pair it to Telegram, and build an agent that wakes up on its own schedule — while you grab a coffee.
 
+> **This is an Anthropic / Claude-first repository.** It's built around Claude (Claude Code, the `claude` CLI, and skills in `.claude/skills/`). Codex / OpenAI works as an alternative throughout — wherever you see a Claude command, there's a Codex equivalent.
+
 ## Prerequisites
 
 Set these up at home before the workshop, not on conference WiFi.
@@ -43,14 +45,14 @@ bash nanoclaw.sh
 
 When it finishes, DM your bot `ping` from your phone — the agent replies within ~60-90 seconds on first start, sub-10s after that.
 
-For a guided, prompt-by-prompt install, point an AI coding CLI at the [`nanoclaw-install`](.agents/skills/nanoclaw-install/SKILL.md) skill from the cloned repo:
+For a guided, prompt-by-prompt install, use the [`nanoclaw-install`](.claude/skills/nanoclaw-install/SKILL.md) skill from the cloned repo:
 
 ```bash
-# Claude Code
-claude "Follow the nanoclaw-install skill at .agents/skills/nanoclaw-install/SKILL.md and walk me through installing NanoClaw step by step."
+# Claude Code (auto-discovers skills in .claude/skills/)
+claude "/nanoclaw-install"
 
-# Codex (auto-discovers skills in .agents/skills/)
-codex            # then type:  $ nanoclaw-install
+# Codex (alternative) - point it at the skill file
+codex   # then type:  Follow .claude/skills/nanoclaw-install/SKILL.md and walk me through installing NanoClaw step by step.
 ```
 
 ## What's in this repo
@@ -63,7 +65,7 @@ codex            # then type:  $ nanoclaw-install
 │   ├── providers.md            # host/VPS comparison - which providers were tested and how they fared
 │   ├── use-cases-relatable.md  # use cases for the "Connecting the Dots" / use-case exercise
 │   └── use-cases-untested.md   # extra ideas not yet validated in the flow
-├── .agents/skills/
+├── .claude/skills/
 │   └── nanoclaw-install/       # a Skill that walks you through installing NanoClaw
 └── dind-sandbox/               # presenter-only Docker-in-Docker sandbox + what we tried and rejected
     ├── README.md               # how the sandbox works and how to run it
@@ -73,7 +75,7 @@ codex            # then type:  $ nanoclaw-install
 
 ## The Skill that walks you through it
 
-This kit ships Claude Code skills under [`.agents/skills/`](.agents/skills/) that guide a person through the workshop one step at a time. The first is [`nanoclaw-install`](.agents/skills/nanoclaw-install/SKILL.md), which walks you through installing NanoClaw and reaching your first ping/pong (more skills for the later exercises are being split out). You drive the commands; the skill highlights the exact next step and runs only read-only checks.
+This kit ships Claude Code skills under [`.claude/skills/`](.claude/skills/) that guide a person through the workshop one step at a time. The first is [`nanoclaw-install`](.claude/skills/nanoclaw-install/SKILL.md), which walks you through installing NanoClaw and reaching your first ping/pong (more skills for the later exercises are being split out). Claude Code auto-discovers them; Codex can use the same `SKILL.md` files by path. You drive the commands; the skill highlights the exact next step and runs only read-only checks.
 
 ## After the workshop - moving to an always-on host
 
