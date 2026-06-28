@@ -17,7 +17,7 @@
 #   ./scripts/teardown.sh         # confirm each step
 #   ./scripts/teardown.sh -y      # run every step, no prompts (for scripting)
 set -euo pipefail
-cd "$(dirname "$0")/.."   # repo root (.env + docker-compose.yml live here)
+cd "$(dirname "$0")/.."   # dind-sandbox/ dir (.env + docker-compose.yml live here)
 
 # Load SANDBOX_CONTAINER from .env if present, else default.
 if [ -f .env ]; then
