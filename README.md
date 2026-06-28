@@ -4,11 +4,24 @@ A hands-on workshop kit for **"Beyond the Chatbot: Engineering Your Proactive Di
 
 > **This is an Anthropic / Claude-first repository.** It's built around Claude (Claude Code, the `claude` CLI, and skills in `.claude/skills/`). Codex / OpenAI works as an alternative throughout — wherever you see a Claude command, there's a Codex equivalent.
 
-## Prerequisites
+## Contents
+
+- [Getting started](#getting-started)
+- [What's in this repo](#whats-in-this-repo)
+- [After the workshop](#after-the-workshop---moving-to-an-always-on-host)
+- [Gotchas](#gotchas)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
+
+## Getting started
+
+Work through these in order: set up your machine, install the agent, then the two hands-on exercises. Each step has a Claude Code skill that walks you through it one prompt at a time - you drive the commands, the skill highlights the exact next step.
+
+### Prerequisites
 
 Set these up at home before the workshop, not on conference WiFi.
 
-### 1. A booted Linux VM (Ubuntu 24.04 or 22.04 LTS) — the hard prerequisite
+#### 1. A booted Linux VM (Ubuntu 24.04 or 22.04 LTS) — the hard prerequisite
 
 Install a free virtualization tool, then download and boot an Ubuntu LTS ISO inside it.
 
@@ -22,12 +35,12 @@ Download **Ubuntu 24.04 LTS** (or 22.04) from [ubuntu.com](https://ubuntu.com/do
 
 > **Recommended: run the VM natively, not emulated.** For the smoothest experience, the Ubuntu image that matches your computer's CPU architecture is the better pick, so the VM runs on the native CPU rather than emulating a different one (emulation works, but it's several times slower). On **Apple Silicon (M-series) Macs** that's the **ARM64** image; on **Intel/AMD** machines, the **x86_64 / amd64** image (with VT-x / AMD-V enabled in BIOS).
 
-### 2. AI access — one of
+#### 2. AI access — one of
 
 - Claude: [Pro or higher subscription](https://claude.ai) **or** [Anthropic API key](https://console.anthropic.com)
 - OpenAI: [ChatGPT Plus or higher](https://openai.com) **or** [API key](https://platform.openai.com) — install the `/add-codex` skill after setup to switch providers
 
-## Quick start — install NanoClaw
+### Install NanoClaw
 
 In one pass, you'll:
 
@@ -57,6 +70,26 @@ claude "/nanoclaw-install"
 codex   # then type:  Follow .claude/skills/nanoclaw-install/SKILL.md and walk me through installing NanoClaw step by step.
 ```
 
+### Living files
+
+Teach the agent who you are. Ask it how its memory is structured, look at the `system/definition.md` that defines that structure, then have it interview you and write a profile into its memory - so its replies become specific to you, not generic. This is the "verbalize, don't code" core of the workshop.
+
+```bash
+claude "/living-files"
+```
+
+See the [`living-files`](.claude/skills/living-files/SKILL.md) skill for the full walkthrough.
+
+### GitHub memory sync
+
+Back up the agent's memory to a **private GitHub repo, on a schedule**. You connect GitHub to OneCLI once (via an OAuth app), then ask the agent to sync its memory and schedule a recurring job - which is where the workshop introduces **scheduled jobs**.
+
+```bash
+claude "/github-memory-sync"
+```
+
+See the [`github-memory-sync`](.claude/skills/github-memory-sync/SKILL.md) skill for the full walkthrough.
+
 ## What's in this repo
 
 ```plain
@@ -68,16 +101,18 @@ codex   # then type:  Follow .claude/skills/nanoclaw-install/SKILL.md and walk m
 │   ├── use-cases-relatable.md  # use cases for the "Connecting the Dots" / use-case exercise
 │   └── use-cases-untested.md   # extra ideas not yet validated in the flow
 ├── .claude/skills/
-│   └── nanoclaw-install/       # a Skill that walks you through installing NanoClaw
+│   ├── nanoclaw-install/       # walks you through installing NanoClaw (Preparation 1)
+│   ├── living-files/           # walks you through the agent's memory (Preparation 2)
+│   └── github-memory-sync/     # walks you through backing memory up to GitHub (Exercise 3)
 └── dind-sandbox/               # presenter-only Docker-in-Docker sandbox + what we tried and rejected
     ├── README.md               # how the sandbox works and how to run it
     ├── findings.md             # Railway, Oracle, and DinD gotchas (why DinD is problematic)
     └── ...                     # docker-compose.yml, docker/, scripts/, the dind skill, recordings/
 ```
 
-## The Skill that walks you through it
+### The Skill that walks you through it
 
-This kit ships Claude Code skills under [`.claude/skills/`](.claude/skills/) that guide a person through the workshop one step at a time. The first is [`nanoclaw-install`](.claude/skills/nanoclaw-install/SKILL.md), which walks you through installing NanoClaw and reaching your first ping/pong (more skills for the later exercises are being split out). Claude Code auto-discovers them; Codex can use the same `SKILL.md` files by path. You drive the commands; the skill highlights the exact next step and runs only read-only checks.
+This kit ships Claude Code skills under [`.claude/skills/`](.claude/skills/) that guide a person through the workshop one step at a time: [`nanoclaw-install`](.claude/skills/nanoclaw-install/SKILL.md) (install + first ping/pong), [`living-files`](.claude/skills/living-files/SKILL.md) (give the agent its memory), and [`github-memory-sync`](.claude/skills/github-memory-sync/SKILL.md) (back that memory up to GitHub on a schedule). Claude Code auto-discovers them; Codex can use the same `SKILL.md` files by path. You drive the commands; the skill highlights the exact next step and runs only read-only checks.
 
 ## After the workshop - moving to an always-on host
 
@@ -85,9 +120,11 @@ Your VM pauses when the laptop sleeps, so the agent goes quiet with it. **Once y
 
 Every migration is the same shape: provision Linux, SSH in, run the same `bash nanoclaw.sh`. The `CLAUDE.md`, scheduled jobs, and integrations you built in the workshop all transfer.
 
-## Presenter sandbox (Docker-in-Docker)
+## Gotchas
 
-> warning TL;DR; - Do not try to run the Docker-in-docker setup of the NanoClaw. I wen through the pain, so that you don't need you.
+### NOGO Docker-in-Docker setup
+
+> **Warning - TL;DR:** Do not try to run the Docker-in-Docker setup of NanoClaw. I went through the pain so that you don't have to.
 
 See [`dind-sandbox/README.md`](dind-sandbox/README.md) to run it, [`dind-sandbox/findings.md`](dind-sandbox/findings.md) for the 9 DinD-specific issues, and [`dind-sandbox/architecture.md`](dind-sandbox/architecture.md) for the full setup explanation.
 
