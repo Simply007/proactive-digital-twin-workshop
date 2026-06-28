@@ -144,7 +144,7 @@ Updated 2026-06-10 after end-to-end walkthrough validation. Times reflect what a
 | ----------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0:00 – 0:20 | 20 min | **Intro** — hook, framing, stack overview, Telegram bot setup (Claude access already done pre-workshop). 20 min buffers late arrivals + tech check. |
 | 0:20 – 1:00 | 40 min | **Exercise 1** — install NanoClaw + Telegram pairing + first ping/pong reply                                                                        |
-| 1:00 – 1:15 | 15 min | **Exercise 2 (first taste)** — agent self-edits `CLAUDE.local.md` with 5-question profile; verify personalization. Sets up Block B's deep dive.     |
+| 1:00 – 1:15 | 15 min | **Exercise 2 (first taste)** — agent writes a 5-question profile into its memory; verify personalization. Sets up Block B's deep dive.     |
 
 ### Block B breakdown (75 min)
 
@@ -152,7 +152,7 @@ The shift: from install to understanding. What did you just build, how does memo
 
 | Time        | Length | What                                                                                                                                                                                                                                                                                                                      |
 | ----------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1:15 – 1:35 | 20 min | **Living Files debrief** — what you gave the agent (5 answers), what you got (`CLAUDE.local.md` profile). Walk the memory architecture: `CLAUDE.md` (always loaded) → memory files (recalled when relevant) → conversation history. Live: open the files, show the diff, ask the agent to re-read and prove it remembers. |
+| 1:15 – 1:35 | 20 min | **Living Files debrief** — what you gave the agent (5 answers), what you got (a profile in its memory). Walk the memory architecture: `CLAUDE.md` (always-loaded config) → memory store (recalled when relevant; `CLAUDE.local.md` on Claude, the `memory/` tree on Codex) → conversation history. Live: open the files, show the diff, ask the agent to re-read and prove it remembers. |
 | 1:35 – 2:00 | 25 min | **Exercise 3: GitHub memory sync** — connect GitHub to OneCLI via an OAuth app, then DM the agent to back up its memory to a private repo and schedule an hourly sync. Introduces scheduled jobs. Post the use case voting poll here.                                                                              |
 | 2:00 – 2:20 | 20 min | **Exercise 4: Run your use case** — attendees pick the poll winner (or their own choice) and set it up via one DM. Presenter circulates. Goal: at least one notification fires before the session ends.                                                                                                                   |
 | 2:20 – 2:30 | 10 min | **Wrap-up** — what they have, where to take it next, QR + follow-up                                                                                                                                                                                                                                                       |
@@ -163,7 +163,7 @@ The shift: from install to understanding. What did you just build, how does memo
 | ----------------------------------- | ----------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Ex 1 — Install + ping/pong**      | 25 min      | 40 min      | Container build 3-5 min in the VM. Telegram pairing 2-3 min. First-message cold start 60-90s. Pad for Docker-not-started, wrong-token attendees. |
 | **Ex 2 — Living Files first taste** | 10 min      | 15 min      | Agent does most of the work. Five questions + answers + diff + verification took ~7 min including reads.                                                                           |
-| **Living Files debrief**            | 15 min      | 20 min      | Show the diff from Exercise 2, open `CLAUDE.local.md` and memory files live, ask agent to re-read and prove it remembers a detail.                                                 |
+| **Living Files debrief**            | 15 min      | 20 min      | Show the diff from Exercise 2, open the agent's memory files live (`CLAUDE.local.md` on Claude, the `memory/` tree on Codex), ask agent to re-read and prove it remembers a detail.                                                 |
 | **Ex 3 — GitHub memory sync**       | 25 min      | 30 min      | Connect GitHub to OneCLI (OAuth app) → DM the agent to sync memory → `schedule hourly`. Covers scheduled jobs naturally. Pad for the OAuth-app setup + attendees without a GitHub account.                                |
 | **Ex 4 — Run your use case**        | 15 min      | 20 min      | One DM to set up. Presenter circulates. Goal: at least one notification fires before wrap-up.                                                                                      |
 | **Wrap-up**                         | 5 min       | 10 min      | Where to go next, always-on recipes, QR.                                                                                                                                           |
@@ -266,8 +266,8 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 ### Preparation 2: Living Files
 
-> **Heads-up on the file shape.** Where OpenClaw splits context across 9 files (`soul.md`, `user.md`, `heartbeat.md`, `tools.md`, `identity.md`, ...), NanoClaw uses **one `CLAUDE.md` per agent** for config (tone, identity, rules, API references), plus the agent's **memory** for recall, plus installable skills for new capabilities (`/add-*`). Same mental model, far fewer files. **What you teach the agent about yourself in this exercise lands in its memory, not in `CLAUDE.md`** - and the memory store's shape depends on the provider: the **Claude** provider keeps a flat `CLAUDE.local.md`; **Codex** (and other scaffold providers) keep a `memory/` tree (`memory/index.md`, `memory/memories/`, `memory/data/`). The agent reads its memory every time it wakes up.
-
+> **Heads-up on the file shape.** NanoClaw uses **one `CLAUDE.md` per agent** for config (tone, identity, rules, API references), plus the agent's **memory** for recall, plus installable skills for new capabilities (`/add-*`). **What you teach the agent about yourself in this exercise lands in its memory, not in `CLAUDE.md`** - and the memory store's shape depends on the provider: the **Claude** provider keeps a flat `CLAUDE.local.md`; **Codex** (and other scaffold providers) keep a `memory/` tree (`memory/index.md`, `memory/memories/`, `memory/data/`). The agent reads its memory every time it wakes up. (For reference, if you want to see how OpenClaw spreads the same context across 9 living files - `AGENTS.md`, `SOUL.md`, `USER.md`, `HEARTBEAT.md`, `MEMORY.md`, `TOOLS.md`, `IDENTITY.md`, `BOOT.md`, `BOOTSTRAP.md` - check the [OpenClaw agent-workspace docs](https://github.com/openclaw/openclaw/blob/main/docs/concepts/agent-workspace.md). Same mental model, far fewer files.)
+>
 > **Where memory lives.** The agent sees its memory at the in-container path `/workspace/agent/memory`; on the host the same files are at `~/nanoclaw/groups/<folder>/memory` (the `~/nanoclaw-workspace/...` path is not where memory lives). A baked-in scaffold seeds only `system/`, `memories/`, `data/` plus `index.md` and `system/definition.md`; the taxonomy (`people` / `projects` / `organizations` / `decisions`) is editable doctrine in `system/definition.md` - "a starting point, not a contract" - and the concrete files are written by the agent as you talk to it. The [`living-files`](../.claude/skills/living-files/SKILL.md) skill walks this in detail.
 
 **Time budget:** ~25 min (minimum viable) / +5 min (stretch)
@@ -345,10 +345,10 @@ Water, restrooms, hallway track. Presenter stays in the room for 1:1 troubleshoo
 
 **Demo cue (presenter):**
 
-- Open the agent's workspace in the terminal: `ls` the files, `cat CLAUDE.local.md`, open the memory folder.
+- Open the agent's workspace in the terminal: `ls` the files and open the memory store - `cat CLAUDE.local.md` on the Claude provider, or walk the `memory/` tree (`memory/index.md`, `memory/memories/...`) on Codex.
 - Show the diff from Preparation 2 — these are the actual words the agent will carry into every future conversation.
-- DM the agent: `re-read your CLAUDE.local.md and tell me one specific thing you remember about me that you didn't know before this workshop.`
-- Point at the structure: `CLAUDE.md` (always loaded — identity, rules, skills) vs `CLAUDE.local.md` (per-agent memory — who you are, what you care about) vs memory files (longer-term recall, recalled when relevant) vs conversation history (searchable transcripts).
+- DM the agent: `re-read your memory and tell me one specific thing you remember about me that you didn't know before this workshop.`
+- Point at the structure: `CLAUDE.md` (always loaded — identity, rules, skills) vs the agent's **memory store** (per-agent recall — who you are, what you care about; `CLAUDE.local.md` on Claude, the `memory/` tree on Codex) vs conversation history (searchable transcripts).
 
 **Framing line:** "This is just text. Text you wrote in a chat window. The agent reads it every time it wakes up. That's the whole trick — verbalized context beats clever prompting."
 
@@ -426,7 +426,7 @@ Post the voting poll in the workshop Telegram group. Announce the winner at 2:00
 **What you have right now:**
 
 - A NanoClaw container running inside a VM on your laptop.
-- A `CLAUDE.md` (and `personal/` folder) that describes the actual you.
+- An agent **memory** that describes the actual you (`CLAUDE.local.md` on Claude, a `memory/` tree on Codex), plus the per-agent `CLAUDE.md` config.
 - A web-research tool wired to OpenRouter.
 - A scheduled morning brief on Telegram - **as long as your laptop is awake**.
 - A working mental model for the next 10 integrations you'll add.
@@ -439,7 +439,7 @@ See [`./providers.md`](./providers.md) for the hosts we tested (VPS and home-box
 
 ### Other things to do next
 
-- **Swap LLM provider.** Don't want to pay Anthropic forever? Inside the agent run `/add-codex` for OpenAI (ChatGPT subscription or API key), `/add-opencode` for OpenRouter / Google / DeepSeek, or `/add-ollama-provider` for local open-weight models. The `CLAUDE.md` you built today works as-is - it's a Claude Code convention, not a hard provider lock.
+- **Swap LLM provider.** Don't want to pay Anthropic forever? Inside the agent run `/add-codex` for OpenAI (ChatGPT subscription or API key), `/add-opencode` for OpenRouter / Google / DeepSeek, or `/add-ollama-provider` for local open-weight models. Your `CLAUDE.md` config works as-is - it's a Claude Code convention, not a hard provider lock - and the memory you built today carries over too (the `/migrate-memory` skill moves it into the new provider's store shape).
 - **Add a second channel.** Slack for work, Discord for community, WhatsApp for friends. `/add-slack`, `/add-discord`, etc.
 - **Connect Google Calendar.** Pick up the calendar-webhook stretch from Exercise 3.
 - **Write a `personal/playbooks/` folder** with one SOP per recurring task you do.
