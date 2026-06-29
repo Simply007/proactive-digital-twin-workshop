@@ -95,7 +95,7 @@ fi
 if ! docker info >/dev/null 2>&1; then
   say "Reboot needed"
   info "Docker is installed, but this shell isn't in the 'docker' group yet."
-  info "Reboot the VM (or log out and back in), then run this script again."
+  info "Reboot the VM, then run this script again."
   info "(Quick alternative for this shell only: run 'newgrp docker', then re-run.)"
   exit 0
 fi
