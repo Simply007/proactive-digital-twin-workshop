@@ -24,7 +24,7 @@ Work through these in order: set up your machine, install the agent, then the tw
 
 Set these up at home before the workshop, not on conference WiFi.
 
-#### 1. A booted Linux VM (Ubuntu 24.04 or 22.04 LTS) — the hard prerequisite
+#### 1. A booted Linux VM (Ubuntu 26.04 / 24.04 / 22.04 LTS) — the hard prerequisite
 
 Install a free virtualization tool, then download and boot an Ubuntu LTS ISO inside it.
 
@@ -34,7 +34,7 @@ Install a free virtualization tool, then download and boot an Ubuntu LTS ISO ins
 | Windows | [VirtualBox](https://www.virtualbox.org/) (free) |
 | Linux   | KVM / `virt-manager` (free)                      |
 
-Download **Ubuntu 24.04 LTS** (or 22.04) from [ubuntu.com](https://ubuntu.com/download/desktop). Create the VM (allocate at least **4 GB RAM** and **30 GB disk**, 40 GB comfortable - a full install plus the Docker images fills ~20 GB), complete the Ubuntu setup wizard, and boot it to the desktop at least once.
+Download **Ubuntu 26.04 LTS** (24.04 / 22.04 also work) from [ubuntu.com](https://ubuntu.com/download/desktop). Create the VM and **allocate at least 8 GB RAM** and **at least 30 GB disk (40 GB comfortable)**. The installer warns below ~4 GB RAM, and 8 GB keeps the host plus the agent container comfortable (so plan on a **16 GB laptop**). A full install plus the Docker images fills ~20 GB, so do **not** use the default ~20 GB disk - it fills up mid-setup (~90% full). Complete the Ubuntu setup wizard, and boot it to the desktop at least once.
 
 > **Recommended: run the VM natively, not emulated.** For the smoothest experience, the Ubuntu image that matches your computer's CPU architecture is the better pick, so the VM runs on the native CPU rather than emulating a different one (emulation works, but it's several times slower). On **Apple Silicon (M-series) Macs** that's the **ARM64** image; on **Intel/AMD** machines, the **x86_64 / amd64** image (with VT-x / AMD-V enabled in BIOS).
 
@@ -43,7 +43,11 @@ Download **Ubuntu 24.04 LTS** (or 22.04) from [ubuntu.com](https://ubuntu.com/do
 - Claude: [Pro or higher subscription](https://claude.ai) **or** [Anthropic API key](https://console.anthropic.com)
 - OpenAI: [ChatGPT Plus or higher](https://openai.com) **or** [API key](https://platform.openai.com) — install the `/add-codex` skill after setup to switch providers
 
-#### 3. Pre-cache the install on the VM (recommended - saves conference WiFi)
+#### 3. Telegram (on your phone)
+
+Install [Telegram](https://telegram.org) on your phone - it's the channel you'll DM your agent on. You can create the bot now or during the workshop intro: message [@BotFather](https://t.me/botfather), send `/newbot`, pick a name, and **save the token** (you paste it during install). Takes ~2 minutes.
+
+#### 4. Pre-cache the install on the VM (recommended - saves conference WiFi)
 
 The workshop-day install pulls roughly **2 GB** (Docker images, the agent container build, apt/npm packages). Pull the heavy, unchanging parts **at home on good WiFi** so the day-of install pulls little or nothing.
 
