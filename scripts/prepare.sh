@@ -34,7 +34,7 @@ Pulls the entire install now (at home) so the workshop-day install pulls
 essentially nothing - only credentials and Telegram pairing remain.
 
   - host packages: Docker, Node 22, pnpm
-  - the Claude Code CLI (the default agent runtime)
+  - the Claude Code CLI (default runtime) + Codex CLI (alternative)
   - node:22-slim base image
   - the agent container image (pre-built)
   - host dependencies + OneCLI/Postgres images
@@ -78,6 +78,17 @@ if command -v claude >/dev/null 2>&1 || [ -x "$HOME/.local/bin/claude" ]; then
 else
   step "Installing Claude Code CLI (claude.ai/install.sh)"
   curl -fsSL https://claude.ai/install.sh | bash
+fi
+
+# Codex CLI - host CLI for the alternative (OpenAI/Codex) runtime's ChatGPT-
+# subscription sign-in. nanoclaw.sh tells you to install it but doesn't do it
+# for you. (The in-container Codex provider is pinned separately in
+# container/cli-tools.json and baked into the agent image.)
+if command -v codex >/dev/null 2>&1; then
+  info "Codex CLI already installed - skipping."
+else
+  step "Installing Codex CLI (npm i -g @openai/codex)"
+  sudo npm install -g @openai/codex
 fi
 
 # The docker group must be active in this shell to reach the daemon.
