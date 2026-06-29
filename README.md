@@ -43,6 +43,24 @@ Download **Ubuntu 24.04 LTS** (or 22.04) from [ubuntu.com](https://ubuntu.com/do
 - Claude: [Pro or higher subscription](https://claude.ai) **or** [Anthropic API key](https://console.anthropic.com)
 - OpenAI: [ChatGPT Plus or higher](https://openai.com) **or** [API key](https://platform.openai.com) — install the `/add-codex` skill after setup to switch providers
 
+#### 3. Pre-cache the install on the VM (recommended - saves conference WiFi)
+
+The workshop-day install pulls roughly **2 GB** (Docker images, the agent container build, apt/npm packages). Pull the heavy, unchanging parts **at home on good WiFi** so the day-of install pulls little or nothing.
+
+Use the guided script - [`scripts/prepare.sh`](scripts/prepare.sh). Run it **inside your Ubuntu VM**; it asks which stage you want and walks you through it (prompting before each big download, safe to re-run):
+
+```bash
+sudo apt-get update && sudo apt-get install -y curl ca-certificates && curl -fsSL https://raw.githubusercontent.com/Simply007/proactive-digital-twin-workshop/main/scripts/prepare.sh | bash
+```
+
+Three depths, each including the previous:
+
+- **Stage 2** - host packages (Docker, Node, pnpm) + base image, no repo clone. Leaves ~1.1-2.0 GB for the day.
+- **Stage 3** - + pre-build the agent container image. Leaves ~0.45-0.8 GB.
+- **Stage 4** (default) - + host deps + OneCLI/Postgres images. Leaves ~0 for the day - only credentials and Telegram pairing remain.
+
+> **Why it pins a version.** NanoClaw may release an update between your prep and the workshop. The script pins the clone to `v2.1.17`, and you use the same pin on the day, so you install exactly what you pre-cached - no surprise re-download or behavior change on conference WiFi.
+
 ### 1. Install NanoClaw
 
 In one pass, you'll:
@@ -54,7 +72,7 @@ In one pass, you'll:
 Open a terminal inside your Ubuntu VM and run:
 
 ```bash
-git clone https://github.com/nanocoai/nanoclaw.git
+git clone --branch v2.1.17 https://github.com/nanocoai/nanoclaw.git
 cd nanoclaw
 bash nanoclaw.sh
 ```
