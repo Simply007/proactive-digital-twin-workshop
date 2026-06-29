@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# NanoClaw workshop prepare (guided pre-cache)
-# --------------------------------------------
+# NanoClaw workshop prepare (full pre-cache)
+# ------------------------------------------
 # Run this INSIDE your Ubuntu VM, at home on good WiFi, so the workshop-day
 # install pulls little or nothing over the conference network.
 #
@@ -9,10 +9,11 @@
 #     curl -fsSL https://raw.githubusercontent.com/Simply007/proactive-digital-twin-workshop/main/scripts/prepare.sh | bash
 #   # or, from a clone of this kit:  bash scripts/prepare.sh
 #
-# It asks which stage you want to reach and walks you through it, prompting
-# before each heavy download. Re-running is safe - already-done steps are
-# skipped. The clone is pinned to NANOCLAW_REF so what you pre-build at home is
-# exactly what you install on the day (no drift if NanoClaw ships an update).
+# Runs the full pre-cache: host packages + base image + the agent container
+# image + host deps + OneCLI/Postgres images. On the workshop day only
+# credentials and Telegram pairing remain. No prompts. Safe to re-run -
+# already-done steps are skipped. The clone is pinned to NANOCLAW_REF so what
+# you pre-build at home is exactly what you install on the day.
 
 set -euo pipefail
 
@@ -27,36 +28,23 @@ disk() { printf '    [disk] %s used on /\n' "$(df -h --output=used / | tail -1 |
 
 cat <<'INTRO'
 
-NanoClaw workshop pre-cache
-===========================
-Pulls the heavy, unchanging parts of the install now (at home) so the
-workshop-day install runs from a warm cache.
+NanoClaw workshop pre-cache (full)
+==================================
+Pulls the entire install now (at home) so the workshop-day install pulls
+essentially nothing - only credentials and Telegram pairing remain.
 
-  Stage 2  Host packages (Docker, Node, pnpm) + base image, no repo clone.
-           Leaves ~1.1-2.0 GB for the day.
-  Stage 3  + clone (pinned) + pre-build the agent container image.
-           Leaves ~0.45-0.8 GB for the day.
-  Stage 4  + host deps + OneCLI/Postgres images.
-           Leaves ~0 for the day (only credentials + Telegram pairing).
+  - host packages: Docker, Node 22, pnpm
+  - node:22-slim base image
+  - the agent container image (pre-built)
+  - host dependencies + OneCLI/Postgres images
 
-Each stage includes the ones before it.
+No prompts; safe to re-run (already-done steps are skipped).
 INTRO
 
-# Prompt the terminal directly (works even when piped via curl|bash, where
-# stdin is the download pipe). Writing to /dev/tty keeps the prompt visible.
-STAGE=""
-if [ -e /dev/tty ]; then
-  printf 'Which stage do you want to reach? [2/3/4] (default 4): ' > /dev/tty
-  IFS= read -r STAGE < /dev/tty || STAGE=""
-fi
-STAGE="${STAGE:-4}"
-case "$STAGE" in 2|3|4) ;; *) echo "Please pick 2, 3, or 4."; exit 2 ;; esac
-info "Reaching Stage $STAGE."
 disk
 
-# --- Stage 2: host toolchain + base image ------------------------------------
-say "Stage 2: host packages (Docker, Node 22, pnpm) + base image"
-info "Installs Docker, Node 22, pnpm, then pulls the node:22-slim base image."
+# --- Host toolchain ----------------------------------------------------------
+say "Host packages (Docker, Node 22, pnpm)"
 
 step "Updating apt and installing base tools (git, curl, ...)"
 sudo apt-get update
@@ -90,21 +78,13 @@ if ! docker info >/dev/null 2>&1; then
   exit 0
 fi
 
+# --- Base image --------------------------------------------------------------
 step "Pulling the node:22-slim base image"
 docker pull node:22-slim
 disk
 
-if [ "$STAGE" -lt 3 ]; then
-  say "Stage 2 done"
-  info "On the workshop day, run:"
-  info "  git clone --branch $NANOCLAW_REF $REPO_URL && cd nanoclaw && bash nanoclaw.sh"
-  exit 0
-fi
-
-# --- Stage 3: clone (pinned) + pre-build the agent image ---------------------
-say "Stage 3: clone $NANOCLAW_REF and pre-build the agent container image"
-info "Downloads ~0.6-1 GB (Chromium + claude-code + Bun) and takes several minutes."
-
+# --- Clone (pinned) + pre-build the agent container image --------------------
+say "Agent container image"
 if [ -d "$CLONE_DIR/.git" ]; then
   info "Repo already at $CLONE_DIR - skipping clone."
 else
@@ -116,15 +96,8 @@ step "Building the agent container image (Docker build, several minutes)"
 ./container/build.sh
 disk
 
-if [ "$STAGE" -lt 4 ]; then
-  say "Stage 3 done"
-  info "On the workshop day, run:  cd $CLONE_DIR && bash nanoclaw.sh"
-  exit 0
-fi
-
-# --- Stage 4: host deps + OneCLI/Postgres images -----------------------------
-say "Stage 4: host dependencies + OneCLI/Postgres images"
-info "Installs host node_modules and pre-pulls the OneCLI + Postgres images."
+# --- Host deps + OneCLI/Postgres images --------------------------------------
+say "Host dependencies + OneCLI/Postgres images"
 
 step "Installing host dependencies (pnpm install)"
 pnpm install
@@ -137,6 +110,6 @@ step "Pre-pulling OneCLI gateway $ONECLI_VERSION + Postgres images"
 curl -fsSL onecli.sh/install | sh
 disk
 
-say "Stage 4 done"
+say "Pre-cache complete"
 info "On the workshop day, run:  cd $CLONE_DIR && bash nanoclaw.sh"
 info "At the OneCLI prompt, choose 'Use the existing instance'."
