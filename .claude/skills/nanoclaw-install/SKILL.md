@@ -25,13 +25,14 @@ cases) follow the outline in [`../../../workshop/outline.md`](../../../workshop/
 
 ## Prerequisites
 
-- **VM RAM: at least 4 GB (8 GB comfortable, 16 GB if you can spare it).** This is the very
-  first thing `nanoclaw.sh` checks - see the RAM check below.
+- **VM RAM: allocate at least 8 GB (needs a 16 GB laptop).** 4 GB is the installer's hard
+  floor - the first thing `nanoclaw.sh` checks (see the RAM check below) - but it's tight once
+  the Docker images build, so give the VM 8 GB.
 - **VM disk: at least 30 GB (40 GB comfortable).** A full Ubuntu install plus the Docker
   images fills ~20 GB; provider rebuilds add more. Don't use the default ~20 GB - you'll hit
   a full disk mid-setup (observed: 19 GB used of 23 GB = 90% after install with both
   providers built).
-- An Ubuntu Linux LTS VM (or laptop / VPS) with a terminal open.
+- An Ubuntu Linux LTS VM (tested on 26.04; 24.04 / 22.04 also work), laptop, or VPS with a terminal open.
 - Claude access: a Claude Pro/Max subscription or an Anthropic API key (`sk-ant-...`).
 - A Telegram bot token from `@BotFather`.
 
@@ -50,9 +51,9 @@ Warning: this machine likely cannot run NanoClaw.
 ```
 
 The reading is the **guest VM's** RAM, not your laptop's. A VM configured for "4 GB" often
-reports a bit less inside the guest (firmware / reserved memory), so give it headroom above
-4 GB. If you see this, shut the VM down, raise its memory in your virtualization tool's
-settings (8 GB comfortable; 16 GB if your laptop can spare it), reboot, and re-run.
+reports a bit less inside the guest (firmware / reserved memory). If you see this, shut the VM
+down, raise its memory to **8 GB** in your virtualization tool's settings (which needs a 16 GB
+laptop), reboot, and re-run.
 
 ## Step 1 - Install git and clone the repo
 

@@ -76,7 +76,7 @@ You will run the whole workshop inside an Ubuntu Linux VM on your laptop. Set up
 - **Windows 10/11**: Install [VirtualBox](https://www.virtualbox.org/) (free).
 - **Linux**: Use KVM / virt-manager (`sudo apt install virt-manager qemu-kvm`).
 
-Then download an **Ubuntu 24.04 or 22.04 LTS** ISO from <https://ubuntu.com/download>, create a new VM in your tool, and boot it through the installer until you reach an Ubuntu desktop or login. You do NOT install Docker yet - that happens inside the VM when you run `bash nanoclaw.sh` in Preparation 1.
+Then download an **Ubuntu 26.04 LTS** ISO (24.04 / 22.04 also work) from <https://ubuntu.com/download>, create a new VM in your tool, and boot it through the installer until you reach an Ubuntu desktop or login. You do NOT install Docker yet - that happens inside the VM when you run `bash nanoclaw.sh` in Preparation 1.
 
 **Recommended: run the VM natively, not emulated.** For the smoothest experience, the Ubuntu image that matches your computer's CPU architecture is the better pick, so the VM runs on the native CPU rather than emulating a different one (emulation works, but it's several times slower). On Apple Silicon (M-series) Macs that's the **ARM64** image; on Intel/AMD machines, the **x86_64 / amd64** image (with VT-x / AMD-V enabled in BIOS).
 
@@ -101,7 +101,7 @@ Install Telegram on your phone. DM [@BotFather](https://t.me/botfather): send `/
 
 | Resource            | Minimum (will work, will be tight)                                                        | Recommended (comfortable)                            |
 | ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| **RAM**             | 8 GB                                                                                      | 16 GB or more                                        |
+| **RAM**             | 16 GB (the VM wants ~8 GB)                                                                 | 16 GB or more (32 GB very comfortable)               |
 | **Free disk space** | 30 GB (a full install + Docker images fills ~20 GB)                                        | 40 GB+                                               |
 | **CPU**             | Any 64-bit CPU from ~2018 onward (Intel Core i5+, AMD Ryzen 5+, Apple Silicon M1+, ARM64) | Same                                                 |
 | **OS**              | macOS 11+ / Windows 10 build 2004+ with WSL2 / Linux kernel 4.x+                          | macOS 13+ / Windows 11 / recent Ubuntu LTS           |
@@ -110,15 +110,15 @@ Install Telegram on your phone. DM [@BotFather](https://t.me/botfather): send `/
 | **Phone**           | With Telegram installed, to DM the bot                                                    | Same                                                 |
 | **Power**           | Charger plugged in - Docker + LLM calls drain battery fast over 2.5h                      | Same                                                 |
 
-**Why 8 GB RAM is the floor:** your Ubuntu guest VM needs ~4 GB allocated to it to run NanoClaw + one agent container comfortably. Add your host OS, browser, terminal, maybe an IDE, and you're already past 6 GB. With less than 8 GB, the laptop will swap and exercises will feel sluggish.
+**Why 16 GB RAM is the floor:** your Ubuntu guest VM needs **~8 GB allocated** to run NanoClaw plus the agent container comfortably once the Docker images build (4 GB is the installer's hard floor, but it's tight). Add your host OS, browser, terminal, and maybe an IDE, and 16 GB is what keeps the laptop from swapping.
 
-**If your laptop is borderline (8 GB exactly):** close everything you don't need during the workshop (Slack, Zoom, Spotify, Chrome tabs you're not using). Allocate ~4 GB to the VM in your virtualization tool's settings.
+**If your laptop is borderline (16 GB exactly):** close everything you don't need during the workshop (Slack, Zoom, Spotify, unused Chrome tabs) and allocate ~8 GB to the VM in your virtualization tool's settings. On an 8 GB laptop the workshop will be very tight - pair with a neighbor if you can.
 
 ### Known blockers, please DM Ondrej before the workshop if any apply
 
 - **Corporate laptop where you can't install software** - bring a personal device or pair with a neighbor.
 - **Virtualization blocked, or VT-x / AMD-V disabled in BIOS** - same advice. (Some corporate laptops block virtualization tools, or hardware virtualization is turned off in BIOS/UEFI and you can't enable it.)
-- **Less than 8 GB RAM on your laptop** - the workshop will work but it'll be tight. Close other apps during the session.
+- **Less than 16 GB RAM on your laptop** - the VM wants ~8 GB, so it'll be tight. Close other apps, or pair with a neighbor.
 
 If anything breaks during setup, message #ai-engineering-workshop on the conference Discord or DM Ondrej directly. Better to fix it before Friday than during.
 
@@ -257,7 +257,7 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 | Telegram bot never responds (first message, within 60s)                   | Cold-start delay — agent container is spawning + first LLM call                          | Wait up to 90s before retrying. Don't send a second `ping` until the first reply lands.                                                                                                                                                                                                                   |
 | Telegram bot never responds (>2 min, no reply)                            | Pairing race — agent service started after the code expired, queue swallowed an old code | DM the bot `/start` again from your phone. If still silent, presenter runs the bundled `pair-telegram-recover.sh` (drains queue + restarts pair-telegram step).                                                                                                                                           |
 | Anthropic API returns 401                                                 | Key not saved, or wrong region                                                           | Re-paste key, confirm it starts with `sk-ant-`, check Anthropic console for org region                                                                                                                                                                                                                    |
-| Container exits immediately after `bash nanoclaw.sh`                      | Not enough RAM allocated to the VM                                                       | Allocate ~4-6 GB to the VM in your virtualization tool's settings, restart the VM, re-run                                                                                                                                                                                                                 |
+| Container exits immediately after `bash nanoclaw.sh`                      | Not enough RAM allocated to the VM                                                       | Allocate ~8 GB to the VM in your virtualization tool's settings, restart the VM, re-run                                                                                                                                                                                                                 |
 | Agent container logs show `API retry (retryable: true)` forever           | Agent container can't reach OneCLI vault (network issue)                                 | Should not happen in a normal Ubuntu VM - `host.docker.internal` is wired by Docker. If it does, restart Docker in the VM (`sudo systemctl restart docker`). |
 
 **Sources / refs:** <https://github.com/nanocoai/nanoclaw> , <https://core.telegram.org/bots#how-do-i-create-a-bot>
@@ -485,7 +485,7 @@ The same pattern that wired Telegram and GitHub works for anything with an API:
 | Dependency                   | Failure mode                                                 | Backup                                                                                                                                                                                                                                                        |
 | ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Attendee VM setup            | Didn't set up the VM pre-workshop, or boot fails on-site     | Pair with a neighbor (read-only follow-along), 1:1 setup help during the break, take-home recipe for post-workshop                                                                                                                                            |
-| Attendee VM                  | Crashes / out-of-memory mid-session                          | Allocate more RAM to the VM (~4-6 GB) in your virtualization tool's settings, restart the VM, re-run last command                                                                                                                                             |
+| Attendee VM                  | Crashes / out-of-memory mid-session                          | Allocate more RAM to the VM (~8 GB) in your virtualization tool's settings, restart the VM, re-run last command                                                                                                                                             |
 | Attendee laptop too low-spec | Can't allocate enough RAM to Docker, exercises feel unusable | Pair with a neighbor; presenter offers their spare laptop or a screen-share session as fallback                                                                                                                                                               |
 | Anthropic API                | Outage or 529                                                | Presenter runs `/add-codex` (OpenAI) or `/add-opencode` (OpenRouter) on the demo agent to keep the live walkthrough moving; attendees pair with someone whose region is unaffected                                                                            |
 | Telegram                     | Banned country / phone issues                                | Discord via `/add-discord` - same flow, different token; attendee pairs with someone who has Telegram for the demo and switches at home                                                                                                                       |
