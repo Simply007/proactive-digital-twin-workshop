@@ -22,10 +22,8 @@ CLONE_DIR="${NANOCLAW_DIR:-$HOME/nanoclaw}"   # use this SAME dir on the day
 
 say()  { printf '\n=== %s ===\n' "$*"; }
 info() { printf '    %s\n' "$*"; }
+step() { printf '\n--> %s\n' "$*"; }
 disk() { printf '    [disk] %s used on /\n' "$(df -h --output=used / | tail -1 | tr -d ' ')"; }
-# Read prompts from the terminal, not stdin, so the script works when run as
-# `curl ... | bash` (where stdin is the download pipe). No tty -> assume yes.
-ask()  { local r="y"; read -r -p "    $1 [y/N] " r </dev/tty 2>/dev/null || r="y"; [[ "$r" =~ ^[Yy] ]]; }
 
 cat <<'INTRO'
 
@@ -44,23 +42,30 @@ workshop-day install runs from a warm cache.
 Each stage includes the ones before it.
 INTRO
 
+# Prompt the terminal directly (works even when piped via curl|bash, where
+# stdin is the download pipe). Writing to /dev/tty keeps the prompt visible.
 STAGE=""
-read -r -p "Which stage do you want to reach? [2/3/4] (default 4 - smallest day-of download): " STAGE </dev/tty 2>/dev/null || true
+if [ -e /dev/tty ]; then
+  printf 'Which stage do you want to reach? [2/3/4] (default 4): ' > /dev/tty
+  IFS= read -r STAGE < /dev/tty || STAGE=""
+fi
 STAGE="${STAGE:-4}"
 case "$STAGE" in 2|3|4) ;; *) echo "Please pick 2, 3, or 4."; exit 2 ;; esac
+info "Reaching Stage $STAGE."
 disk
 
 # --- Stage 2: host toolchain + base image ------------------------------------
 say "Stage 2: host packages (Docker, Node 22, pnpm) + base image"
 info "Installs Docker, Node 22, pnpm, then pulls the node:22-slim base image."
-ask "Proceed with Stage 2?" || { echo "Nothing changed."; exit 0; }
 
+step "Updating apt and installing base tools (git, curl, ...)"
 sudo apt-get update
 sudo apt-get install -y util-linux-extra git curl ca-certificates
 
 if command -v docker >/dev/null 2>&1; then
   info "Docker already installed - skipping."
 else
+  step "Installing Docker (get.docker.com)"
   curl -fsSL https://get.docker.com | sh
   sudo usermod -aG docker "$USER"
 fi
@@ -68,10 +73,12 @@ fi
 if command -v node >/dev/null 2>&1; then
   info "Node already installed ($(node --version)) - skipping."
 else
+  step "Installing Node 22 (NodeSource)"
   curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
   sudo apt-get install -y nodejs
 fi
 
+step "Enabling pnpm (corepack)"
 sudo corepack enable
 
 # The docker group must be active in this shell to reach the daemon.
@@ -83,6 +90,7 @@ if ! docker info >/dev/null 2>&1; then
   exit 0
 fi
 
+step "Pulling the node:22-slim base image"
 docker pull node:22-slim
 disk
 
@@ -96,14 +104,15 @@ fi
 # --- Stage 3: clone (pinned) + pre-build the agent image ---------------------
 say "Stage 3: clone $NANOCLAW_REF and pre-build the agent container image"
 info "Downloads ~0.6-1 GB (Chromium + claude-code + Bun) and takes several minutes."
-ask "Proceed with Stage 3?" || { echo "Stopped after Stage 2."; exit 0; }
 
 if [ -d "$CLONE_DIR/.git" ]; then
   info "Repo already at $CLONE_DIR - skipping clone."
 else
+  step "Cloning NanoClaw $NANOCLAW_REF into $CLONE_DIR"
   git clone --branch "$NANOCLAW_REF" "$REPO_URL" "$CLONE_DIR"
 fi
 cd "$CLONE_DIR"
+step "Building the agent container image (Docker build, several minutes)"
 ./container/build.sh
 disk
 
@@ -116,15 +125,15 @@ fi
 # --- Stage 4: host deps + OneCLI/Postgres images -----------------------------
 say "Stage 4: host dependencies + OneCLI/Postgres images"
 info "Installs host node_modules and pre-pulls the OneCLI + Postgres images."
-ask "Proceed with Stage 4?" || { echo "Stopped after Stage 3."; exit 0; }
 
+step "Installing host dependencies (pnpm install)"
 pnpm install
 
 # Match the OneCLI gateway version NanoClaw pins (read from the pinned clone),
 # so the pre-pulled image is the one the installer will expect.
 ONECLI_VERSION="$(grep -m1 onecli-gateway versions.json | grep -oE '[0-9]+(\.[0-9]+)+')"
 export ONECLI_VERSION
-info "Pre-pulling OneCLI gateway $ONECLI_VERSION + Postgres..."
+step "Pre-pulling OneCLI gateway $ONECLI_VERSION + Postgres images"
 curl -fsSL onecli.sh/install | sh
 disk
 
