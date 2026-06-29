@@ -34,6 +34,7 @@ Pulls the entire install now (at home) so the workshop-day install pulls
 essentially nothing - only credentials and Telegram pairing remain.
 
   - host packages: Docker, Node 22, pnpm
+  - the Claude Code CLI (the default agent runtime)
   - node:22-slim base image
   - the agent container image (pre-built)
   - host dependencies + OneCLI/Postgres images
@@ -68,6 +69,16 @@ fi
 
 step "Enabling pnpm (corepack)"
 sudo corepack enable
+
+# Claude Code CLI - host CLI for the default (Claude) runtime. The subscription
+# sign-in needs it; the API-key path does not. (Codex users instead need
+# `npm install -g @openai/codex`.) Installs to ~/.local/bin.
+if command -v claude >/dev/null 2>&1 || [ -x "$HOME/.local/bin/claude" ]; then
+  info "Claude Code CLI already installed - skipping."
+else
+  step "Installing Claude Code CLI (claude.ai/install.sh)"
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
 
 # The docker group must be active in this shell to reach the daemon.
 if ! docker info >/dev/null 2>&1; then

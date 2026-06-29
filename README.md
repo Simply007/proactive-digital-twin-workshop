@@ -53,7 +53,7 @@ Run the pre-cache script - [`scripts/prepare.sh`](scripts/prepare.sh) - **inside
 sudo apt-get update && sudo apt-get install -y curl ca-certificates && curl -fsSL https://raw.githubusercontent.com/Simply007/proactive-digital-twin-workshop/main/scripts/prepare.sh | bash
 ```
 
-It installs the toolchain (Docker, Node, pnpm), pulls the base image, pre-builds the agent container image, and pre-pulls the host deps + OneCLI/Postgres images - so on the workshop day only your credentials and Telegram pairing remain (essentially **0 download**). On a fresh VM it stops once after installing Docker and asks you to reboot the VM, then re-run the same command.
+It installs the toolchain (Docker, Node, pnpm, the Claude Code CLI), pulls the base image, pre-builds the agent container image, and pre-pulls the host deps + OneCLI/Postgres images - so on the workshop day only your credentials and Telegram pairing remain (essentially **0 download**). On a fresh VM it stops once after installing Docker and asks you to reboot the VM, then re-run the same command.
 
 > **Why it pins a version.** NanoClaw may release an update between your prep and the workshop. The script pins the clone to `v2.1.17`, and you use the same pin on the day, so you install exactly what you pre-cached - no surprise re-download or behavior change on conference WiFi.
 
