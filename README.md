@@ -9,7 +9,8 @@ A hands-on workshop kit for **"Beyond the Chatbot: Engineering Your Proactive Di
 - [Getting started](#getting-started)
   - [1. Install NanoClaw](#1-install-nanoclaw)
   - [2. Living files](#2-living-files)
-  - [3. GitHub memory sync](#3-github-memory-sync)
+  - [3. GitHub knowledge capture](#3-github-knowledge-capture)
+  - [4. Scheduled morning brief](#4-scheduled-morning-brief)
 - [What's in this repo](#whats-in-this-repo)
 - [After the workshop](#after-the-workshop---moving-to-an-always-on-host)
 - [Gotchas](#gotchas)
@@ -101,19 +102,33 @@ codex   # then type:  Follow .claude/skills/living-files/SKILL.md and walk me th
 
 See the [`living-files`](.claude/skills/living-files/SKILL.md) skill for the full walkthrough.
 
-### 3. GitHub memory sync
+### 3. GitHub knowledge capture
 
-Back up the agent's memory to a **private GitHub repo, on a schedule**. You connect GitHub to OneCLI once (via an OAuth app), then ask the agent to sync its memory and schedule a recurring job - which is where the workshop introduces **scheduled jobs**.
+Capture the outputs you approve into a **private GitHub repo** as portable Markdown notes. You connect GitHub to OneCLI once (via an OAuth app), then say a trigger phrase - the agent drafts a note (frontmatter + body), you approve, and it pushes to the repo.
 
 ```bash
 # Claude Code (auto-discovers skills in .claude/skills/)
-claude "/github-memory-sync"
+claude "/github-knowledge-capture"
 
 # Codex (alternative) - point it at the skill file
-codex   # then type:  Follow .claude/skills/github-memory-sync/SKILL.md and walk me through backing my agent's memory up to GitHub.
+codex   # then type:  Follow .claude/skills/github-knowledge-capture/SKILL.md and walk me through capturing my agent's outputs to GitHub.
 ```
 
-See the [`github-memory-sync`](.claude/skills/github-memory-sync/SKILL.md) skill for the full walkthrough.
+See the [`github-knowledge-capture`](.claude/skills/github-knowledge-capture/SKILL.md) skill for the full walkthrough.
+
+### 4. Scheduled morning brief
+
+Teach the agent its first **scheduled job**: a daily morning brief it sends on its own clock. You describe the schedule in plain language; the agent creates it with `schedule_task`, and you confirm with `list my scheduled tasks` and `run it once now`.
+
+```bash
+# Claude Code (auto-discovers skills in .claude/skills/)
+claude "/scheduled-brief"
+
+# Codex (alternative) - point it at the skill file
+codex   # then type:  Follow .claude/skills/scheduled-brief/SKILL.md and walk me through scheduling a daily morning brief.
+```
+
+See the [`scheduled-brief`](.claude/skills/scheduled-brief/SKILL.md) skill for the full walkthrough.
 
 ## What's in this repo
 
@@ -128,7 +143,8 @@ See the [`github-memory-sync`](.claude/skills/github-memory-sync/SKILL.md) skill
 ├── .claude/skills/
 │   ├── nanoclaw-install/       # walks you through installing NanoClaw (Preparation 1)
 │   ├── living-files/           # walks you through the agent's memory (Preparation 2)
-│   └── github-memory-sync/     # walks you through backing memory up to GitHub (Exercise 3)
+│   ├── github-knowledge-capture/  # capture approved outputs to GitHub as portable notes (Exercise 3)
+│   └── scheduled-brief/        # schedule a recurring morning brief (Exercise 4)
 └── dind-sandbox/               # presenter-only Docker-in-Docker sandbox + what we tried and rejected
     ├── README.md               # how the sandbox works and how to run it
     ├── findings.md             # Railway, Oracle, and DinD gotchas (why DinD is problematic)
@@ -137,7 +153,7 @@ See the [`github-memory-sync`](.claude/skills/github-memory-sync/SKILL.md) skill
 
 ### The Skill that walks you through it
 
-This kit ships Claude Code skills under [`.claude/skills/`](.claude/skills/) that guide a person through the workshop one step at a time: [`nanoclaw-install`](.claude/skills/nanoclaw-install/SKILL.md) (install + first ping/pong), [`living-files`](.claude/skills/living-files/SKILL.md) (give the agent its memory), and [`github-memory-sync`](.claude/skills/github-memory-sync/SKILL.md) (back that memory up to GitHub on a schedule). Claude Code auto-discovers them; Codex can use the same `SKILL.md` files by path. You drive the commands; the skill highlights the exact next step and runs only read-only checks.
+This kit ships Claude Code skills under [`.claude/skills/`](.claude/skills/) that guide a person through the workshop one step at a time: [`nanoclaw-install`](.claude/skills/nanoclaw-install/SKILL.md) (install + first ping/pong), [`living-files`](.claude/skills/living-files/SKILL.md) (give the agent its memory), [`github-knowledge-capture`](.claude/skills/github-knowledge-capture/SKILL.md) (capture approved outputs to a portable GitHub repo), and [`scheduled-brief`](.claude/skills/scheduled-brief/SKILL.md) (schedule a recurring morning brief). Claude Code auto-discovers them; Codex can use the same `SKILL.md` files by path. You drive the commands; the skill highlights the exact next step and runs only read-only checks.
 
 ## After the workshop - moving to an always-on host
 
