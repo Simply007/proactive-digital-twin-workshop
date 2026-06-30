@@ -136,7 +136,7 @@ Updated 2026-06-10 after end-to-end walkthrough validation. Times reflect what a
 | ---------------------------------------------------------------------- | -------------- | ----------------------------------------------------------------------------- |
 | **Block A – Foundations** (1h 15min)                                   | 0:00 – 1:15    | Intro + ping/pong + first taste of Living Files                               |
 | Break (off-clock, 30 min)                                              | between blocks | Water, restrooms, hallway track, 1:1 troubleshooting with stragglers          |
-| **Block B – Memory Architecture + GitHub Sync + Use Cases** (1h 15min) | 1:15 – 2:30    | Living Files debrief, GitHub memory sync hands-on, run your use case, wrap-up |
+| **Block B – Memory Architecture + Knowledge Capture + Scheduling + Use Cases** (1h 15min) | 1:15 – 2:30    | Living Files debrief, knowledge capture to GitHub, scheduled morning brief, run your use case, wrap-up |
 
 ### Block A breakdown (75 min)
 
@@ -152,9 +152,10 @@ The shift: from install to understanding. What did you just build, how does memo
 
 | Time        | Length | What                                                                                                                                                                                                                                                                                                                      |
 | ----------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1:15 – 1:35 | 20 min | **Living Files debrief** — what you gave the agent (5 answers), what you got (a profile in its memory). Walk the memory architecture: `CLAUDE.md` (always-loaded config) → memory store (recalled when relevant; `CLAUDE.local.md` on Claude, the `memory/` tree on Codex) → conversation history. Live: open the files, show the diff, ask the agent to re-read and prove it remembers. |
-| 1:35 – 2:00 | 25 min | **Exercise 3: GitHub memory sync** — connect GitHub to OneCLI via an OAuth app, then DM the agent to back up its memory to a private repo and schedule an hourly sync. Introduces scheduled jobs. Post the use case voting poll here.                                                                              |
-| 2:00 – 2:20 | 20 min | **Exercise 4: Run your use case** — attendees pick the poll winner (or their own choice) and set it up via one DM. Presenter circulates. Goal: at least one notification fires before the session ends.                                                                                                                   |
+| 1:15 – 1:30 | 15 min | **Living Files debrief** — what you gave the agent (5 answers), what you got (a profile in its memory). Walk the memory architecture: `CLAUDE.md` (always-loaded config) → memory (recalled when relevant; the single `CLAUDE.local.md` on Claude, a `memory/` tree on Codex) → conversation history. Live: open `CLAUDE.local.md`, show the diff, ask the agent to re-read and prove it remembers. |
+| 1:30 – 1:50 | 20 min | **Exercise 3: Knowledge capture** — connect GitHub to OneCLI via an OAuth app, then say the capture phrase so the agent drafts a portable note (frontmatter + body), approve it, and it pushes to a private repo. Post the use case voting poll here.                                                                       |
+| 1:50 – 2:05 | 15 min | **Exercise 4: Scheduled morning brief** — DM the agent to schedule a daily brief; `list my scheduled tasks`; `run it once now`. Introduces scheduled jobs.                                                                                                                                                                  |
+| 2:05 – 2:20 | 15 min | **Exercise 5: Run your use case** — attendees pick the poll winner (or their own choice) and set it up via one DM. Presenter circulates. Goal: at least one notification fires before the session ends.                                                                                                                       |
 | 2:20 – 2:30 | 10 min | **Wrap-up** — what they have, where to take it next, QR + follow-up                                                                                                                                                                                                                                                       |
 
 ### Time estimates per exercise (from the 2026-06-10 walkthrough)
@@ -163,15 +164,16 @@ The shift: from install to understanding. What did you just build, how does memo
 | ----------------------------------- | ----------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Ex 1 — Install + ping/pong**      | 25 min      | 40 min      | Container build 3-5 min in the VM. Telegram pairing 2-3 min. First-message cold start 60-90s. Pad for Docker-not-started, wrong-token attendees. |
 | **Ex 2 — Living Files first taste** | 10 min      | 15 min      | Agent does most of the work. Five questions + answers + diff + verification took ~7 min including reads.                                                                           |
-| **Living Files debrief**            | 15 min      | 20 min      | Show the diff from Exercise 2, open the agent's memory files live (`CLAUDE.local.md` on Claude, the `memory/` tree on Codex), ask agent to re-read and prove it remembers a detail.                                                 |
-| **Ex 3 — GitHub memory sync**       | 25 min      | 30 min      | Connect GitHub to OneCLI (OAuth app) → DM the agent to sync memory → `schedule hourly`. Covers scheduled jobs naturally. Pad for the OAuth-app setup + attendees without a GitHub account.                                |
-| **Ex 4 — Run your use case**        | 15 min      | 20 min      | One DM to set up. Presenter circulates. Goal: at least one notification fires before wrap-up.                                                                                      |
+| **Living Files debrief**            | 12 min      | 15 min      | Show the diff from Exercise 2, open the agent's memory live (`CLAUDE.local.md` on Claude, a `memory/` tree on Codex), ask agent to re-read and prove it remembers a detail.                                                 |
+| **Ex 3 — Knowledge capture**        | 15 min      | 20 min      | Connect GitHub to OneCLI (OAuth app) → say the phrase → approve the drafted note → push one portable `knowledge/<slug>.md`. Pad for the OAuth-app setup + attendees without a GitHub account.                              |
+| **Ex 4 — Scheduled morning brief**  | 10 min      | 15 min      | One DM to schedule; `list my scheduled tasks`; `run it once now`. Covers scheduled jobs.                                                                                          |
+| **Ex 5 — Run your use case**        | 15 min      | 20 min      | One DM to set up. Presenter circulates. Goal: at least one notification fires before wrap-up.                                                                                      |
 | **Wrap-up**                         | 5 min       | 10 min      | Where to go next, always-on recipes, QR.                                                                                                                                           |
 
 ### Cut candidates (in order, if running slow)
 
-1. **Exercise 3 attendee task** — keep as presenter demo only; skip the hands-on schedule create from attendees.
-2. **Exercise 4** — cut to presenter demo only; pick the top-voted use case and set it up live while attendees watch.
+1. **Exercise 4 (scheduled brief) attendee task** — keep as presenter demo only; show the schedule-create live instead of having attendees do it.
+2. **Exercise 5 (use case)** — cut to presenter demo only; pick the top-voted use case and set it up live while attendees watch.
 
 If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely into Block B and start Block B with "we'll do the personalization that catches everyone up" — 15 min slack for stragglers, no one feels left behind.
 
@@ -268,30 +270,30 @@ If the room is **still stuck on Exercise 1 at 1:00**, push Exercise 2 entirely i
 
 > **Heads-up on the file shape.** NanoClaw uses **one `CLAUDE.md` per agent** for config (tone, identity, rules, API references), plus the agent's **memory** for recall, plus installable skills for new capabilities (`/add-*`). **What you teach the agent about yourself in this exercise lands in its memory, not in `CLAUDE.md`** - and the memory store's shape depends on the provider: the **Claude** provider keeps a flat `CLAUDE.local.md`; **Codex** (and other scaffold providers) keep a `memory/` tree (`memory/index.md`, `memory/memories/`, `memory/data/`). The agent reads its memory every time it wakes up. (For reference, if you want to see how OpenClaw spreads the same context across 9 living files - `AGENTS.md`, `SOUL.md`, `USER.md`, `HEARTBEAT.md`, `MEMORY.md`, `TOOLS.md`, `IDENTITY.md`, `BOOT.md`, `BOOTSTRAP.md` - check the [OpenClaw agent-workspace docs](https://github.com/openclaw/openclaw/blob/main/docs/concepts/agent-workspace.md). Same mental model, far fewer files.)
 >
-> **Where memory lives.** The agent sees its memory at the in-container path `/workspace/agent/memory`; on the host the same files are at `~/nanoclaw/groups/<folder>/memory` (the `~/nanoclaw-workspace/...` path is not where memory lives). A baked-in scaffold seeds only `system/`, `memories/`, `data/` plus `index.md` and `system/definition.md`; the taxonomy (`people` / `projects` / `organizations` / `decisions`) is editable doctrine in `system/definition.md` - "a starting point, not a contract" - and the concrete files are written by the agent as you talk to it. The [`living-files`](../.claude/skills/living-files/SKILL.md) skill walks this in detail.
+> **Where memory lives.** On the default **Claude** provider the agent's memory is a single flat `CLAUDE.local.md` at the group root: in-container at `/workspace/agent/CLAUDE.local.md`, on the host at `~/nanoclaw/groups/<folder>/CLAUDE.local.md` (the `~/nanoclaw-workspace/...` path is not where memory lives). There is no `memory/` tree, no `index.md`, no `system/definition.md` - everything the agent learns folds into that one file, which Claude Code loads on every wake. (On **Codex** and other scaffold providers it is a `memory/` tree instead, seeded with `system/`, `memories/`, `data/`, `index.md`, and an editable `system/definition.md` doctrine the agent grows as you talk to it.) The [`living-files`](../.claude/skills/living-files/SKILL.md) skill walks this in detail.
 
 **Time budget:** ~25 min (minimum viable) / +5 min (stretch)
 **Goal (minimum viable):** your agent's **memory** contains enough about you that when you message "what should I focus on this afternoon?", the reply references your actual stack, role, and current project - not generic advice.
-**Stretch goal:** have the agent spread what it learned across its memory categories (`people`, `projects`, `organizations`, `decisions`, `data`) and update the indexes - then confirm it reads only the relevant file when asked.
+**Stretch goal:** have the agent organize what it learned into clear sections of `CLAUDE.local.md` (who you are, your project, your preferences, your stack) - then confirm it cites the right detail when asked. (On Codex, where memory is a tree, this means spreading facts across `people` / `projects` / `organizations` / `decisions` / `data` and updating the indexes.)
 
 **Demo cue (presenter):**
 
-- Ask the agent how its memory is structured, then `read your memory definition at system/definition.md and explain the rules`. Land the point: the folder taxonomy is **editable doctrine, not code** - "a starting point, not a contract."
+- Ask the agent how its memory is structured, then `show me your CLAUDE.local.md and explain how you decide what goes in it`. Land the point: the structure is **yours to shape by talking, not code**. (On Codex, point at the `system/definition.md` doctrine - "a starting point, not a contract.")
 - DM the bot: `ask me 5 questions to get to know me, then write what you learn into your memory`.
-- Read the questions out loud, answer 2 of them on stage, show the new file in the agent's memory tree.
+- Read the questions out loud, answer 2 of them on stage, then `cat CLAUDE.local.md` to show the new profile the agent just wrote.
 - "Notice what just happened. We didn't write code. We verbalized."
 
 **Attendee task:**
 
-1. From Telegram, send: `tell me how structured is your memory` - see the tree (or, on the Claude provider, the single `CLAUDE.local.md`).
-2. Send: `how can I explore it within the environment you run in` - note the three ways (ask in chat, shell into `/workspace/agent/memory`, packaged export).
-3. Send: `read your memory definition at system/definition.md and explain the rules you follow`.
-4. Send: `ask me 5 short questions to learn the basics about me - role, stack, time zone, what I'm working on this week, communication style.` Answer them in chat, then: `save what you learned into your memory and show me the files you wrote.`
+1. From Telegram, send: `tell me how structured is your memory` - on Claude, see the single `CLAUDE.local.md` (on Codex, a `memory/` tree).
+2. Send: `how can I explore it within the environment you run in` - note the three ways (ask in chat, shell into `/workspace/agent/CLAUDE.local.md`, packaged export).
+3. Send: `show me how you organize CLAUDE.local.md and the rules you follow for what goes in it`.
+4. Send: `ask me 5 short questions to learn the basics about me - role, stack, time zone, what I'm working on this week, communication style.` Answer them in chat, then: `save what you learned into your memory and show me what you wrote.`
 5. Test: send `given what you now know about me, what should I focus on this afternoon?` - check that the reply is specific to you.
 
 **Expected output / checkpoint:**
 
-- The agent's memory holds your profile in its voice - on Codex a file like `memory/memories/people/<you>.md`; on the Claude provider, your details in `CLAUDE.local.md`.
+- The agent's memory holds your profile in its voice - on Claude, your details in `CLAUDE.local.md`; on Codex, a file like `memory/memories/people/<you>.md`.
 - The "what should I focus on" reply mentions at least one detail from your answers (not generic).
 
 **Troubleshooting:**
@@ -337,56 +339,54 @@ Water, restrooms, hallway track. Presenter stays in the room for 1:1 troubleshoo
 
 ---
 
-## Block B - Memory Architecture + GitHub Sync + Use Cases (75 min)
+## Block B - Memory Architecture + Knowledge Capture + Scheduling + Use Cases (75 min)
 
-### Living Files debrief (20 min)
+### Living Files debrief (15 min)
 
 **Goal:** attendees understand what they just built and why it works.
 
 **Demo cue (presenter):**
 
-- Open the agent's workspace in the terminal: `ls` the files and open the memory store - `cat CLAUDE.local.md` on the Claude provider, or walk the `memory/` tree (`memory/index.md`, `memory/memories/...`) on Codex.
+- Open the agent's workspace in the terminal: `ls` the files and open the memory - `cat CLAUDE.local.md` on the default Claude provider (a single flat file). (On Codex you walk the `memory/` tree instead: `memory/index.md`, `memory/memories/...`.)
 - Show the diff from Preparation 2 — these are the actual words the agent will carry into every future conversation.
 - DM the agent: `re-read your memory and tell me one specific thing you remember about me that you didn't know before this workshop.`
-- Point at the structure: `CLAUDE.md` (always loaded — identity, rules, skills) vs the agent's **memory store** (per-agent recall — who you are, what you care about; `CLAUDE.local.md` on Claude, the `memory/` tree on Codex) vs conversation history (searchable transcripts).
+- Point at the structure: `CLAUDE.md` (always loaded — identity, rules, skills, regenerated read-only each spawn) vs the agent's **memory** (per-agent recall — who you are, what you care about; the single `CLAUDE.local.md` on Claude, a `memory/` tree on Codex) vs conversation history (searchable transcripts).
 
 **Framing line:** "This is just text. Text you wrote in a chat window. The agent reads it every time it wakes up. That's the whole trick — verbalized context beats clever prompting."
 
 ---
 
-### Exercise 3: GitHub Memory Sync (25 min)
+### Exercise 3: Knowledge Capture (20 min)
 
-**Time budget:** ~25 min (minimum viable) / +5 min (stretch)
-**Goal (minimum viable):** agent memory backed up to a private GitHub repo, syncing on a schedule. Memory survives container rebuilds and is version-controlled.
-**Stretch goal:** schedule a second sync for a different file set, or switch the recurring job to "only ping me when it fails".
+**Time budget:** ~20 min (minimum viable) / +5 min (stretch)
+**Goal (minimum viable):** one approved output captured to a private GitHub repo as a portable `knowledge/<slug>.md` with frontmatter, listed in the repo's `index.md`.
+**Stretch goal:** capture a second output of a different `type` and show the `index.md` grouping them by type.
 
-**Why this exercise:** the agent's memory lives in files. A version-controlled off-site backup adds a safety net - and it introduces **scheduled jobs** in a real-world use case rather than a toy example.
+**Why this exercise:** build a reusable, version-controlled knowledge base from the outputs **you** decide are worth keeping. The agent only saves what you approve, and the notes are portable Markdown - reusable in Obsidian, a static site, or another agent. (Note: this is *not* a wholesale memory backup. On the default Claude provider, memory is a single `CLAUDE.local.md` already living on the host, so it already survives container rebuilds; what is valuable is a curated, portable record.)
 
-**The approach - the agent does the sync (verbalize, don't code).** You connect GitHub to **OneCLI** (the credential vault) once via an OAuth app, then **ask the agent** to back up its memory. The agent writes the sync script, pushes through the **GitHub API** (OneCLI injects the token at the proxy level), and schedules the recurring job itself. You never write a sync script or run `git`. This is the verified path; the full step-by-step lives in the [`github-memory-sync`](../.claude/skills/github-memory-sync/SKILL.md) skill. (A host-side `gh` CLI + cron alternative is in that skill's "Alternative" section for anyone who would rather not create an OAuth app.)
+**The approach - the agent drafts, you approve (verbalize, don't code).** You connect GitHub to **OneCLI** (the credential vault) once via an OAuth app, then say a trigger phrase. The agent grabs the relevant output, drafts a portable note (proposing `title / summary / tags / type` + body), and shows it to you; on your approval it pushes through the **GitHub API** (OneCLI injects the token at the proxy level) and updates the repo index. You never write a script or run `git`. The full step-by-step lives in the [`github-knowledge-capture`](../.claude/skills/github-knowledge-capture/SKILL.md) skill. (A host-side `gh` CLI alternative is in that skill's "Alternative" section for anyone who would rather not create an OAuth app.)
 
 **Demo cue (presenter):**
 
-- Show the memory files live on the host: `ls -R ~/nanoclaw/groups/<folder>/memory` (in-container they are at `/workspace/agent/memory`).
 - Open the OneCLI dashboard (find it with `sudo docker ps` - port `10254`, e.g. `http://127.0.0.1:10254` or `http://172.17.0.1:10254`), Connections -> GitHub OAuth. Copy the callback URL.
 - On GitHub, create an OAuth App (Settings -> Developer settings -> OAuth Apps) with that callback URL, copy the Client ID, generate a Client Secret, paste both back into OneCLI, and log in. **The secret is a password - it goes only into the OneCLI form.**
-- Create an empty **private** repo (e.g. `my-agent-memory`).
-- DM the agent: `do you have GitHub access? which user are you, and which repos can you see?` then `keep your memory in sync with <owner>/<repo> - copy /workspace/agent/memory into the repo under memory/ and push.`
-- DM the agent: `schedule this sync every hour, and only ping me if it fails.` Show the task id, then `run the sync once now` and refresh GitHub.
+- Create an empty **private** repo (e.g. `my-knowledge`).
+- DM the agent: `do you have GitHub access? which user are you, and which repos can you see?` then produce an output worth keeping and say `save this to my knowledge repo <owner>/<repo>`.
+- Show the drafted note (frontmatter + body), approve it, then refresh GitHub to show `knowledge/<slug>.md` and the updated `index.md`.
 
 **Attendee task:**
 
 1. **Find OneCLI** with `sudo docker ps` (port `10254`) and open it in the VM browser. Go to Connections -> GitHub OAuth and copy the callback URL.
 2. **Create a GitHub OAuth App** (Settings -> Developer settings -> OAuth Apps -> New OAuth App). Set the callback URL (reuse it for the homepage), copy the Client ID, generate a Client Secret.
 3. **Connect** in OneCLI: paste Client ID + Secret, set the callback, log in. (Note which GitHub account you authorize - the agent acts as that account.)
-4. **Create an empty private repo** on GitHub (e.g. `my-agent-memory`).
-5. **DM the agent** to confirm access, then to sync `/workspace/agent/memory` into the repo under `memory/`.
-6. **DM the agent** to schedule the sync hourly, waking you only on failure. Then `run the sync once now`.
+4. **Create an empty private repo** on GitHub (e.g. `my-knowledge`).
+5. **DM the agent** to confirm access, produce an output you like, then say `save this to my knowledge repo <owner>/<repo>`.
+6. **Review the drafted note** (title/summary/tags/type + body) and approve it.
 
 **Expected output / checkpoint:**
 
-- GitHub auth is active in the agent (`who are you on GitHub?` returns the authorized user + scopes like `repo, user, workflow`).
-- The private repo shows your memory files (e.g. `memory/memories/people/<you>.md`).
-- `list my scheduled tasks` shows the hourly sync; `run the sync once now` lands a new commit within ~60 seconds.
+- GitHub auth is active in the agent (`who are you on GitHub?` returns the authorized user + scopes like `repo, user`).
+- The private repo shows a portable note (e.g. `knowledge/dockerfile-for-the-nanoclaw-vm.md`) with `title / summary / tags / date / source / type` frontmatter, listed in `index.md`.
 
 **Troubleshooting:**
 
@@ -396,12 +396,38 @@ Water, restrooms, hallway track. Presenter stays in the room for 1:1 troubleshoo
 | `git push` does nothing / cannot prompt       | No interactive credential prompt inside the container | Expected - the agent pushes via the GitHub commit/tree API instead                                    |
 | Agent acts as the wrong GitHub user           | OAuth connection authorized a different account       | `who are you on GitHub?`, then re-authorize the OneCLI GitHub connection with the right account        |
 | New repo not in the agent's repo list         | GitHub `/user/repos` listing lag                      | Expected - access by `owner/repo` or search works immediately                                         |
-| `Turn timed out after 600000ms`               | Long first sync hit the ~10-min per-turn ceiling      | Ask `what is the status?` - the work usually finished; keep the sync its own focused request          |
-| Scheduled job runs but nothing commits        | No changes since last run                             | Expected - the sync detects no diff and stays quiet                                                   |
+| `Turn timed out after 600000ms`               | A first push that builds repo structure hit the ~10-min per-turn ceiling | Ask `what is the status?` - the work usually finished; keep the capture its own focused request        |
 
 ---
 
-### Exercise 4: Run your use case (20 min)
+### Exercise 4: Scheduled morning brief (15 min)
+
+**Goal (minimum viable):** a recurring morning brief scheduled on the agent, confirmed by listing it and running it once on demand.
+**Stretch goal:** switch the job to "only ping me if it fails" using the scheduled-task `script` hook.
+
+**Why this exercise:** this is where the workshop teaches **scheduled jobs** - recurring tasks the agent runs on its own clock. You describe the schedule in plain language; the agent creates it with its `schedule_task` tool. The full step-by-step lives in the [`scheduled-brief`](../.claude/skills/scheduled-brief/SKILL.md) skill.
+
+**Demo cue (presenter):**
+
+- DM the agent: `every weekday at 8am, send me a brief with the top 3 AI headlines and anything on my calendar for the day.` Show the returned task id.
+- DM: `list my scheduled tasks` - the brief appears.
+- DM: `run the morning brief once now` - it arrives within ~60 seconds.
+- Mention the "only ping me if it fails" pattern (the `script` hook returns `wakeAgent: false` on a clean run).
+
+**Attendee task:**
+
+1. **DM the agent** to schedule a daily brief at a time of their choice.
+2. **DM** `list my scheduled tasks` to confirm it.
+3. **DM** `run it once now` and watch the brief arrive.
+
+**Expected output / checkpoint:**
+
+- `list my scheduled tasks` shows the recurring brief with its cadence and next run time.
+- `run it once now` delivers the brief within ~60 seconds.
+
+---
+
+### Exercise 5: Run your use case (15 min)
 
 **Goal:** each attendee picks one use case from the voting results and sets it up with their agent in a single DM.
 
@@ -441,7 +467,7 @@ See [`./providers.md`](./providers.md) for the hosts we tested (VPS and home-box
 
 - **Swap LLM provider.** Don't want to pay Anthropic forever? Inside the agent run `/add-codex` for OpenAI (ChatGPT subscription or API key), `/add-opencode` for OpenRouter / Google / DeepSeek, or `/add-ollama-provider` for local open-weight models. Your `CLAUDE.md` config works as-is - it's a Claude Code convention, not a hard provider lock - and the memory you built today carries over too (the `/migrate-memory` skill moves it into the new provider's store shape).
 - **Add a second channel.** Slack for work, Discord for community, WhatsApp for friends. `/add-slack`, `/add-discord`, etc.
-- **Connect Google Calendar.** Pick up the calendar-webhook stretch from Exercise 3.
+- **Connect Google Calendar.** Wire it in with `/add-gcal-tool` so the morning brief (Exercise 4) pulls your real day.
 - **Write a `personal/playbooks/` folder** with one SOP per recurring task you do.
 - **Want the "easy button" instead?** Hostinger offers a one-click managed OpenClaw option if you prefer zero setup with a different framework and file model (9 files vs `CLAUDE.md`).
 

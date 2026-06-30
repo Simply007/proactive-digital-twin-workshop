@@ -32,7 +32,10 @@ The attendee-facing host/VPS comparison (Railway, Oracle, and the rest) lives in
 │   ├── use-cases-relatable.md      # use cases for the use-case exercise
 │   └── use-cases-untested.md       # extra ideas not yet validated in the flow
 ├── .claude/skills/
-│   └── nanoclaw-install/           # install walkthrough skill (Claude-native; more being split out)
+│   ├── nanoclaw-install/           # install walkthrough (Preparation 1)
+│   ├── living-files/               # agent memory walkthrough (Preparation 2)
+│   ├── github-knowledge-capture/   # capture approved outputs to GitHub as portable notes (Exercise 3)
+│   └── scheduled-brief/            # schedule a recurring morning brief (Exercise 4)
 ├── ai-library/                     # private git submodule (author tooling; not fetched by a normal clone)
 ├── reference/
 │   └── nanoclaw/                   # git submodule: upstream NanoClaw source, vendored as a reference/data source for authoring the skill + outline (run `git submodule update --init reference/nanoclaw`)
