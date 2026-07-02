@@ -1,6 +1,6 @@
 # Multi-Agent Use Cases
 
-Two demos that show your agent is not a single brain - it can spawn a team of agents, orchestrate them, and wind them down when the job is done. Both run from a single DM to your NanoClaw agent.
+Two demos that show your agent reaching beyond a single brain - spawning a team of agents for the puzzle, and rotating through OpenRouter's free models for the research. Both run from a single DM to your NanoClaw agent.
 
 ---
 
@@ -188,14 +188,14 @@ Confirm that all four agents were put to sleep once they finished.
 
 ---
 
-## Use case 2: OpenRouter Researcher (multi-model)
+## Use case 2: OpenRouter Researcher (one agent, rotating models)
 
-A manager agent spawns **four researcher agents**, routes each one through **OpenRouter** with round-robin selection across free models, compares the outputs, and merges the best findings into one report - on the EU AI Act and last quarter's AI news.
+Your agent runs a **4-step research workflow** through **OpenRouter**, rotating to the next available free model for each step - four steps, four different models - then compares the outputs and merges the best findings into one report on the EU AI Act and last quarter's AI news.
 
 ### Why this demo
 
-- Shows the agent reaching beyond its own model: four researchers, each answer produced by a different OpenRouter model.
-- The comparison phase makes model differences visible - the manager has to judge quality, not just collect text.
+- Shows one agent reaching beyond its own model: every research step is answered by a different free OpenRouter model.
+- The comparison phase makes model differences visible - the agent has to judge quality, not just collect text.
 - The topic is real homework for the audience: the EU AI Act affects everyone in the room.
 
 ### Setup (short)
@@ -209,46 +209,42 @@ A manager agent spawns **four researcher agents**, routes each one through **Ope
 ### The prompt
 
 ```markdown
-# Multi-Agent OpenRouter Research Demo
+# OpenRouter Research Demo: One Agent, Rotating Models
 
-You are running a 4-agent research workflow using OpenRouter.
+You are running a 4-step research workflow using OpenRouter.
+
+Do not spawn any subagents. You do all four steps yourself.
 
 Use only models available through OpenRouter. Prefer free-tier models when possible.
 
 The goal is to demonstrate:
 
 - routing tasks through OpenRouter
-- using multiple models
+- one agent using multiple models
 - round-robin model selection
 - comparing outputs
-- handing the final result back to the manager
+- merging the results into one final report
 
 ## Topic
 
 Research the **EU AI Act** and summarize the most important AI-related news from the **last quarter**.
 
-## Manager Instructions
-
-You are the manager agent.
+## Instructions
 
 Your tasks:
 
-1. Spawn 4 researcher agents.
-2. Assign one research angle to each agent.
-3. Route each agent through OpenRouter.
-4. Use round-robin model selection across available free models.
-5. Collect all results.
-6. Compare the quality of the answers.
-7. Merge the best findings into one final report.
-8. Clearly show which agent contributed what.
+1. List the free models available to you on OpenRouter and set a rotation order.
+2. Run the four research steps below, sending each step through the next model in the rotation (round-robin).
+3. Record which model answered which step.
+4. Compare the quality of the answers.
+5. Merge the best findings into one final report.
+6. Clearly show which model contributed what.
 
 ---
 
-## Agent 1 Prompt: AI Act Overview
+## Step 1: AI Act Overview
 
-You are Agent 1.
-
-Use OpenRouter.
+Send this step through the first model in the rotation.
 
 Research the EU AI Act at a high level.
 
@@ -268,11 +264,9 @@ Return:
 
 ---
 
-## Agent 2 Prompt: Developer Impact
+## Step 2: Developer Impact
 
-You are Agent 2.
-
-Use OpenRouter.
+Send this step through the next model in the rotation.
 
 Research how the EU AI Act affects software developers and AI application builders.
 
@@ -293,11 +287,9 @@ Return:
 
 ---
 
-## Agent 3 Prompt: Last Quarter AI News
+## Step 3: Last Quarter AI News
 
-You are Agent 3.
-
-Use OpenRouter.
+Send this step through the next model in the rotation.
 
 Research important AI news from the last quarter.
 
@@ -317,11 +309,9 @@ Return:
 
 ---
 
-## Agent 4 Prompt: Conference Angle
+## Step 4: Conference Angle
 
-You are Agent 4.
-
-Use OpenRouter.
+Send this step through the next model in the rotation.
 
 Turn the research into a workshop-friendly narrative.
 
@@ -340,39 +330,39 @@ Return:
 
 ---
 
-# Collaboration Phase
+# Comparison Phase
 
-After all agents finish:
+After all four steps finish:
 
-1. Display every agent's raw result.
+1. Display every step's raw result.
 2. Identify overlapping information.
 3. Identify contradictions or uncertainty.
 4. Compare answer quality.
-5. Explain which model/agent performed best and why.
+5. Explain which model performed best and why.
 6. Merge the findings into one final result.
 
 ---
 
 # Final Output Format
 
-## Agent Results
+## Step Results
 
-### Agent 1: AI Act Overview
+### Step 1: AI Act Overview
 - Model used:
 - Key findings:
 - Weaknesses:
 
-### Agent 2: Developer Impact
+### Step 2: Developer Impact
 - Model used:
 - Key findings:
 - Weaknesses:
 
-### Agent 3: Last Quarter AI News
+### Step 3: Last Quarter AI News
 - Model used:
 - Key findings:
 - Weaknesses:
 
-### Agent 4: Conference Angle
+### Step 4: Conference Angle
 - Model used:
 - Key findings:
 - Weaknesses:
@@ -385,16 +375,16 @@ Explain how the outputs differed.
 
 Create a concise final summary for workshop participants.
 
-## Manager Conclusion
+## Conclusion
 
 Explain:
 
 - how OpenRouter helped
 - why model rotation was useful
-- where the agents disagreed
-- what the manager changed in the final answer
+- where the models disagreed
+- what you changed in the final answer
 ```
 
 **Difficulty:** Medium - needs an OpenRouter account and the key in OneCLI first.
 
-**Wow:** High - four models answering side by side, and the manager judging them openly.
+**Wow:** High - four models answering side by side, and one agent judging them openly.
