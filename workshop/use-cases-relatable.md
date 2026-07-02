@@ -209,4 +209,8 @@ Agent starts gentle and gets louder if you don't act.
 
 ---
 
+**Multi-agent demos** (the Guess the Destination puzzle and the OpenRouter researcher) live in [`use-cases-multi-agent.md`](use-cases-multi-agent.md).
+
+---
+
 *v4 — 10 use cases for Exercise 4 voting — iterate from here*
